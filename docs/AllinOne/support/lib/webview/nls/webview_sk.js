@@ -1,0 +1,4 @@
+//>>built
+define("webview/nls/webview_sk",{"webview/resources/slreportgen_webview/nls/modelbrowser":{Open:"Open",OpenInNewTab:"Open In New Tab",Title:"Model Browser"},"webview/resources/slreportgen_webview/nls/modelinspector":{ParameterAttributes:"Parameter Attributes"},"dijit/nls/loading":{loadingState:"Zav\u00e1dza sa...",errorState:"\u013dutujeme, ale vyskytla sa chyba"},"webview/resources/slreportgen_webview/nls/modelviewer":{ModelBrowserButtonLabel:"Hide/Show Model Browser",ExplorerBarButtonLabel:"Hide/Show Explorer Bar",
+OpenInNewTab:"Open In New Tab",MarqueeZoomButtonLabel:"Zoom",NoExport:"This system was not exported.",ViewAll:"View All",FitToViewButtonLabel:"Fit to View",Open:"Open"},"dijit/nls/common":{buttonOk:"OK",buttonCancel:"Zru\u0161i\u0165",buttonSave:"Ulo\u017ei\u0165",itemClose:"Zatvori\u0165"}});
+//@ sourceMappingURL=webview_sk.js.map
