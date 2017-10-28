@@ -49,7 +49,7 @@ if isnumeric(method)
             if (~ishandle(sideline))
                 return
             end
-            % set(state, 'String', sprintf('Cup %d\nWater %d(%d¡ãC)\nCoffee %d\nMilk %d\nSugar %d\n', Coffee(1), Coffee(2), Coffee(3), Coffee(4), Coffee(5), Coffee(6)));
+            % set(state, 'String', sprintf('Cup %d\nWater %d(%dÂ¡Ã£C)\nCoffee %d\nMilk %d\nSugar %d\n', Coffee(1), Coffee(2), Coffee(3), Coffee(4), Coffee(5), Coffee(6)));
             if Coffee(1) == 0
                 set(sideline, 'Visible', 'off');
                 set(waterploy, 'Visible', 'off');
@@ -71,7 +71,7 @@ if isnumeric(method)
                 next = now + water;
                 set(waterploy, 'XData', [0.2 - 0.1 * next / all, 0.2 - 0.1 * now / all, 0.8 + 0.1 * now / all, 0.8 + 0.1 * next / all], ...
                                'YData', [0.1 + 0.8 * next / all, 0.1 + 0.8 * now / all, 0.1 + 0.8 * now / all, 0.1 + 0.8 * next / all]);
-                set(watertext, 'Position', [0.5, 0.1 + 0.8 * (next + now) / 2 / all], 'String', sprintf('Water: %.2fml(%.2f¡ãC)', water, watertemp));
+                set(watertext, 'Position', [0.5, 0.1 + 0.8 * (next + now) / 2 / all], 'String', sprintf('Water: %.2fml(%.2fÂ¡Ã£C)', water, watertemp));
                 now = next;
                 next = now + coffee;
                 set(coffeeploy, 'XData', [0.2 - 0.1 * next / all, 0.2 - 0.1 * now / all, 0.8 + 0.1 * now / all, 0.8 + 0.1 * next / all], ...
@@ -144,7 +144,7 @@ gui_State = struct('gui_Name',       'CoffeeMachineGUI', ...
 
 gui_mainfcn(gui_State);
 % End initialization code - DO NOT EDIT
-set_param('AllinOne','StopFcn',sprintf('CoffeeMachineIOSupport(''closefig'', fig);'));
+set_param('AllinOne','StopFcn',sprintf('CoffeeMachineIOSupport(''closefig'');'));
 
 function fig_close
 global fig;
