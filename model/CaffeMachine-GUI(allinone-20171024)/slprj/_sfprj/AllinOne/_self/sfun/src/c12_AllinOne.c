@@ -239,6 +239,12 @@ static void c12_update_debugger_state_c12_AllinOne(SFc12_AllinOneInstanceStruct 
     _SFD_CS_CALL(STATE_INACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
   }
 
+  if (chartInstance->c12_is_c12_AllinOne == c12_IN_TakeOut) {
+    _SFD_CS_CALL(STATE_ACTIVE_TAG, 4U, chartInstance->c12_sfEvent);
+  } else {
+    _SFD_CS_CALL(STATE_INACTIVE_TAG, 4U, chartInstance->c12_sfEvent);
+  }
+
   if (chartInstance->c12_is_c12_AllinOne == c12_IN_error) {
     _SFD_CS_CALL(STATE_ACTIVE_TAG, 6U, chartInstance->c12_sfEvent);
   } else {
@@ -357,12 +363,6 @@ static void c12_update_debugger_state_c12_AllinOne(SFc12_AllinOneInstanceStruct 
     _SFD_CS_CALL(STATE_ACTIVE_TAG, 2U, chartInstance->c12_sfEvent);
   } else {
     _SFD_CS_CALL(STATE_INACTIVE_TAG, 2U, chartInstance->c12_sfEvent);
-  }
-
-  if (chartInstance->c12_is_c12_AllinOne == c12_IN_TakeOut) {
-    _SFD_CS_CALL(STATE_ACTIVE_TAG, 4U, chartInstance->c12_sfEvent);
-  } else {
-    _SFD_CS_CALL(STATE_INACTIVE_TAG, 4U, chartInstance->c12_sfEvent);
   }
 
   _SFD_SET_ANIMATION(c12_prevAniVal);
@@ -971,8 +971,6 @@ static void c12_chartstep_c12_AllinOne(SFc12_AllinOneInstanceStruct
     chartInstance->c12_is_active_c12_AllinOne = 1U;
     _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 7U, chartInstance->c12_sfEvent);
     _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 0U, chartInstance->c12_sfEvent);
-    sf_mex_call_debug(sfGlobalDebugInstanceStruct, "CoffeeMachineIOSupport", 0U,
-                      1U, 15, "init");
     chartInstance->c12_is_c12_AllinOne = c12_IN_Init;
     _SFD_CS_CALL(STATE_ACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
     chartInstance->c12_tp_Init = 1U;
@@ -2496,10 +2494,10 @@ extern void utFree(void*);
 
 void sf_c12_AllinOne_get_check_sum(mxArray *plhs[])
 {
-  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(738571584U);
-  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(3672264192U);
-  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(1221249993U);
-  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(1275301618U);
+  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(3458852723U);
+  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(3658478632U);
+  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(1386882413U);
+  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(2048323324U);
 }
 
 mxArray* sf_c12_AllinOne_get_post_codegen_info(void);
@@ -3572,7 +3570,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
 static const char* sf_get_instance_specialization(void)
 {
-  return "yI6kvSkp3aF4GtKlctv9OE";
+  return "AdtYVb8COUYR90eJPBEZyG";
 }
 
 static void sf_opaque_initialize_c12_AllinOne(void *chartInstanceVar)
@@ -3709,10 +3707,10 @@ static void mdlSetWorkWidths_c12_AllinOne(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(3765088486U));
-  ssSetChecksum1(S,(252923689U));
-  ssSetChecksum2(S,(3138765403U));
-  ssSetChecksum3(S,(3375950688U));
+  ssSetChecksum0(S,(2352448292U));
+  ssSetChecksum1(S,(2843228166U));
+  ssSetChecksum2(S,(2166155163U));
+  ssSetChecksum3(S,(3074671326U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

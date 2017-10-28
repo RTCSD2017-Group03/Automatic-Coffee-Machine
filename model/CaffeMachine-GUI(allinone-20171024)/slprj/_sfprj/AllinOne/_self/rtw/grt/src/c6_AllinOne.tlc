@@ -1,0 +1,48 @@
+%implements "chartSource" "C"
+%function ChartConfig(block, system) void
+  %createrecord chartConfiguration { ...
+          executeAtInitialization  0 ...
+  }
+  %return chartConfiguration
+%endfunction
+%function ChartDataMap(block, system) void
+  %createrecord ChartDataElements {\
+    NumChartData   5 \
+    ChartDataDefaults {\
+      RecordType   "ChartData"\
+      Dimensions   []\
+      IsTestPoint  0\
+    }\
+    ChartData {\
+      Name         "is_active_c6_AllinOne"\
+      Description  "StateIsActive"\
+      SFName       ""\
+      Path         ""\
+    }\
+    ChartData {\
+      Name         "is_InFlow"\
+      Description  "StateActiveChild"\
+      SFName       ""\
+      Path         "InFlow"\
+    }\
+    ChartData {\
+      Name         "is_active_InFlow"\
+      Description  "StateIsActive"\
+      SFName       ""\
+      Path         "InFlow"\
+    }\
+    ChartData {\
+      Name         "is_Heater"\
+      Description  "StateActiveChild"\
+      SFName       ""\
+      Path         "Heater"\
+    }\
+    ChartData {\
+      Name         "is_active_Heater"\
+      Description  "StateIsActive"\
+      SFName       ""\
+      Path         "Heater"\
+    }\
+  }
+  %return ChartDataElements
+%endfunction

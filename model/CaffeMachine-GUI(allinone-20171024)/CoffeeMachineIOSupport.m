@@ -47,6 +47,7 @@ if isnumeric(method)
         case 4
             handle = 1;
             if (~ishandle(sideline))
+                fig_init;
                 return
             end
             % set(state, 'String', sprintf('Cup %d\nWater %d(%d¡ãC)\nCoffee %d\nMilk %d\nSugar %d\n', Coffee(1), Coffee(2), Coffee(3), Coffee(4), Coffee(5), Coffee(6)));
@@ -133,6 +134,10 @@ else
 end
 
 function fig_init
+global fig;
+if ishandle(fig)
+    return;
+end
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       'CoffeeMachineGUI', ...
