@@ -1,0 +1,60 @@
+CC     = "D:\MATLAB\R2014b\sys\lcc64\lcc64\bin\lcc64.exe"
+LD     = "D:\MATLAB\R2014b\sys\lcc64\lcc64\bin\lcclnk64.exe"
+LIBCMD = "D:\MATLAB\R2014b\sys\lcc64\lcc64\bin\lcclib64.exe"
+CFLAGS = -dll -noregistrylookup  -c -Zp8 -DLCC_WIN64 -DMATLAB_MEX_FILE -DMX_COMPAT_32 -nodeclspec 
+LDFLAGS = -s -dll -L"D:\MATLAB\R2014b\sys\lcc64\lcc64\lib64" -entry LibMain -map sfun.map 
+LIBFLAGS = 
+
+OBJECTS = \
+	"AllinOne_sfun.obj"\
+	"c1_AllinOne.obj"\
+	"c2_AllinOne.obj"\
+	"c3_AllinOne.obj"\
+	"c4_AllinOne.obj"\
+	"c5_AllinOne.obj"\
+	"c6_AllinOne.obj"\
+	"c7_AllinOne.obj"\
+	"c12_AllinOne.obj"\
+	"AllinOne_sfun_registry.obj"\
+	"lccstub.obj"\
+	"AllinOne_sfun.def"\
+	"D:\MATLAB\R2014b\extern\lib\win64\microsoft\sf_runtime.lib"\
+	"D:\MATLAB\R2014b\extern\lib\win64\microsoft\libmwblas.lib"\
+	"D:\MATLAB\R2014b\extern\lib\win64\microsoft\libmx.lib"\
+	"D:\MATLAB\R2014b\extern\lib\win64\microsoft\libmex.lib"\
+	"D:\MATLAB\R2014b\extern\lib\win64\microsoft\libmat.lib"\
+	"D:\MATLAB\R2014b\extern\lib\win64\microsoft\libfixedpoint.lib"\
+	"D:\MATLAB\R2014b\extern\lib\win64\microsoft\libut.lib"\
+	"D:\MATLAB\R2014b\extern\lib\win64\microsoft\libmwmathutil.lib"\
+	"D:\MATLAB\R2014b\extern\lib\win64\microsoft\libemlrt.lib"\
+	"D:\MATLAB\R2014b\extern\lib\win64\microsoft\libmwsl_log_load_blocks.lib"\
+	"D:\MATLAB\R2014b\extern\lib\win64\microsoft\libmwsimulink.lib"\
+	"D:\MATLAB\R2014b\lib\win64\libmwipp.lib"\
+
+INCLUDE_PATH= -I"D:\MATLAB\R2014b\sys\lcc64\lcc64\include64"  -I"D:\MATLAB\R2014b\extern\include"  -I"D:\MATLAB\R2014b\simulink\include"  -I"D:\MATLAB\R2014b\stateflow\c\mex\include"  -I"D:\MATLAB\R2014b\rtw\c\src"  -I"F:\Matlab\CaffeMachine\CaffeMachine(allinone-20171024)\slprj\_sfprj\AllinOne\_self\sfun\src" 
+ 
+
+AllinOne_sfun.mexw64 : $(MAKEFILE) $(OBJECTS)
+	$(LD) $(LDFLAGS) -o AllinOne_sfun.mexw64 @AllinOne_sfun.lmko
+AllinOne_sfun.obj :	"AllinOne_sfun.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "AllinOne_sfun.c"
+c1_AllinOne.obj :	"c1_AllinOne.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "c1_AllinOne.c"
+c2_AllinOne.obj :	"c2_AllinOne.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "c2_AllinOne.c"
+c3_AllinOne.obj :	"c3_AllinOne.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "c3_AllinOne.c"
+c4_AllinOne.obj :	"c4_AllinOne.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "c4_AllinOne.c"
+c5_AllinOne.obj :	"c5_AllinOne.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "c5_AllinOne.c"
+c6_AllinOne.obj :	"c6_AllinOne.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "c6_AllinOne.c"
+c7_AllinOne.obj :	"c7_AllinOne.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "c7_AllinOne.c"
+c12_AllinOne.obj :	"c12_AllinOne.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "c12_AllinOne.c"
+AllinOne_sfun_registry.obj :	"AllinOne_sfun_registry.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "AllinOne_sfun_registry.c"
+lccstub.obj :	"D:\MATLAB\R2014b\sys\lcc64\lcc64\mex\lccstub.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "D:\MATLAB\R2014b\sys\lcc64\lcc64\mex\lccstub.c"
