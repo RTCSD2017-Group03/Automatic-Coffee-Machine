@@ -31,7 +31,7 @@ OBJECTS = \
 	"D:\MATLAB\R2014b\extern\lib\win64\microsoft\libmwsimulink.lib"\
 	"D:\MATLAB\R2014b\lib\win64\libmwipp.lib"\
 
-INCLUDE_PATH= -I"D:\MATLAB\R2014b\sys\lcc64\lcc64\include64"  -I"D:\MATLAB\R2014b\extern\include"  -I"D:\MATLAB\R2014b\simulink\include"  -I"D:\MATLAB\R2014b\stateflow\c\mex\include"  -I"D:\MATLAB\R2014b\rtw\c\src"  -I"F:\Matlab\CaffeMachine\CaffeMachine(allinone-20171024)\slprj\_sfprj\AllinOne\_self\sfun\src" 
+INCLUDE_PATH= -I"D:\MATLAB\R2014b\sys\lcc64\lcc64\include64"  -I"D:\MATLAB\R2014b\extern\include"  -I"D:\MATLAB\R2014b\simulink\include"  -I"D:\MATLAB\R2014b\stateflow\c\mex\include"  -I"D:\MATLAB\R2014b\rtw\c\src"  -I"F:\Matlab\Automatic-Coffee-Machine\model\CaffeMachine-GUI(allinone-20171024)\slprj\_sfprj\AllinOne\_self\sfun\src" 
  
 
 AllinOne_sfun.mexw64 : $(MAKEFILE) $(OBJECTS)

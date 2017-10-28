@@ -1,0 +1,49 @@
+%implements "chartSource" "C"
+%function ChartConfig(block, system) void
+  %createrecord chartConfiguration { ...
+          executeAtInitialization  1 ...
+  }
+  %return chartConfiguration
+%endfunction
+%function ChartDataMap(block, system) void
+  %createrecord ChartDataElements {\
+    NumChartData   5 \
+    ChartDataDefaults {\
+      RecordType   "ChartData"\
+      Dimensions   []\
+      IsTestPoint  0\
+    }\
+    ChartData {\
+      Name         "ClearIntegratorEventEventCounter"\
+      Description  "OutputEventCounter"\
+      SFName       ""\
+      Path         "ClearIntegratorEvent"\
+    }\
+    ChartData {\
+      Name         "tp_Transmiting"\
+      Description  "StateTestPoint"\
+      SFName       "Transmiting"\
+      Path         "Transmiting"\
+      IsTestPoint  1\
+    }\
+    ChartData {\
+      Name         "is_c4_AllinOne"\
+      Description  "StateActiveChild"\
+      SFName       ""\
+      Path         ""\
+    }\
+    ChartData {\
+      Name         "TargetAmount"\
+      Description  "ChartLocal"\
+      SFName       ""\
+      Path         "TargetAmount"\
+    }\
+    ChartData {\
+      Name         "temporalCounter_i1"\
+      Description  "TemporalCounter"\
+      SFName       ""\
+      Path         ""\
+    }\
+  }
+  %return ChartDataElements
+%endfunction

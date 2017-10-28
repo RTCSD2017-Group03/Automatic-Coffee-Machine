@@ -1,0 +1,84 @@
+%implements "chartSource" "C"
+%function ChartConfig(block, system) void
+  %createrecord chartConfiguration { ...
+          executeAtInitialization  1 ...
+  }
+  %return chartConfiguration
+%endfunction
+%function ChartDataMap(block, system) void
+  %createrecord ChartDataElements {\
+    NumChartData   11 \
+    ChartDataDefaults {\
+      RecordType   "ChartData"\
+      Dimensions   []\
+      IsTestPoint  0\
+    }\
+    ChartData {\
+      Name         "StepEventEventCounter"\
+      Description  "OutputEventCounter"\
+      SFName       ""\
+      Path         "StepEvent"\
+    }\
+    ChartData {\
+      Name         "sfEvent"\
+      Description  "ActiveChartEvent"\
+      SFName       ""\
+      Path         ""\
+    }\
+    ChartData {\
+      Name         "is_MixtrueMonitor"\
+      Description  "StateActiveChild"\
+      SFName       ""\
+      Path         "MixtrueMonitor"\
+    }\
+    ChartData {\
+      Name         "is_active_MixtrueMonitor"\
+      Description  "StateIsActive"\
+      SFName       ""\
+      Path         "MixtrueMonitor"\
+    }\
+    ChartData {\
+      Name         "is_CupMonitor"\
+      Description  "StateActiveChild"\
+      SFName       ""\
+      Path         "CupMonitor"\
+    }\
+    ChartData {\
+      Name         "is_active_CupMonitor"\
+      Description  "StateIsActive"\
+      SFName       ""\
+      Path         "CupMonitor"\
+    }\
+    ChartData {\
+      Name         "is_CupTransmit"\
+      Description  "StateActiveChild"\
+      SFName       ""\
+      Path         "CupTransmit"\
+    }\
+    ChartData {\
+      Name         "is_active_CupTransmit"\
+      Description  "StateIsActive"\
+      SFName       ""\
+      Path         "CupTransmit"\
+    }\
+    ChartData {\
+      Name         "CupLocation"\
+      Description  "ChartLocal"\
+      SFName       ""\
+      Path         "CupLocation"\
+    }\
+    ChartData {\
+      Name         "LocalMixtrue"\
+      Description  "ChartLocal"\
+      SFName       ""\
+      Path         "LocalMixtrue"\
+    }\
+    ChartData {\
+      Name         "temporalCounter_i1"\
+      Description  "TemporalCounter"\
+      SFName       ""\
+      Path         ""\
+    }\
+  }
+  %return ChartDataElements
+%endfunction
