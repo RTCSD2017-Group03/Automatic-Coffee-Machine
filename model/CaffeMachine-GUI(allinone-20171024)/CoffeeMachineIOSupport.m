@@ -46,7 +46,8 @@ if isnumeric(method)
             handle = TakeOutEvent;
         case 4
             handle = 1;
-            if (~ishandle(sideline))
+            if (isempty(sideline) || ~ishandle(sideline))
+                fig_init;
                 return
             end
             % set(state, 'String', sprintf('Cup %d\nWater %d(%d¡ãC)\nCoffee %d\nMilk %d\nSugar %d\n', Coffee(1), Coffee(2), Coffee(3), Coffee(4), Coffee(5), Coffee(6)));
@@ -93,10 +94,18 @@ if isnumeric(method)
                 set(coffeeploy, 'Visible', 'on');
                 set(milkploy, 'Visible', 'on');
                 set(sugarploy, 'Visible', 'on');
-                if (water > 0) set(watertext, 'Visible', 'on'); end
-                if (coffee > 0) set(coffeetext, 'Visible', 'on'); end
-                if (milk > 0) set(milktext, 'Visible', 'on'); end
-                if (sugar > 0) set(sugartext, 'Visible', 'on'); end
+                if (water > 0) 
+                    set(watertext, 'Visible', 'on'); 
+                end
+                if (coffee > 0) 
+                    set(coffeetext, 'Visible', 'on'); 
+                end
+                if (milk > 0) 
+                    set(milktext, 'Visible', 'on'); 
+                end
+                if (sugar > 0) 
+                    set(sugartext, 'Visible', 'on'); 
+                end
             end
         otherwise
             error('undefine input');
@@ -133,6 +142,10 @@ else
 end
 
 function fig_init
+global fig;
+if ishandle(fig)
+    return;
+end;
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       'CoffeeMachineGUI', ...

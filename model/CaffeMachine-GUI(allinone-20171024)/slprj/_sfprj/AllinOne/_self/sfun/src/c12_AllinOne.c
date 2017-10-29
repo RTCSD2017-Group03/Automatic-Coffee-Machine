@@ -971,8 +971,6 @@ static void c12_chartstep_c12_AllinOne(SFc12_AllinOneInstanceStruct
     chartInstance->c12_is_active_c12_AllinOne = 1U;
     _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 7U, chartInstance->c12_sfEvent);
     _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 0U, chartInstance->c12_sfEvent);
-    sf_mex_call_debug(sfGlobalDebugInstanceStruct, "CoffeeMachineIOSupport", 0U,
-                      1U, 15, "init");
     chartInstance->c12_is_c12_AllinOne = c12_IN_Init;
     _SFD_CS_CALL(STATE_ACTIVE_TAG, 3U, chartInstance->c12_sfEvent);
     chartInstance->c12_tp_Init = 1U;
@@ -2493,10 +2491,10 @@ extern void utFree(void*);
 
 void sf_c12_AllinOne_get_check_sum(mxArray *plhs[])
 {
-  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(1828955435U);
-  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(1505853268U);
-  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(1707358117U);
-  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(310490444U);
+  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(1112855678U);
+  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(1460187496U);
+  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(4248645487U);
+  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(1055323540U);
 }
 
 mxArray* sf_c12_AllinOne_get_post_codegen_info(void);
@@ -3270,7 +3268,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
           static int sRelationalopEps[] = { -1 };
 
-          static int sRelationalopType[] = { 2 };
+          static int sRelationalopType[] = { 2, 2 };
 
           _SFD_CV_INIT_TRANSITION_RELATIONALOP(3,1,&(sStartRelationalopMap[0]),
             &(sEndRelationalopMap[0]),&(sRelationalopEps[0]),
@@ -3295,7 +3293,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
           static int sRelationalopEps[] = { -1 };
 
-          static int sRelationalopType[] = { 2 };
+          static int sRelationalopType[] = { 2, 2 };
 
           _SFD_CV_INIT_TRANSITION_RELATIONALOP(7,1,&(sStartRelationalopMap[0]),
             &(sEndRelationalopMap[0]),&(sRelationalopEps[0]),
@@ -3320,7 +3318,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
           static int sRelationalopEps[] = { -1 };
 
-          static int sRelationalopType[] = { 2 };
+          static int sRelationalopType[] = { 2, 2 };
 
           _SFD_CV_INIT_TRANSITION_RELATIONALOP(8,1,&(sStartRelationalopMap[0]),
             &(sEndRelationalopMap[0]),&(sRelationalopEps[0]),
@@ -3345,7 +3343,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
           static int sRelationalopEps[] = { -1 };
 
-          static int sRelationalopType[] = { 2 };
+          static int sRelationalopType[] = { 2, 2 };
 
           _SFD_CV_INIT_TRANSITION_RELATIONALOP(11,1,&(sStartRelationalopMap[0]),
             &(sEndRelationalopMap[0]),&(sRelationalopEps[0]),
@@ -3370,7 +3368,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
           static int sRelationalopEps[] = { -1 };
 
-          static int sRelationalopType[] = { 3 };
+          static int sRelationalopType[] = { 3, 3 };
 
           _SFD_CV_INIT_TRANSITION_RELATIONALOP(16,1,&(sStartRelationalopMap[0]),
             &(sEndRelationalopMap[0]),&(sRelationalopEps[0]),
@@ -3395,7 +3393,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
           static int sRelationalopEps[] = { -1 };
 
-          static int sRelationalopType[] = { 3 };
+          static int sRelationalopType[] = { 3, 3 };
 
           _SFD_CV_INIT_TRANSITION_RELATIONALOP(22,1,&(sStartRelationalopMap[0]),
             &(sEndRelationalopMap[0]),&(sRelationalopEps[0]),
@@ -3569,7 +3567,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
 static const char* sf_get_instance_specialization(void)
 {
-  return "qqDv59zgLOSRV8swcuJCcF";
+  return "3np7WsMRQr94NOec473ERF";
 }
 
 static void sf_opaque_initialize_c12_AllinOne(void *chartInstanceVar)
@@ -3706,10 +3704,10 @@ static void mdlSetWorkWidths_c12_AllinOne(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(2982961629U));
-  ssSetChecksum1(S,(2610937591U));
-  ssSetChecksum2(S,(807732119U));
-  ssSetChecksum3(S,(3115825575U));
+  ssSetChecksum0(S,(3269028167U));
+  ssSetChecksum1(S,(3131695812U));
+  ssSetChecksum2(S,(2286962126U));
+  ssSetChecksum3(S,(709381048U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);
