@@ -121,10 +121,6 @@ static const mxArray *c6_k_emlrt_marshallIn(SFc6_AllinOneInstanceStruct
   *chartInstance, const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId);
 static void c6_updateDataWrittenToVector(SFc6_AllinOneInstanceStruct
   *chartInstance, uint32_T c6_vectorIndex);
-static void c6_errorIfDataNotWrittenToFcn(SFc6_AllinOneInstanceStruct
-  *chartInstance, uint32_T c6_vectorIndex, uint32_T c6_dataNumber, uint32_T
-  c6_ssIdOfSourceObject, int32_T c6_offsetInSourceObject, int32_T
-  c6_lengthInSourceObject);
 static void init_dsm_address_info(SFc6_AllinOneInstanceStruct *chartInstance);
 static void init_simulink_io_address(SFc6_AllinOneInstanceStruct *chartInstance);
 
@@ -410,47 +406,29 @@ static void c6_chartstep_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance)
   uint32_T c6_debug_family_var_map[2];
   real_T c6_nargin = 0.0;
   real_T c6_nargout = 0.0;
-  real_T c6_hoistedGlobal;
-  real_T c6_u;
-  const mxArray *c6_y = NULL;
   real_T c6_b_nargin = 0.0;
   real_T c6_b_nargout = 0.0;
-  real_T c6_b_hoistedGlobal;
-  real_T c6_b_u;
-  const mxArray *c6_b_y = NULL;
   uint32_T c6_b_debug_family_var_map[3];
   real_T c6_c_nargin = 0.0;
   real_T c6_c_nargout = 1.0;
   boolean_T c6_out;
   real_T c6_d_nargin = 0.0;
   real_T c6_d_nargout = 0.0;
-  real_T c6_c_hoistedGlobal;
-  real_T c6_c_u;
-  const mxArray *c6_c_y = NULL;
   real_T c6_e_nargin = 0.0;
   real_T c6_e_nargout = 1.0;
   boolean_T c6_b_out;
   real_T c6_f_nargin = 0.0;
   real_T c6_f_nargout = 0.0;
-  real_T c6_d_hoistedGlobal;
-  real_T c6_d_u;
-  const mxArray *c6_d_y = NULL;
   real_T c6_g_nargin = 0.0;
   real_T c6_g_nargout = 1.0;
   boolean_T c6_c_out;
   real_T c6_h_nargin = 0.0;
   real_T c6_h_nargout = 0.0;
-  real_T c6_e_hoistedGlobal;
-  real_T c6_e_u;
-  const mxArray *c6_e_y = NULL;
   real_T c6_i_nargin = 0.0;
   real_T c6_i_nargout = 1.0;
   boolean_T c6_d_out;
   real_T c6_j_nargin = 0.0;
   real_T c6_j_nargout = 0.0;
-  real_T c6_f_hoistedGlobal;
-  real_T c6_f_u;
-  const mxArray *c6_f_y = NULL;
   _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 5U, chartInstance->c6_sfEvent);
   if (chartInstance->c6_is_active_c6_AllinOne == 0U) {
     _SFD_CC_CALL(CHART_ENTER_ENTRY_FUNCTION_TAG, 5U, chartInstance->c6_sfEvent);
@@ -472,13 +450,6 @@ static void c6_chartstep_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance)
     *chartInstance->c6_HeatSwitch = 0.0;
     c6_updateDataWrittenToVector(chartInstance, 0U);
     _SFD_DATA_RANGE_CHECK(*chartInstance->c6_HeatSwitch, 2U);
-    c6_errorIfDataNotWrittenToFcn(chartInstance, 0U, 2U, 3U, 8, 10);
-    sf_mex_printf("%s =\\n", "HeatSwitch");
-    c6_hoistedGlobal = *chartInstance->c6_HeatSwitch;
-    c6_u = c6_hoistedGlobal;
-    c6_y = NULL;
-    sf_mex_assign(&c6_y, sf_mex_create("y", &c6_u, 0, 0U, 0U, 0U, 0), false);
-    sf_mex_call_debug(sfGlobalDebugInstanceStruct, "disp", 0U, 1U, 14, c6_y);
     _SFD_SYMBOL_SCOPE_POP();
     chartInstance->c6_is_active_InFlow = 1U;
     _SFD_CS_CALL(STATE_ACTIVE_TAG, 3U, chartInstance->c6_sfEvent);
@@ -496,13 +467,6 @@ static void c6_chartstep_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance)
     *chartInstance->c6_InFlowSwitch = 0.0;
     c6_updateDataWrittenToVector(chartInstance, 1U);
     _SFD_DATA_RANGE_CHECK(*chartInstance->c6_InFlowSwitch, 3U);
-    c6_errorIfDataNotWrittenToFcn(chartInstance, 1U, 3U, 17U, 8, 12);
-    sf_mex_printf("%s =\\n", "InFlowSwitch");
-    c6_b_hoistedGlobal = *chartInstance->c6_InFlowSwitch;
-    c6_b_u = c6_b_hoistedGlobal;
-    c6_b_y = NULL;
-    sf_mex_assign(&c6_b_y, sf_mex_create("y", &c6_b_u, 0, 0U, 0U, 0U, 0), false);
-    sf_mex_call_debug(sfGlobalDebugInstanceStruct, "disp", 0U, 1U, 14, c6_b_y);
     _SFD_SYMBOL_SCOPE_POP();
   } else {
     _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 0U, chartInstance->c6_sfEvent);
@@ -539,15 +503,6 @@ static void c6_chartstep_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance)
         *chartInstance->c6_HeatSwitch = 0.0;
         c6_updateDataWrittenToVector(chartInstance, 0U);
         _SFD_DATA_RANGE_CHECK(*chartInstance->c6_HeatSwitch, 2U);
-        c6_errorIfDataNotWrittenToFcn(chartInstance, 0U, 2U, 3U, 8, 10);
-        sf_mex_printf("%s =\\n", "HeatSwitch");
-        c6_c_hoistedGlobal = *chartInstance->c6_HeatSwitch;
-        c6_c_u = c6_c_hoistedGlobal;
-        c6_c_y = NULL;
-        sf_mex_assign(&c6_c_y, sf_mex_create("y", &c6_c_u, 0, 0U, 0U, 0U, 0),
-                      false);
-        sf_mex_call_debug(sfGlobalDebugInstanceStruct, "disp", 0U, 1U, 14,
-                          c6_c_y);
         _SFD_SYMBOL_SCOPE_POP();
       } else {
         _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 1U,
@@ -589,15 +544,6 @@ static void c6_chartstep_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance)
         *chartInstance->c6_HeatSwitch = 1.0;
         c6_updateDataWrittenToVector(chartInstance, 0U);
         _SFD_DATA_RANGE_CHECK(*chartInstance->c6_HeatSwitch, 2U);
-        c6_errorIfDataNotWrittenToFcn(chartInstance, 0U, 2U, 2U, 12, 10);
-        sf_mex_printf("%s =\\n", "HeatSwitch");
-        c6_d_hoistedGlobal = *chartInstance->c6_HeatSwitch;
-        c6_d_u = c6_d_hoistedGlobal;
-        c6_d_y = NULL;
-        sf_mex_assign(&c6_d_y, sf_mex_create("y", &c6_d_u, 0, 0U, 0U, 0U, 0),
-                      false);
-        sf_mex_call_debug(sfGlobalDebugInstanceStruct, "disp", 0U, 1U, 14,
-                          c6_d_y);
         _SFD_SYMBOL_SCOPE_POP();
       } else {
         _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 2U,
@@ -649,15 +595,6 @@ static void c6_chartstep_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance)
         *chartInstance->c6_InFlowSwitch = 0.0;
         c6_updateDataWrittenToVector(chartInstance, 1U);
         _SFD_DATA_RANGE_CHECK(*chartInstance->c6_InFlowSwitch, 3U);
-        c6_errorIfDataNotWrittenToFcn(chartInstance, 1U, 3U, 17U, 8, 12);
-        sf_mex_printf("%s =\\n", "InFlowSwitch");
-        c6_e_hoistedGlobal = *chartInstance->c6_InFlowSwitch;
-        c6_e_u = c6_e_hoistedGlobal;
-        c6_e_y = NULL;
-        sf_mex_assign(&c6_e_y, sf_mex_create("y", &c6_e_u, 0, 0U, 0U, 0U, 0),
-                      false);
-        sf_mex_call_debug(sfGlobalDebugInstanceStruct, "disp", 0U, 1U, 14,
-                          c6_e_y);
         _SFD_SYMBOL_SCOPE_POP();
       } else {
         _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 4U,
@@ -699,15 +636,6 @@ static void c6_chartstep_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance)
         *chartInstance->c6_InFlowSwitch = 1.0;
         c6_updateDataWrittenToVector(chartInstance, 1U);
         _SFD_DATA_RANGE_CHECK(*chartInstance->c6_InFlowSwitch, 3U);
-        c6_errorIfDataNotWrittenToFcn(chartInstance, 1U, 3U, 18U, 14, 12);
-        sf_mex_printf("%s =\\n", "InFlowSwitch");
-        c6_f_hoistedGlobal = *chartInstance->c6_InFlowSwitch;
-        c6_f_u = c6_f_hoistedGlobal;
-        c6_f_y = NULL;
-        sf_mex_assign(&c6_f_y, sf_mex_create("y", &c6_f_u, 0, 0U, 0U, 0U, 0),
-                      false);
-        sf_mex_call_debug(sfGlobalDebugInstanceStruct, "disp", 0U, 1U, 14,
-                          c6_f_y);
         _SFD_SYMBOL_SCOPE_POP();
       } else {
         _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 5U,
@@ -1074,20 +1002,6 @@ static void c6_updateDataWrittenToVector(SFc6_AllinOneInstanceStruct
     (int32_T)c6_vectorIndex, 0, 1, 1, 0)] = true;
 }
 
-static void c6_errorIfDataNotWrittenToFcn(SFc6_AllinOneInstanceStruct
-  *chartInstance, uint32_T c6_vectorIndex, uint32_T c6_dataNumber, uint32_T
-  c6_ssIdOfSourceObject, int32_T c6_offsetInSourceObject, int32_T
-  c6_lengthInSourceObject)
-{
-  (void)c6_ssIdOfSourceObject;
-  (void)c6_offsetInSourceObject;
-  (void)c6_lengthInSourceObject;
-  if (!chartInstance->c6_dataWrittenToVector[(uint32_T)
-      _SFD_EML_ARRAY_BOUNDS_CHECK(0U, (int32_T)c6_vectorIndex, 0, 1, 1, 0)]) {
-    _SFD_DATA_READ_BEFORE_WRITE_ERROR(c6_dataNumber);
-  }
-}
-
 static void init_dsm_address_info(SFc6_AllinOneInstanceStruct *chartInstance)
 {
   (void)chartInstance;
@@ -1130,10 +1044,10 @@ extern void utFree(void*);
 
 void sf_c6_AllinOne_get_check_sum(mxArray *plhs[])
 {
-  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(4272216744U);
-  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(1862626243U);
-  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(963443452U);
-  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(944434502U);
+  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(1915012223U);
+  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(2825511530U);
+  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(4244403374U);
+  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(3910439711U);
 }
 
 mxArray* sf_c6_AllinOne_get_post_codegen_info(void);
@@ -1147,7 +1061,7 @@ mxArray *sf_c6_AllinOne_get_autoinheritance_info(void)
     autoinheritanceFields);
 
   {
-    mxArray *mxChecksum = mxCreateString("zhe03H0KICfzuwungCAIb");
+    mxArray *mxChecksum = mxCreateString("3FiXkiEbCIdIJ7z8pZnHqB");
     mxSetField(mxAutoinheritanceInfo,0,"checksum",mxChecksum);
   }
 
@@ -1469,7 +1383,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
 static const char* sf_get_instance_specialization(void)
 {
-  return "Zti2IJFaQokb4Nfxwfw1DC";
+  return "K4yQs9alYkw4e1Kxc6bitC";
 }
 
 static void sf_opaque_initialize_c6_AllinOne(void *chartInstanceVar)
@@ -1600,10 +1514,10 @@ static void mdlSetWorkWidths_c6_AllinOne(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(2651344989U));
-  ssSetChecksum1(S,(1993608521U));
-  ssSetChecksum2(S,(2854017153U));
-  ssSetChecksum3(S,(5868459U));
+  ssSetChecksum0(S,(350362544U));
+  ssSetChecksum1(S,(3417916625U));
+  ssSetChecksum2(S,(4162414099U));
+  ssSetChecksum3(S,(300871228U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

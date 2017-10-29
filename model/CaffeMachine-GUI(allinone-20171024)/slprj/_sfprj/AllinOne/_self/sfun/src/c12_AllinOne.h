@@ -21,10 +21,10 @@ typedef struct {
   uint8_T c12_tp_Init;
   uint8_T c12_tp_TakeOut;
   uint8_T c12_tp_error;
-  uint8_T c12_tp_working_AmerricanCoffee;
-  uint8_T c12_tp_working_Cappuccino;
+  uint8_T c12_tp_prepare_AmerricanCoffee;
+  uint8_T c12_tp_prepare_Cappuccino;
   uint8_T c12_tp_prepare_CoffeeLatte;
-  uint8_T c12_tp_Step2;
+  uint8_T c12_tp_BeltStep2;
   uint8_T c12_tp_GetCup;
   uint8_T c12_tp_working_Coffee;
   uint8_T c12_tp_WaterState;
@@ -39,7 +39,7 @@ typedef struct {
   uint8_T c12_tp_MilkDoserState;
   uint8_T c12_d_tp_Working;
   uint8_T c12_d_tp_Finished;
-  uint8_T c12_tp_Step1;
+  uint8_T c12_tp_BeltStep1;
   boolean_T c12_isStable;
   uint8_T c12_is_active_c12_AllinOne;
   uint8_T c12_is_c12_AllinOne;

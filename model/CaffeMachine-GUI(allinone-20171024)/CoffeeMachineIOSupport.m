@@ -144,7 +144,7 @@ gui_State = struct('gui_Name',       'CoffeeMachineGUI', ...
 
 gui_mainfcn(gui_State);
 % End initialization code - DO NOT EDIT
-set_param('AllinOne','StopFcn',sprintf('CoffeeMachineIOSupport(''closefig'', fig);'));
+set_param('AllinOne','StopFcn',sprintf('CoffeeMachineIOSupport(''closefig'');'));
 
 function fig_close
 global fig;

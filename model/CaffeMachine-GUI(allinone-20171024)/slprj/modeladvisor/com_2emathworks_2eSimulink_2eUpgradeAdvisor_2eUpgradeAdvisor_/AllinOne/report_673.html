@@ -603,7 +603,7 @@ Simulink version: <font color="#800000">8.4</font>
 </td>
 <td align="right" valign="top">
 <b>
-Model version: <font color="#800000">1.75</font>
+Model version: <font color="#800000">1.93</font>
 </b>
 
 </td>
@@ -618,7 +618,7 @@ System: <font color="#800000">AllinOne</font>
 </td>
 <td align="right" valign="top">
 <b>
-Current run: <font color="#800000">2017/10/27 20:51:25</font>
+Current run: <font color="#800000">2017/10/29 21:16:21</font>
 </b>
 
 </td>
@@ -674,13 +674,13 @@ Total
 </tr>
 <tr>
 <td align="left" valign="top">
-&#160;&#160;<img src="task_passed.png" /> 1
+&#160;&#160;<img src="task_passed.png" /> 0
 </td>
 <td align="left" valign="top">
 &#160;&#160;<img src="task_failed.png" /> 0
 </td>
 <td align="left" valign="top">
-&#160;&#160;<img src="task_warning.png" /> 0
+&#160;&#160;<img src="task_warning.png" /> 1
 </td>
 <td align="left" valign="top">
 &#160;&#160;<img src="icon_task.png" /> 0
@@ -692,10 +692,10 @@ Total
 </tr>
 
 </table>
-<!-- Compile Status Flag --><!-- Service Status Flag -->
-<!-- mdladv_ignore_start --><div name = "Passed Check"  id = "Passed Check" class="PassedCheck" style="margin-left: 0pt;"><!-- mdladv_ignore_finish -->
+<font color="#FF0000">Error occurred during model compile.</font><br /><br />Error due to multiple causes.<!-- Service Status Flag -->
+<!-- mdladv_ignore_start --><div name = "Warning Check" id = "Warning Check" class="WarningCheck" style="margin-left: 0pt;"> <!-- mdladv_ignore_finish -->
 <p><hr /></p>  <a name="CheckRecord_307"></a><div class="CheckHeader" id="Header_mathworks.design.CheckMuxUsedAsBusCreatorUpgrade">
-<!-- mdladv_ignore_start --><img src="task_passed.png" />&#160;<!-- mdladv_ignore_finish --><span class="CheckHeading" id="Heading_mathworks.design.CheckMuxUsedAsBusCreatorUpgrade">
+<!-- mdladv_ignore_start --><img src="task_warning.png" />&#160;<!-- mdladv_ignore_finish --><span class="CheckHeading" id="Heading_mathworks.design.CheckMuxUsedAsBusCreatorUpgrade">
 Check for Mux blocks used to create bus signals</span>
 <!-- mdladv_ignore_start --><!-- mdladv_ignore_finish --><!-- mdladv_ignore_start --><!-- mdladv_ignore_finish --></div>
 <!-- mdladv_ignore_start --><div class="subsection"><!-- mdladv_ignore_finish --><p /><p /><p>
@@ -703,12 +703,18 @@ Check for Mux blocks used to create bus signals</span>
 Mux blocks used to create bus signals
 </b>
 <br />Identify Mux blocks in the model that are creating bus signals.  For guidelines about changes that you might need to make to models, callbacks, scripts, or tests after running the check, see <a href="matlab:helpview(fullfile(docroot,'simulink','helptargets.map'),'mux_bus_mixture_cleanup')">Compatibility Issues.</a><br /><br /><b>
-<font color="Green">
-Passed 
+<font color="Orange">
+Warning 
 </font>
 
 </b>
-<br />The model uses Mux blocks properly. Model is configured to detect future changes that might result in improper Mux block usage.<br />_________________________________________________________________________________________
+<br />The model uses Mux blocks properly. However, the model is not configured to detect future changes that might result in improper Mux block usage.<br /><br /><b>
+Recommended Action
+</b>
+<br />Set the <b>Diagnostic > Mux blocks used to create bus signals</b> to <tt>error</tt> by clicking on the link below. You can also set this diagnostic to error by pressing the modify button below.<br /><a href="matlab: modeladvisorprivate openCSAndHighlight AllinOne 'StrictBusMsg' ">
+Buses - Mux blocks used to create bus signals
+</a>
+<br />_________________________________________________________________________________________
 </p>
 <!-- mdladv_ignore_start --></div><!-- mdladv_ignore_finish --><!-- mdladv_ignore_start --></div><!-- mdladv_ignore_finish -->
 <!-- mdladv_ignore_start -->

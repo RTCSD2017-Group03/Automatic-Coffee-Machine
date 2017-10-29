@@ -49,8 +49,8 @@ typedef struct {
   uint8_T c1_tp_Running;
   uint8_T c1_tp_Output;
   uint8_T c1_tp_Prepare;
-  uint8_T c1_tp_Stepping;
   uint8_T c1_tp_Finished;
+  uint8_T c1_tp_Stepping;
   boolean_T c1_isStable;
   boolean_T c1_doneDoubleBufferReInit;
   uint8_T c1_is_active_c1_AllinOne;

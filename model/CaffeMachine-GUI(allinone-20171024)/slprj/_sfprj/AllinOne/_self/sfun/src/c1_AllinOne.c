@@ -217,9 +217,6 @@ static void initialize_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance)
   uint32_T c1_debug_family_var_map[2];
   real_T c1_nargin = 0.0;
   real_T c1_nargout = 0.0;
-  real_T c1_hoistedGlobal;
-  real_T c1_u;
-  const mxArray *c1_y = NULL;
   _sfTime_ = sf_get_time(chartInstance->S);
   chartInstance->c1_doSetSimStateSideEffects = 0U;
   chartInstance->c1_setSimStateSideEffectsInfo = NULL;
@@ -267,13 +264,6 @@ static void initialize_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance)
   chartInstance->c1_CupLocation = -1.0;
   c1_updateDataWrittenToVector(chartInstance, 0U);
   _SFD_DATA_RANGE_CHECK(chartInstance->c1_CupLocation, 1U);
-  c1_errorIfDataNotWrittenToFcn(chartInstance, 0U, 1U, 119U, 9, 11);
-  sf_mex_printf("%s =\\n", "CupLocation");
-  c1_hoistedGlobal = chartInstance->c1_CupLocation;
-  c1_u = c1_hoistedGlobal;
-  c1_y = NULL;
-  sf_mex_assign(&c1_y, sf_mex_create("y", &c1_u, 0, 0U, 0U, 0U, 0), false);
-  sf_mex_call_debug(sfGlobalDebugInstanceStruct, "disp", 0U, 1U, 14, c1_y);
   _SFD_SYMBOL_SCOPE_POP();
   chartInstance->c1_is_active_MixtrueMonitor = 1U;
   _SFD_CS_CALL(STATE_ACTIVE_TAG, 10U, chartInstance->c1_sfEvent);
@@ -387,16 +377,16 @@ static void c1_update_debugger_state_c1_AllinOne(SFc1_AllinOneInstanceStruct
     _SFD_CS_CALL(STATE_INACTIVE_TAG, 6U, chartInstance->c1_sfEvent);
   }
 
-  if (chartInstance->c1_is_CupTransmit == c1_IN_Stepping) {
-    _SFD_CS_CALL(STATE_ACTIVE_TAG, 9U, chartInstance->c1_sfEvent);
-  } else {
-    _SFD_CS_CALL(STATE_INACTIVE_TAG, 9U, chartInstance->c1_sfEvent);
-  }
-
   if (chartInstance->c1_is_CupTransmit == c1_IN_Finished) {
     _SFD_CS_CALL(STATE_ACTIVE_TAG, 4U, chartInstance->c1_sfEvent);
   } else {
     _SFD_CS_CALL(STATE_INACTIVE_TAG, 4U, chartInstance->c1_sfEvent);
+  }
+
+  if (chartInstance->c1_is_CupTransmit == c1_IN_Stepping) {
+    _SFD_CS_CALL(STATE_ACTIVE_TAG, 9U, chartInstance->c1_sfEvent);
+  } else {
+    _SFD_CS_CALL(STATE_INACTIVE_TAG, 9U, chartInstance->c1_sfEvent);
   }
 
   _SFD_SET_ANIMATION(c1_prevAniVal);
@@ -819,16 +809,6 @@ static void c1_chartstep_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance)
   real_T c1_c_nargin = 0.0;
   real_T c1_c_nargout = 0.0;
   int32_T c1_i5;
-  const mxArray *c1_y = NULL;
-  int32_T c1_i6;
-  real_T c1_u[2];
-  const mxArray *c1_b_y = NULL;
-  real_T c1_b_u;
-  const mxArray *c1_c_y = NULL;
-  real_T c1_c_u;
-  const mxArray *c1_d_y = NULL;
-  real_T c1_d_u;
-  const mxArray *c1_e_y = NULL;
   real_T c1_d_nargin = 0.0;
   real_T c1_d_nargout = 1.0;
   boolean_T c1_c_out;
@@ -837,9 +817,6 @@ static void c1_chartstep_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance)
   boolean_T c1_d_out;
   real_T c1_f_nargin = 0.0;
   real_T c1_f_nargout = 0.0;
-  real_T c1_b_hoistedGlobal;
-  real_T c1_e_u;
-  const mxArray *c1_f_y = NULL;
   boolean_T guard1 = false;
   boolean_T guard2 = false;
   _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 0U, chartInstance->c1_sfEvent);
@@ -944,34 +921,6 @@ static void c1_chartstep_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance)
       chartInstance->c1_LocalMixtrue.Sugar = *(real_T *)&((char_T *)
         chartInstance->c1_InMixtrue)[32];
       c1_updateDataWrittenToVector(chartInstance, 3U);
-      c1_errorIfDataNotWrittenToFcn(chartInstance, 3U, 6U, 134U, 11, 12);
-      sf_mex_printf("%s =\\n", "LocalMixtrue");
-      c1_y = NULL;
-      sf_mex_assign(&c1_y, sf_mex_createstruct("structure", 2, 1, 1), false);
-      for (c1_i6 = 0; c1_i6 < 2; c1_i6++) {
-        c1_u[c1_i6] = chartInstance->c1_LocalMixtrue.Water[c1_i6];
-      }
-
-      c1_b_y = NULL;
-      sf_mex_assign(&c1_b_y, sf_mex_create("y", c1_u, 0, 0U, 1U, 0U, 1, 2),
-                    false);
-      sf_mex_addfield(c1_y, c1_b_y, "Water", "Water", 0);
-      c1_b_u = chartInstance->c1_LocalMixtrue.Coffee;
-      c1_c_y = NULL;
-      sf_mex_assign(&c1_c_y, sf_mex_create("y", &c1_b_u, 0, 0U, 0U, 0U, 0),
-                    false);
-      sf_mex_addfield(c1_y, c1_c_y, "Coffee", "Coffee", 0);
-      c1_c_u = chartInstance->c1_LocalMixtrue.Milk;
-      c1_d_y = NULL;
-      sf_mex_assign(&c1_d_y, sf_mex_create("y", &c1_c_u, 0, 0U, 0U, 0U, 0),
-                    false);
-      sf_mex_addfield(c1_y, c1_d_y, "Milk", "Milk", 0);
-      c1_d_u = chartInstance->c1_LocalMixtrue.Sugar;
-      c1_e_y = NULL;
-      sf_mex_assign(&c1_e_y, sf_mex_create("y", &c1_d_u, 0, 0U, 0U, 0U, 0),
-                    false);
-      sf_mex_addfield(c1_y, c1_e_y, "Sugar", "Sugar", 0);
-      sf_mex_call_debug(sfGlobalDebugInstanceStruct, "disp", 0U, 1U, 14, c1_y);
       _SFD_SYMBOL_SCOPE_POP();
     } else {
       _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 12U,
@@ -1077,14 +1026,6 @@ static void c1_chartstep_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance)
       chartInstance->c1_CupLocation = 0.0;
       c1_updateDataWrittenToVector(chartInstance, 0U);
       _SFD_DATA_RANGE_CHECK(chartInstance->c1_CupLocation, 1U);
-      c1_errorIfDataNotWrittenToFcn(chartInstance, 0U, 1U, 139U, 11, 11);
-      sf_mex_printf("%s =\\n", "CupLocation");
-      c1_b_hoistedGlobal = chartInstance->c1_CupLocation;
-      c1_e_u = c1_b_hoistedGlobal;
-      c1_f_y = NULL;
-      sf_mex_assign(&c1_f_y, sf_mex_create("y", &c1_e_u, 0, 0U, 0U, 0U, 0),
-                    false);
-      sf_mex_call_debug(sfGlobalDebugInstanceStruct, "disp", 0U, 1U, 14, c1_f_y);
       _SFD_SYMBOL_SCOPE_POP();
     } else {
       _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 2U,
@@ -1122,26 +1063,20 @@ static void c1_CupTransmit(SFc1_AllinOneInstanceStruct *chartInstance)
   uint32_T c1_b_debug_family_var_map[2];
   real_T c1_c_nargin = 0.0;
   real_T c1_c_nargout = 0.0;
-  int32_T c1_i7;
+  int32_T c1_i6;
   real_T c1_d_nargin = 0.0;
   real_T c1_d_nargout = 0.0;
-  real_T c1_hoistedGlobal;
-  real_T c1_u;
-  const mxArray *c1_y = NULL;
   real_T c1_e_nargin = 0.0;
   real_T c1_e_nargout = 1.0;
   boolean_T c1_c_out;
   real_T c1_f_nargin = 0.0;
   real_T c1_f_nargout = 0.0;
-  real_T c1_b_hoistedGlobal;
-  real_T c1_b_u;
-  const mxArray *c1_b_y = NULL;
   real_T c1_g_nargin = 0.0;
   real_T c1_g_nargout = 1.0;
   boolean_T c1_d_out;
   real_T c1_h_nargin = 0.0;
   real_T c1_h_nargout = 0.0;
-  int32_T c1_i8;
+  int32_T c1_i7;
   real_T c1_i_nargin = 0.0;
   real_T c1_i_nargout = 1.0;
   boolean_T c1_e_out;
@@ -1211,8 +1146,8 @@ static void c1_CupTransmit(SFc1_AllinOneInstanceStruct *chartInstance)
         c1_sf_marshallIn);
       _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c1_c_nargout, 1U, c1_sf_marshallOut,
         c1_sf_marshallIn);
-      for (c1_i7 = 0; c1_i7 < 2; c1_i7++) {
-        ((real_T *)&((char_T *)chartInstance->c1_OutMixtrue)[0])[c1_i7] = 0.0;
+      for (c1_i6 = 0; c1_i6 < 2; c1_i6++) {
+        ((real_T *)&((char_T *)chartInstance->c1_OutMixtrue)[0])[c1_i6] = 0.0;
       }
 
       c1_updateDataWrittenToVector(chartInstance, 1U);
@@ -1240,13 +1175,6 @@ static void c1_CupTransmit(SFc1_AllinOneInstanceStruct *chartInstance)
       chartInstance->c1_CupLocation = -1.0;
       c1_updateDataWrittenToVector(chartInstance, 0U);
       _SFD_DATA_RANGE_CHECK(chartInstance->c1_CupLocation, 1U);
-      c1_errorIfDataNotWrittenToFcn(chartInstance, 0U, 1U, 119U, 9, 11);
-      sf_mex_printf("%s =\\n", "CupLocation");
-      c1_hoistedGlobal = chartInstance->c1_CupLocation;
-      c1_u = c1_hoistedGlobal;
-      c1_y = NULL;
-      sf_mex_assign(&c1_y, sf_mex_create("y", &c1_u, 0, 0U, 0U, 0U, 0), false);
-      sf_mex_call_debug(sfGlobalDebugInstanceStruct, "disp", 0U, 1U, 14, c1_y);
       _SFD_SYMBOL_SCOPE_POP();
     } else {
       _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 5U,
@@ -1289,14 +1217,6 @@ static void c1_CupTransmit(SFc1_AllinOneInstanceStruct *chartInstance)
       chartInstance->c1_CupLocation += *chartInstance->c1_Step;
       c1_updateDataWrittenToVector(chartInstance, 0U);
       _SFD_DATA_RANGE_CHECK(chartInstance->c1_CupLocation, 1U);
-      c1_errorIfDataNotWrittenToFcn(chartInstance, 0U, 1U, 128U, 13, 11);
-      sf_mex_printf("%s =\\n", "CupLocation");
-      c1_b_hoistedGlobal = chartInstance->c1_CupLocation;
-      c1_b_u = c1_b_hoistedGlobal;
-      c1_b_y = NULL;
-      sf_mex_assign(&c1_b_y, sf_mex_create("y", &c1_b_u, 0, 0U, 0U, 0U, 0),
-                    false);
-      sf_mex_call_debug(sfGlobalDebugInstanceStruct, "disp", 0U, 1U, 14, c1_b_y);
       chartInstance->c1_StepEventEventCounter++;
       _SFD_SYMBOL_SCOPE_POP();
     } else {
@@ -1337,9 +1257,9 @@ static void c1_CupTransmit(SFc1_AllinOneInstanceStruct *chartInstance)
       _SFD_SYMBOL_SCOPE_ADD_EML_IMPORTABLE(&c1_h_nargout, 1U, c1_sf_marshallOut,
         c1_sf_marshallIn);
       c1_errorIfDataNotWrittenToFcn(chartInstance, 3U, 6U, 120U, 24, 12);
-      for (c1_i8 = 0; c1_i8 < 2; c1_i8++) {
-        ((real_T *)&((char_T *)chartInstance->c1_OutMixtrue)[0])[c1_i8] =
-          chartInstance->c1_LocalMixtrue.Water[c1_i8];
+      for (c1_i7 = 0; c1_i7 < 2; c1_i7++) {
+        ((real_T *)&((char_T *)chartInstance->c1_OutMixtrue)[0])[c1_i7] =
+          chartInstance->c1_LocalMixtrue.Water[c1_i7];
       }
 
       *(real_T *)&((char_T *)chartInstance->c1_OutMixtrue)[16] =
@@ -1822,10 +1742,10 @@ static int8_T c1_e_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
   const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId)
 {
   int8_T c1_y;
-  int8_T c1_i9;
+  int8_T c1_i8;
   (void)chartInstance;
-  sf_mex_import(c1_parentId, sf_mex_dup(c1_u), &c1_i9, 1, 2, 0U, 0, 0U, 0);
-  c1_y = c1_i9;
+  sf_mex_import(c1_parentId, sf_mex_dup(c1_u), &c1_i8, 1, 2, 0U, 0, 0U, 0);
+  c1_y = c1_i8;
   sf_mex_destroy(&c1_u);
   return c1_y;
 }
@@ -1930,10 +1850,10 @@ static int32_T c1_h_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
   const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId)
 {
   int32_T c1_y;
-  int32_T c1_i10;
+  int32_T c1_i9;
   (void)chartInstance;
-  sf_mex_import(c1_parentId, sf_mex_dup(c1_u), &c1_i10, 1, 6, 0U, 0, 0U, 0);
-  c1_y = c1_i10;
+  sf_mex_import(c1_parentId, sf_mex_dup(c1_u), &c1_i9, 1, 6, 0U, 0, 0U, 0);
+  c1_y = c1_i9;
   sf_mex_destroy(&c1_u);
   return c1_y;
 }
@@ -2023,14 +1943,14 @@ static const mxArray *c1_InMixtrue_bus_io(void *chartInstanceVoid, void
   *c1_pData)
 {
   const mxArray *c1_mxVal = NULL;
-  int32_T c1_i11;
+  int32_T c1_i10;
   c1_Mixtrue c1_tmp;
   SFc1_AllinOneInstanceStruct *chartInstance;
   chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_mxVal = NULL;
-  for (c1_i11 = 0; c1_i11 < 2; c1_i11++) {
-    c1_tmp.Water[c1_i11] = ((real_T *)&((char_T *)(c1_Mixtrue *)c1_pData)[0])
-      [c1_i11];
+  for (c1_i10 = 0; c1_i10 < 2; c1_i10++) {
+    c1_tmp.Water[c1_i10] = ((real_T *)&((char_T *)(c1_Mixtrue *)c1_pData)[0])
+      [c1_i10];
   }
 
   c1_tmp.Coffee = *(real_T *)&((char_T *)(c1_Mixtrue *)c1_pData)[16];
@@ -2046,7 +1966,7 @@ static const mxArray *c1_g_sf_marshallOut(void *chartInstanceVoid, void
   const mxArray *c1_mxArrayOutData = NULL;
   c1_Mixtrue c1_u;
   const mxArray *c1_y = NULL;
-  int32_T c1_i12;
+  int32_T c1_i11;
   real_T c1_b_u[2];
   const mxArray *c1_b_y = NULL;
   real_T c1_c_u;
@@ -2061,8 +1981,8 @@ static const mxArray *c1_g_sf_marshallOut(void *chartInstanceVoid, void
   c1_u = *(c1_Mixtrue *)c1_inData;
   c1_y = NULL;
   sf_mex_assign(&c1_y, sf_mex_createstruct("structure", 2, 1, 1), false);
-  for (c1_i12 = 0; c1_i12 < 2; c1_i12++) {
-    c1_b_u[c1_i12] = c1_u.Water[c1_i12];
+  for (c1_i11 = 0; c1_i11 < 2; c1_i11++) {
+    c1_b_u[c1_i11] = c1_u.Water[c1_i11];
   }
 
   c1_b_y = NULL;
@@ -2126,11 +2046,11 @@ static void c1_m_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
   const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId, real_T c1_y[2])
 {
   real_T c1_dv0[2];
-  int32_T c1_i13;
+  int32_T c1_i12;
   (void)chartInstance;
   sf_mex_import(c1_parentId, sf_mex_dup(c1_u), c1_dv0, 1, 0, 0U, 1, 0U, 1, 2);
-  for (c1_i13 = 0; c1_i13 < 2; c1_i13++) {
-    c1_y[c1_i13] = c1_dv0[c1_i13];
+  for (c1_i12 = 0; c1_i12 < 2; c1_i12++) {
+    c1_y[c1_i12] = c1_dv0[c1_i12];
   }
 
   sf_mex_destroy(&c1_u);
@@ -2172,11 +2092,11 @@ static void c1_o_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
   const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId, boolean_T c1_y[4])
 {
   boolean_T c1_bv1[4];
-  int32_T c1_i14;
+  int32_T c1_i13;
   (void)chartInstance;
   sf_mex_import(c1_parentId, sf_mex_dup(c1_u), c1_bv1, 1, 11, 0U, 1, 0U, 1, 4);
-  for (c1_i14 = 0; c1_i14 < 4; c1_i14++) {
-    c1_y[c1_i14] = c1_bv1[c1_i14];
+  for (c1_i13 = 0; c1_i13 < 4; c1_i13++) {
+    c1_y[c1_i13] = c1_bv1[c1_i13];
   }
 
   sf_mex_destroy(&c1_u);
@@ -2278,10 +2198,10 @@ extern void utFree(void*);
 
 void sf_c1_AllinOne_get_check_sum(mxArray *plhs[])
 {
-  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(535383529U);
-  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(3995047988U);
-  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(234467067U);
-  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(2662145631U);
+  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(1411136447U);
+  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(2758678837U);
+  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(705663754U);
+  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(2814913606U);
 }
 
 mxArray* sf_c1_AllinOne_get_post_codegen_info(void);
@@ -2295,7 +2215,7 @@ mxArray *sf_c1_AllinOne_get_autoinheritance_info(void)
     autoinheritanceFields);
 
   {
-    mxArray *mxChecksum = mxCreateString("3yuxwpQdv8FVs4bVHgzvoH");
+    mxArray *mxChecksum = mxCreateString("bap3uBfgSLH5iCvTW45YME");
     mxSetField(mxAutoinheritanceInfo,0,"checksum",mxChecksum);
   }
 
@@ -2807,7 +2727,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
 static const char* sf_get_instance_specialization(void)
 {
-  return "HgWaE9XjDfimpxiUiPbkWB";
+  return "ATG8pLH6DCAvAPeVYpnJpE";
 }
 
 static void sf_opaque_initialize_c1_AllinOne(void *chartInstanceVar)
@@ -2940,10 +2860,10 @@ static void mdlSetWorkWidths_c1_AllinOne(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(761111347U));
-  ssSetChecksum1(S,(80786989U));
-  ssSetChecksum2(S,(2778586661U));
-  ssSetChecksum3(S,(4250720344U));
+  ssSetChecksum0(S,(2277029774U));
+  ssSetChecksum1(S,(3268845383U));
+  ssSetChecksum2(S,(3234262406U));
+  ssSetChecksum3(S,(1107214574U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);

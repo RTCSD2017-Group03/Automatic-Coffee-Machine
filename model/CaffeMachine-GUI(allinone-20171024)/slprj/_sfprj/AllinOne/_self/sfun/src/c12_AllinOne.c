@@ -25,15 +25,15 @@
 #define c12_event_TakeOutEvent         (11)
 #define CALL_EVENT                     (-1)
 #define c12_IN_NO_ACTIVE_CHILD         ((uint8_T)0U)
-#define c12_IN_GetCup                  ((uint8_T)1U)
-#define c12_IN_Init                    ((uint8_T)2U)
-#define c12_IN_Step1                   ((uint8_T)3U)
-#define c12_IN_Step2                   ((uint8_T)4U)
+#define c12_IN_BeltStep1               ((uint8_T)1U)
+#define c12_IN_BeltStep2               ((uint8_T)2U)
+#define c12_IN_GetCup                  ((uint8_T)3U)
+#define c12_IN_Init                    ((uint8_T)4U)
 #define c12_IN_TakeOut                 ((uint8_T)5U)
 #define c12_IN_error                   ((uint8_T)6U)
-#define c12_IN_prepare_CoffeeLatte     ((uint8_T)7U)
-#define c12_IN_working_AmerricanCoffee ((uint8_T)8U)
-#define c12_IN_working_Cappuccino      ((uint8_T)9U)
+#define c12_IN_prepare_AmerricanCoffee ((uint8_T)7U)
+#define c12_IN_prepare_Cappuccino      ((uint8_T)8U)
+#define c12_IN_prepare_CoffeeLatte     ((uint8_T)9U)
 #define c12_IN_working_Coffee          ((uint8_T)10U)
 #define c12_IN_Finished                ((uint8_T)1U)
 #define c12_IN_Working                 ((uint8_T)2U)
@@ -64,12 +64,12 @@ static void c12_chartstep_c12_AllinOne(SFc12_AllinOneInstanceStruct
   *chartInstance);
 static void initSimStructsc12_AllinOne(SFc12_AllinOneInstanceStruct
   *chartInstance);
-static void c12_Init(SFc12_AllinOneInstanceStruct *chartInstance);
+static void c12_BeltStep2(SFc12_AllinOneInstanceStruct *chartInstance);
 static void c12_GetCup(SFc12_AllinOneInstanceStruct *chartInstance);
 static void c12_working_Coffee(SFc12_AllinOneInstanceStruct *chartInstance);
 static void c12_exit_internal_working_Coffee(SFc12_AllinOneInstanceStruct
   *chartInstance);
-static void c12_Step1(SFc12_AllinOneInstanceStruct *chartInstance);
+static void c12_BeltStep1(SFc12_AllinOneInstanceStruct *chartInstance);
 static void init_script_number_translation(uint32_T c12_machineNumber, uint32_T
   c12_chartNumber, uint32_T c12_instanceNumber);
 static boolean_T c12_checkall(SFc12_AllinOneInstanceStruct *chartInstance,
@@ -141,18 +141,18 @@ static void initialize_c12_AllinOne(SFc12_AllinOneInstanceStruct *chartInstance)
   _sfTime_ = sf_get_time(chartInstance->S);
   chartInstance->c12_doSetSimStateSideEffects = 0U;
   chartInstance->c12_setSimStateSideEffectsInfo = NULL;
+  chartInstance->c12_tp_BeltStep1 = 0U;
+  chartInstance->c12_temporalCounter_i1 = 0U;
+  chartInstance->c12_tp_BeltStep2 = 0U;
+  chartInstance->c12_temporalCounter_i1 = 0U;
   chartInstance->c12_tp_GetCup = 0U;
   chartInstance->c12_temporalCounter_i1 = 0U;
   chartInstance->c12_tp_Init = 0U;
-  chartInstance->c12_tp_Step1 = 0U;
-  chartInstance->c12_temporalCounter_i1 = 0U;
-  chartInstance->c12_tp_Step2 = 0U;
-  chartInstance->c12_temporalCounter_i1 = 0U;
   chartInstance->c12_tp_TakeOut = 0U;
   chartInstance->c12_tp_error = 0U;
+  chartInstance->c12_tp_prepare_AmerricanCoffee = 0U;
+  chartInstance->c12_tp_prepare_Cappuccino = 0U;
   chartInstance->c12_tp_prepare_CoffeeLatte = 0U;
-  chartInstance->c12_tp_working_AmerricanCoffee = 0U;
-  chartInstance->c12_tp_working_Cappuccino = 0U;
   chartInstance->c12_tp_working_Coffee = 0U;
   chartInstance->c12_temporalCounter_i2 = 0U;
   chartInstance->c12_is_active_CoffeeDoserState = 0U;
@@ -234,9 +234,9 @@ static void c12_update_debugger_state_c12_AllinOne(SFc12_AllinOneInstanceStruct 
   }
 
   if (chartInstance->c12_is_c12_AllinOne == c12_IN_Init) {
-    _SFD_CS_CALL(STATE_ACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
+    _SFD_CS_CALL(STATE_ACTIVE_TAG, 3U, chartInstance->c12_sfEvent);
   } else {
-    _SFD_CS_CALL(STATE_INACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
+    _SFD_CS_CALL(STATE_INACTIVE_TAG, 3U, chartInstance->c12_sfEvent);
   }
 
   if (chartInstance->c12_is_c12_AllinOne == c12_IN_TakeOut) {
@@ -251,34 +251,34 @@ static void c12_update_debugger_state_c12_AllinOne(SFc12_AllinOneInstanceStruct 
     _SFD_CS_CALL(STATE_INACTIVE_TAG, 6U, chartInstance->c12_sfEvent);
   }
 
-  if (chartInstance->c12_is_c12_AllinOne == c12_IN_working_AmerricanCoffee) {
-    _SFD_CS_CALL(STATE_ACTIVE_TAG, 8U, chartInstance->c12_sfEvent);
-  } else {
-    _SFD_CS_CALL(STATE_INACTIVE_TAG, 8U, chartInstance->c12_sfEvent);
-  }
-
-  if (chartInstance->c12_is_c12_AllinOne == c12_IN_working_Cappuccino) {
-    _SFD_CS_CALL(STATE_ACTIVE_TAG, 9U, chartInstance->c12_sfEvent);
-  } else {
-    _SFD_CS_CALL(STATE_INACTIVE_TAG, 9U, chartInstance->c12_sfEvent);
-  }
-
-  if (chartInstance->c12_is_c12_AllinOne == c12_IN_prepare_CoffeeLatte) {
+  if (chartInstance->c12_is_c12_AllinOne == c12_IN_prepare_AmerricanCoffee) {
     _SFD_CS_CALL(STATE_ACTIVE_TAG, 7U, chartInstance->c12_sfEvent);
   } else {
     _SFD_CS_CALL(STATE_INACTIVE_TAG, 7U, chartInstance->c12_sfEvent);
   }
 
-  if (chartInstance->c12_is_c12_AllinOne == c12_IN_Step2) {
-    _SFD_CS_CALL(STATE_ACTIVE_TAG, 3U, chartInstance->c12_sfEvent);
+  if (chartInstance->c12_is_c12_AllinOne == c12_IN_prepare_Cappuccino) {
+    _SFD_CS_CALL(STATE_ACTIVE_TAG, 8U, chartInstance->c12_sfEvent);
   } else {
-    _SFD_CS_CALL(STATE_INACTIVE_TAG, 3U, chartInstance->c12_sfEvent);
+    _SFD_CS_CALL(STATE_INACTIVE_TAG, 8U, chartInstance->c12_sfEvent);
+  }
+
+  if (chartInstance->c12_is_c12_AllinOne == c12_IN_prepare_CoffeeLatte) {
+    _SFD_CS_CALL(STATE_ACTIVE_TAG, 9U, chartInstance->c12_sfEvent);
+  } else {
+    _SFD_CS_CALL(STATE_INACTIVE_TAG, 9U, chartInstance->c12_sfEvent);
+  }
+
+  if (chartInstance->c12_is_c12_AllinOne == c12_IN_BeltStep2) {
+    _SFD_CS_CALL(STATE_ACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
+  } else {
+    _SFD_CS_CALL(STATE_INACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
   }
 
   if (chartInstance->c12_is_c12_AllinOne == c12_IN_GetCup) {
-    _SFD_CS_CALL(STATE_ACTIVE_TAG, 0U, chartInstance->c12_sfEvent);
+    _SFD_CS_CALL(STATE_ACTIVE_TAG, 2U, chartInstance->c12_sfEvent);
   } else {
-    _SFD_CS_CALL(STATE_INACTIVE_TAG, 0U, chartInstance->c12_sfEvent);
+    _SFD_CS_CALL(STATE_INACTIVE_TAG, 2U, chartInstance->c12_sfEvent);
   }
 
   if (chartInstance->c12_is_c12_AllinOne == c12_IN_working_Coffee) {
@@ -359,10 +359,10 @@ static void c12_update_debugger_state_c12_AllinOne(SFc12_AllinOneInstanceStruct 
     _SFD_CS_CALL(STATE_INACTIVE_TAG, 15U, chartInstance->c12_sfEvent);
   }
 
-  if (chartInstance->c12_is_c12_AllinOne == c12_IN_Step1) {
-    _SFD_CS_CALL(STATE_ACTIVE_TAG, 2U, chartInstance->c12_sfEvent);
+  if (chartInstance->c12_is_c12_AllinOne == c12_IN_BeltStep1) {
+    _SFD_CS_CALL(STATE_ACTIVE_TAG, 0U, chartInstance->c12_sfEvent);
   } else {
-    _SFD_CS_CALL(STATE_INACTIVE_TAG, 2U, chartInstance->c12_sfEvent);
+    _SFD_CS_CALL(STATE_INACTIVE_TAG, 0U, chartInstance->c12_sfEvent);
   }
 
   _SFD_SET_ANIMATION(c12_prevAniVal);
@@ -636,10 +636,30 @@ static void c12_set_sim_state_side_effects_c12_AllinOne
   (SFc12_AllinOneInstanceStruct *chartInstance)
 {
   if (chartInstance->c12_doSetSimStateSideEffects != 0) {
+    if (chartInstance->c12_is_c12_AllinOne == c12_IN_BeltStep1) {
+      chartInstance->c12_tp_BeltStep1 = 1U;
+      if (sf_mex_sub(chartInstance->c12_setSimStateSideEffectsInfo,
+                     "setSimStateSideEffectsInfo", 1, 2) == 0.0) {
+        chartInstance->c12_temporalCounter_i1 = 0U;
+      }
+    } else {
+      chartInstance->c12_tp_BeltStep1 = 0U;
+    }
+
+    if (chartInstance->c12_is_c12_AllinOne == c12_IN_BeltStep2) {
+      chartInstance->c12_tp_BeltStep2 = 1U;
+      if (sf_mex_sub(chartInstance->c12_setSimStateSideEffectsInfo,
+                     "setSimStateSideEffectsInfo", 1, 3) == 0.0) {
+        chartInstance->c12_temporalCounter_i1 = 0U;
+      }
+    } else {
+      chartInstance->c12_tp_BeltStep2 = 0U;
+    }
+
     if (chartInstance->c12_is_c12_AllinOne == c12_IN_GetCup) {
       chartInstance->c12_tp_GetCup = 1U;
       if (sf_mex_sub(chartInstance->c12_setSimStateSideEffectsInfo,
-                     "setSimStateSideEffectsInfo", 1, 2) == 0.0) {
+                     "setSimStateSideEffectsInfo", 1, 4) == 0.0) {
         chartInstance->c12_temporalCounter_i1 = 0U;
       }
     } else {
@@ -650,26 +670,6 @@ static void c12_set_sim_state_side_effects_c12_AllinOne
       chartInstance->c12_tp_Init = 1U;
     } else {
       chartInstance->c12_tp_Init = 0U;
-    }
-
-    if (chartInstance->c12_is_c12_AllinOne == c12_IN_Step1) {
-      chartInstance->c12_tp_Step1 = 1U;
-      if (sf_mex_sub(chartInstance->c12_setSimStateSideEffectsInfo,
-                     "setSimStateSideEffectsInfo", 1, 4) == 0.0) {
-        chartInstance->c12_temporalCounter_i1 = 0U;
-      }
-    } else {
-      chartInstance->c12_tp_Step1 = 0U;
-    }
-
-    if (chartInstance->c12_is_c12_AllinOne == c12_IN_Step2) {
-      chartInstance->c12_tp_Step2 = 1U;
-      if (sf_mex_sub(chartInstance->c12_setSimStateSideEffectsInfo,
-                     "setSimStateSideEffectsInfo", 1, 5) == 0.0) {
-        chartInstance->c12_temporalCounter_i1 = 0U;
-      }
-    } else {
-      chartInstance->c12_tp_Step2 = 0U;
     }
 
     if (chartInstance->c12_is_c12_AllinOne == c12_IN_TakeOut) {
@@ -684,22 +684,22 @@ static void c12_set_sim_state_side_effects_c12_AllinOne
       chartInstance->c12_tp_error = 0U;
     }
 
+    if (chartInstance->c12_is_c12_AllinOne == c12_IN_prepare_AmerricanCoffee) {
+      chartInstance->c12_tp_prepare_AmerricanCoffee = 1U;
+    } else {
+      chartInstance->c12_tp_prepare_AmerricanCoffee = 0U;
+    }
+
+    if (chartInstance->c12_is_c12_AllinOne == c12_IN_prepare_Cappuccino) {
+      chartInstance->c12_tp_prepare_Cappuccino = 1U;
+    } else {
+      chartInstance->c12_tp_prepare_Cappuccino = 0U;
+    }
+
     if (chartInstance->c12_is_c12_AllinOne == c12_IN_prepare_CoffeeLatte) {
       chartInstance->c12_tp_prepare_CoffeeLatte = 1U;
     } else {
       chartInstance->c12_tp_prepare_CoffeeLatte = 0U;
-    }
-
-    if (chartInstance->c12_is_c12_AllinOne == c12_IN_working_AmerricanCoffee) {
-      chartInstance->c12_tp_working_AmerricanCoffee = 1U;
-    } else {
-      chartInstance->c12_tp_working_AmerricanCoffee = 0U;
-    }
-
-    if (chartInstance->c12_is_c12_AllinOne == c12_IN_working_Cappuccino) {
-      chartInstance->c12_tp_working_Cappuccino = 1U;
-    } else {
-      chartInstance->c12_tp_working_Cappuccino = 0U;
     }
 
     if (chartInstance->c12_is_c12_AllinOne == c12_IN_working_Coffee) {
@@ -959,20 +959,22 @@ static void c12_chartstep_c12_AllinOne(SFc12_AllinOneInstanceStruct
   *chartInstance)
 {
   boolean_T c12_out;
-  boolean_T c12_temp;
   boolean_T c12_b_out;
   boolean_T c12_c_out;
   boolean_T c12_d_out;
   boolean_T c12_e_out;
   boolean_T c12_f_out;
+  boolean_T c12_g_out;
   _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 7U, chartInstance->c12_sfEvent);
   if (chartInstance->c12_is_active_c12_AllinOne == 0U) {
     _SFD_CC_CALL(CHART_ENTER_ENTRY_FUNCTION_TAG, 7U, chartInstance->c12_sfEvent);
     chartInstance->c12_is_active_c12_AllinOne = 1U;
     _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 7U, chartInstance->c12_sfEvent);
     _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 0U, chartInstance->c12_sfEvent);
+    sf_mex_call_debug(sfGlobalDebugInstanceStruct, "CoffeeMachineIOSupport", 0U,
+                      1U, 15, "init");
     chartInstance->c12_is_c12_AllinOne = c12_IN_Init;
-    _SFD_CS_CALL(STATE_ACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
+    _SFD_CS_CALL(STATE_ACTIVE_TAG, 3U, chartInstance->c12_sfEvent);
     chartInstance->c12_tp_Init = 1U;
     *chartInstance->c12_CoffeeAmount = 0.0;
     _SFD_DATA_RANGE_CHECK(*chartInstance->c12_CoffeeAmount, 3U);
@@ -986,68 +988,89 @@ static void c12_chartstep_c12_AllinOne(SFc12_AllinOneInstanceStruct
     _SFD_DATA_RANGE_CHECK(*chartInstance->c12_NextStep, 7U);
   } else {
     switch (chartInstance->c12_is_c12_AllinOne) {
-     case c12_IN_GetCup:
+     case c12_IN_BeltStep1:
       CV_CHART_EVAL(7, 0, 1);
+      c12_BeltStep1(chartInstance);
+      break;
+
+     case c12_IN_BeltStep2:
+      CV_CHART_EVAL(7, 0, 2);
+      c12_BeltStep2(chartInstance);
+      break;
+
+     case c12_IN_GetCup:
+      CV_CHART_EVAL(7, 0, 3);
       c12_GetCup(chartInstance);
       break;
 
      case c12_IN_Init:
-      CV_CHART_EVAL(7, 0, 2);
-      c12_Init(chartInstance);
-      break;
-
-     case c12_IN_Step1:
-      CV_CHART_EVAL(7, 0, 3);
-      c12_Step1(chartInstance);
-      break;
-
-     case c12_IN_Step2:
       CV_CHART_EVAL(7, 0, 4);
-      _SFD_CT_CALL(TRANSITION_BEFORE_PROCESSING_TAG, 25U,
+      _SFD_CT_CALL(TRANSITION_BEFORE_PROCESSING_TAG, 1U,
                    chartInstance->c12_sfEvent);
-      c12_out = (CV_TRANSITION_EVAL(25U, (int32_T)_SFD_CCP_CALL(25U, 0,
-        chartInstance->c12_sfEvent == c12_event_StepEvent != 0U,
+      c12_out = (CV_TRANSITION_EVAL(1U, (int32_T)_SFD_CCP_CALL(1U, 0,
+        chartInstance->c12_sfEvent == c12_event_AmericanCoffee != 0U,
         chartInstance->c12_sfEvent)) != 0);
       if (c12_out) {
-        _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 25U, chartInstance->c12_sfEvent);
-        chartInstance->c12_tp_Step2 = 0U;
-        _SFD_CS_CALL(STATE_ENTER_EXIT_FUNCTION_TAG, 3U,
-                     chartInstance->c12_sfEvent);
-        *chartInstance->c12_NextStep = 0.0;
-        _SFD_DATA_RANGE_CHECK(*chartInstance->c12_NextStep, 7U);
-        _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 3U, chartInstance->c12_sfEvent);
+        _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
+        chartInstance->c12_tp_Init = 0U;
         _SFD_CS_CALL(STATE_INACTIVE_TAG, 3U, chartInstance->c12_sfEvent);
-        chartInstance->c12_is_c12_AllinOne = c12_IN_TakeOut;
-        _SFD_CS_CALL(STATE_ACTIVE_TAG, 4U, chartInstance->c12_sfEvent);
-        chartInstance->c12_tp_TakeOut = 1U;
+        chartInstance->c12_is_c12_AllinOne = c12_IN_prepare_CoffeeLatte;
+        _SFD_CS_CALL(STATE_ACTIVE_TAG, 9U, chartInstance->c12_sfEvent);
+        chartInstance->c12_tp_prepare_CoffeeLatte = 1U;
+        chartInstance->c12_CoffeeRecipe = 10.0;
+        _SFD_DATA_RANGE_CHECK(chartInstance->c12_CoffeeRecipe, 11U);
+        chartInstance->c12_MilkRecipe = 80.0;
+        _SFD_DATA_RANGE_CHECK(chartInstance->c12_MilkRecipe, 12U);
+        chartInstance->c12_SugarRecipe = 10.0;
+        _SFD_DATA_RANGE_CHECK(chartInstance->c12_SugarRecipe, 13U);
+        chartInstance->c12_WaterRecipe = 40.0;
+        _SFD_DATA_RANGE_CHECK(chartInstance->c12_WaterRecipe, 14U);
       } else {
-        _SFD_CT_CALL(TRANSITION_BEFORE_PROCESSING_TAG, 44U,
+        _SFD_CT_CALL(TRANSITION_BEFORE_PROCESSING_TAG, 26U,
                      chartInstance->c12_sfEvent);
-        c12_temp = (_SFD_CCP_CALL(44U, 0, chartInstance->c12_sfEvent ==
-          c12_event_Tick != 0U, chartInstance->c12_sfEvent) != 0);
-        if (c12_temp) {
-          c12_temp = (_SFD_CCP_CALL(44U, 1,
-            chartInstance->c12_temporalCounter_i1 >= 10000U != 0U,
-            chartInstance->c12_sfEvent) != 0);
-        }
-
-        c12_b_out = (CV_TRANSITION_EVAL(44U, (int32_T)c12_temp) != 0);
+        c12_b_out = (CV_TRANSITION_EVAL(26U, (int32_T)_SFD_CCP_CALL(26U, 0,
+          chartInstance->c12_sfEvent == c12_event_CoffeeLatte != 0U,
+          chartInstance->c12_sfEvent)) != 0);
         if (c12_b_out) {
-          _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 44U, chartInstance->c12_sfEvent);
-          _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 45U, chartInstance->c12_sfEvent);
-          chartInstance->c12_tp_Step2 = 0U;
-          _SFD_CS_CALL(STATE_ENTER_EXIT_FUNCTION_TAG, 3U,
-                       chartInstance->c12_sfEvent);
-          *chartInstance->c12_NextStep = 0.0;
-          _SFD_DATA_RANGE_CHECK(*chartInstance->c12_NextStep, 7U);
-          _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 3U, chartInstance->c12_sfEvent);
+          _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 26U, chartInstance->c12_sfEvent);
+          chartInstance->c12_tp_Init = 0U;
           _SFD_CS_CALL(STATE_INACTIVE_TAG, 3U, chartInstance->c12_sfEvent);
-          chartInstance->c12_is_c12_AllinOne = c12_IN_error;
-          _SFD_CS_CALL(STATE_ACTIVE_TAG, 6U, chartInstance->c12_sfEvent);
-          chartInstance->c12_tp_error = 1U;
+          chartInstance->c12_is_c12_AllinOne = c12_IN_prepare_Cappuccino;
+          _SFD_CS_CALL(STATE_ACTIVE_TAG, 8U, chartInstance->c12_sfEvent);
+          chartInstance->c12_tp_prepare_Cappuccino = 1U;
+          chartInstance->c12_CoffeeRecipe = 10.0;
+          _SFD_DATA_RANGE_CHECK(chartInstance->c12_CoffeeRecipe, 11U);
+          chartInstance->c12_MilkRecipe = 100.0;
+          _SFD_DATA_RANGE_CHECK(chartInstance->c12_MilkRecipe, 12U);
+          chartInstance->c12_SugarRecipe = 10.0;
+          _SFD_DATA_RANGE_CHECK(chartInstance->c12_SugarRecipe, 13U);
+          chartInstance->c12_WaterRecipe = 20.0;
+          _SFD_DATA_RANGE_CHECK(chartInstance->c12_WaterRecipe, 14U);
         } else {
-          _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 3U,
+          _SFD_CT_CALL(TRANSITION_BEFORE_PROCESSING_TAG, 27U,
                        chartInstance->c12_sfEvent);
+          c12_c_out = (CV_TRANSITION_EVAL(27U, (int32_T)_SFD_CCP_CALL(27U, 0,
+            chartInstance->c12_sfEvent == c12_event_Cappuccino != 0U,
+            chartInstance->c12_sfEvent)) != 0);
+          if (c12_c_out) {
+            _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 27U, chartInstance->c12_sfEvent);
+            chartInstance->c12_tp_Init = 0U;
+            _SFD_CS_CALL(STATE_INACTIVE_TAG, 3U, chartInstance->c12_sfEvent);
+            chartInstance->c12_is_c12_AllinOne = c12_IN_prepare_AmerricanCoffee;
+            _SFD_CS_CALL(STATE_ACTIVE_TAG, 7U, chartInstance->c12_sfEvent);
+            chartInstance->c12_tp_prepare_AmerricanCoffee = 1U;
+            chartInstance->c12_CoffeeRecipe = 10.0;
+            _SFD_DATA_RANGE_CHECK(chartInstance->c12_CoffeeRecipe, 11U);
+            chartInstance->c12_MilkRecipe = 60.0;
+            _SFD_DATA_RANGE_CHECK(chartInstance->c12_MilkRecipe, 12U);
+            chartInstance->c12_SugarRecipe = 10.0;
+            _SFD_DATA_RANGE_CHECK(chartInstance->c12_SugarRecipe, 13U);
+            chartInstance->c12_WaterRecipe = 60.0;
+            _SFD_DATA_RANGE_CHECK(chartInstance->c12_WaterRecipe, 14U);
+          } else {
+            _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 3U,
+                         chartInstance->c12_sfEvent);
+          }
         }
       }
 
@@ -1058,15 +1081,15 @@ static void c12_chartstep_c12_AllinOne(SFc12_AllinOneInstanceStruct
       CV_CHART_EVAL(7, 0, 5);
       _SFD_CT_CALL(TRANSITION_BEFORE_PROCESSING_TAG, 46U,
                    chartInstance->c12_sfEvent);
-      c12_c_out = (CV_TRANSITION_EVAL(46U, (int32_T)_SFD_CCP_CALL(46U, 0,
+      c12_d_out = (CV_TRANSITION_EVAL(46U, (int32_T)_SFD_CCP_CALL(46U, 0,
         chartInstance->c12_sfEvent == c12_event_TakeOutEvent != 0U,
         chartInstance->c12_sfEvent)) != 0);
-      if (c12_c_out) {
+      if (c12_d_out) {
         _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 46U, chartInstance->c12_sfEvent);
         chartInstance->c12_tp_TakeOut = 0U;
         _SFD_CS_CALL(STATE_INACTIVE_TAG, 4U, chartInstance->c12_sfEvent);
         chartInstance->c12_is_c12_AllinOne = c12_IN_Init;
-        _SFD_CS_CALL(STATE_ACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
+        _SFD_CS_CALL(STATE_ACTIVE_TAG, 3U, chartInstance->c12_sfEvent);
         chartInstance->c12_tp_Init = 1U;
         *chartInstance->c12_CoffeeAmount = 0.0;
         _SFD_DATA_RANGE_CHECK(*chartInstance->c12_CoffeeAmount, 3U);
@@ -1093,55 +1116,8 @@ static void c12_chartstep_c12_AllinOne(SFc12_AllinOneInstanceStruct
       _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 6U, chartInstance->c12_sfEvent);
       break;
 
-     case c12_IN_prepare_CoffeeLatte:
+     case c12_IN_prepare_AmerricanCoffee:
       CV_CHART_EVAL(7, 0, 7);
-      _SFD_CT_CALL(TRANSITION_BEFORE_PROCESSING_TAG, 5U,
-                   chartInstance->c12_sfEvent);
-      c12_d_out = (CV_TRANSITION_EVAL(5U, (int32_T)_SFD_CCP_CALL(5U, 0,
-        c12_checkall(chartInstance, *chartInstance->c12_WaterRemain,
-                     chartInstance->c12_WaterRecipe,
-                     *chartInstance->c12_MilkRemain,
-                     chartInstance->c12_MilkRecipe,
-                     *chartInstance->c12_SugarRemain,
-                     chartInstance->c12_SugarRecipe,
-                     *chartInstance->c12_CoffeeRemain,
-                     chartInstance->c12_CoffeeRecipe, (real_T)
-                     *chartInstance->c12_CupRemain,
-                     *chartInstance->c12_WaterTemp) != 0U,
-        chartInstance->c12_sfEvent)) != 0);
-      if (c12_d_out) {
-        _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 5U, chartInstance->c12_sfEvent);
-        chartInstance->c12_tp_prepare_CoffeeLatte = 0U;
-        _SFD_CS_CALL(STATE_INACTIVE_TAG, 7U, chartInstance->c12_sfEvent);
-        chartInstance->c12_is_c12_AllinOne = c12_IN_GetCup;
-        _SFD_CS_CALL(STATE_ACTIVE_TAG, 0U, chartInstance->c12_sfEvent);
-        chartInstance->c12_temporalCounter_i1 = 0U;
-        chartInstance->c12_tp_GetCup = 1U;
-        chartInstance->c12_GetCupEventEventCounter++;
-      } else {
-        _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 18U, chartInstance->c12_sfEvent);
-        chartInstance->c12_tp_prepare_CoffeeLatte = 0U;
-        _SFD_CS_CALL(STATE_INACTIVE_TAG, 7U, chartInstance->c12_sfEvent);
-        chartInstance->c12_is_c12_AllinOne = c12_IN_Init;
-        _SFD_CS_CALL(STATE_ACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
-        chartInstance->c12_tp_Init = 1U;
-        *chartInstance->c12_CoffeeAmount = 0.0;
-        _SFD_DATA_RANGE_CHECK(*chartInstance->c12_CoffeeAmount, 3U);
-        *chartInstance->c12_MilkAmount = 0.0;
-        _SFD_DATA_RANGE_CHECK(*chartInstance->c12_MilkAmount, 4U);
-        *chartInstance->c12_SugarAmount = 0.0;
-        _SFD_DATA_RANGE_CHECK(*chartInstance->c12_SugarAmount, 5U);
-        *chartInstance->c12_WaterAmount = 0.0;
-        _SFD_DATA_RANGE_CHECK(*chartInstance->c12_WaterAmount, 6U);
-        *chartInstance->c12_NextStep = 0.0;
-        _SFD_DATA_RANGE_CHECK(*chartInstance->c12_NextStep, 7U);
-      }
-
-      _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 7U, chartInstance->c12_sfEvent);
-      break;
-
-     case c12_IN_working_AmerricanCoffee:
-      CV_CHART_EVAL(7, 0, 8);
       _SFD_CT_CALL(TRANSITION_BEFORE_PROCESSING_TAG, 29U,
                    chartInstance->c12_sfEvent);
       c12_e_out = (CV_TRANSITION_EVAL(29U, (int32_T)_SFD_CCP_CALL(29U, 0,
@@ -1158,19 +1134,19 @@ static void c12_chartstep_c12_AllinOne(SFc12_AllinOneInstanceStruct
         chartInstance->c12_sfEvent)) != 0);
       if (c12_e_out) {
         _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 29U, chartInstance->c12_sfEvent);
-        chartInstance->c12_tp_working_AmerricanCoffee = 0U;
-        _SFD_CS_CALL(STATE_INACTIVE_TAG, 8U, chartInstance->c12_sfEvent);
+        chartInstance->c12_tp_prepare_AmerricanCoffee = 0U;
+        _SFD_CS_CALL(STATE_INACTIVE_TAG, 7U, chartInstance->c12_sfEvent);
         chartInstance->c12_is_c12_AllinOne = c12_IN_GetCup;
-        _SFD_CS_CALL(STATE_ACTIVE_TAG, 0U, chartInstance->c12_sfEvent);
+        _SFD_CS_CALL(STATE_ACTIVE_TAG, 2U, chartInstance->c12_sfEvent);
         chartInstance->c12_temporalCounter_i1 = 0U;
         chartInstance->c12_tp_GetCup = 1U;
         chartInstance->c12_GetCupEventEventCounter++;
       } else {
         _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 30U, chartInstance->c12_sfEvent);
-        chartInstance->c12_tp_working_AmerricanCoffee = 0U;
-        _SFD_CS_CALL(STATE_INACTIVE_TAG, 8U, chartInstance->c12_sfEvent);
+        chartInstance->c12_tp_prepare_AmerricanCoffee = 0U;
+        _SFD_CS_CALL(STATE_INACTIVE_TAG, 7U, chartInstance->c12_sfEvent);
         chartInstance->c12_is_c12_AllinOne = c12_IN_Init;
-        _SFD_CS_CALL(STATE_ACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
+        _SFD_CS_CALL(STATE_ACTIVE_TAG, 3U, chartInstance->c12_sfEvent);
         chartInstance->c12_tp_Init = 1U;
         *chartInstance->c12_CoffeeAmount = 0.0;
         _SFD_DATA_RANGE_CHECK(*chartInstance->c12_CoffeeAmount, 3U);
@@ -1184,11 +1160,11 @@ static void c12_chartstep_c12_AllinOne(SFc12_AllinOneInstanceStruct
         _SFD_DATA_RANGE_CHECK(*chartInstance->c12_NextStep, 7U);
       }
 
-      _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 8U, chartInstance->c12_sfEvent);
+      _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 7U, chartInstance->c12_sfEvent);
       break;
 
-     case c12_IN_working_Cappuccino:
-      CV_CHART_EVAL(7, 0, 9);
+     case c12_IN_prepare_Cappuccino:
+      CV_CHART_EVAL(7, 0, 8);
       _SFD_CT_CALL(TRANSITION_BEFORE_PROCESSING_TAG, 28U,
                    chartInstance->c12_sfEvent);
       c12_f_out = (CV_TRANSITION_EVAL(28U, (int32_T)_SFD_CCP_CALL(28U, 0,
@@ -1205,19 +1181,66 @@ static void c12_chartstep_c12_AllinOne(SFc12_AllinOneInstanceStruct
         chartInstance->c12_sfEvent)) != 0);
       if (c12_f_out) {
         _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 28U, chartInstance->c12_sfEvent);
-        chartInstance->c12_tp_working_Cappuccino = 0U;
-        _SFD_CS_CALL(STATE_INACTIVE_TAG, 9U, chartInstance->c12_sfEvent);
+        chartInstance->c12_tp_prepare_Cappuccino = 0U;
+        _SFD_CS_CALL(STATE_INACTIVE_TAG, 8U, chartInstance->c12_sfEvent);
         chartInstance->c12_is_c12_AllinOne = c12_IN_GetCup;
-        _SFD_CS_CALL(STATE_ACTIVE_TAG, 0U, chartInstance->c12_sfEvent);
+        _SFD_CS_CALL(STATE_ACTIVE_TAG, 2U, chartInstance->c12_sfEvent);
         chartInstance->c12_temporalCounter_i1 = 0U;
         chartInstance->c12_tp_GetCup = 1U;
         chartInstance->c12_GetCupEventEventCounter++;
       } else {
         _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 31U, chartInstance->c12_sfEvent);
-        chartInstance->c12_tp_working_Cappuccino = 0U;
+        chartInstance->c12_tp_prepare_Cappuccino = 0U;
+        _SFD_CS_CALL(STATE_INACTIVE_TAG, 8U, chartInstance->c12_sfEvent);
+        chartInstance->c12_is_c12_AllinOne = c12_IN_Init;
+        _SFD_CS_CALL(STATE_ACTIVE_TAG, 3U, chartInstance->c12_sfEvent);
+        chartInstance->c12_tp_Init = 1U;
+        *chartInstance->c12_CoffeeAmount = 0.0;
+        _SFD_DATA_RANGE_CHECK(*chartInstance->c12_CoffeeAmount, 3U);
+        *chartInstance->c12_MilkAmount = 0.0;
+        _SFD_DATA_RANGE_CHECK(*chartInstance->c12_MilkAmount, 4U);
+        *chartInstance->c12_SugarAmount = 0.0;
+        _SFD_DATA_RANGE_CHECK(*chartInstance->c12_SugarAmount, 5U);
+        *chartInstance->c12_WaterAmount = 0.0;
+        _SFD_DATA_RANGE_CHECK(*chartInstance->c12_WaterAmount, 6U);
+        *chartInstance->c12_NextStep = 0.0;
+        _SFD_DATA_RANGE_CHECK(*chartInstance->c12_NextStep, 7U);
+      }
+
+      _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 8U, chartInstance->c12_sfEvent);
+      break;
+
+     case c12_IN_prepare_CoffeeLatte:
+      CV_CHART_EVAL(7, 0, 9);
+      _SFD_CT_CALL(TRANSITION_BEFORE_PROCESSING_TAG, 5U,
+                   chartInstance->c12_sfEvent);
+      c12_g_out = (CV_TRANSITION_EVAL(5U, (int32_T)_SFD_CCP_CALL(5U, 0,
+        c12_checkall(chartInstance, *chartInstance->c12_WaterRemain,
+                     chartInstance->c12_WaterRecipe,
+                     *chartInstance->c12_MilkRemain,
+                     chartInstance->c12_MilkRecipe,
+                     *chartInstance->c12_SugarRemain,
+                     chartInstance->c12_SugarRecipe,
+                     *chartInstance->c12_CoffeeRemain,
+                     chartInstance->c12_CoffeeRecipe, (real_T)
+                     *chartInstance->c12_CupRemain,
+                     *chartInstance->c12_WaterTemp) != 0U,
+        chartInstance->c12_sfEvent)) != 0);
+      if (c12_g_out) {
+        _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 5U, chartInstance->c12_sfEvent);
+        chartInstance->c12_tp_prepare_CoffeeLatte = 0U;
+        _SFD_CS_CALL(STATE_INACTIVE_TAG, 9U, chartInstance->c12_sfEvent);
+        chartInstance->c12_is_c12_AllinOne = c12_IN_GetCup;
+        _SFD_CS_CALL(STATE_ACTIVE_TAG, 2U, chartInstance->c12_sfEvent);
+        chartInstance->c12_temporalCounter_i1 = 0U;
+        chartInstance->c12_tp_GetCup = 1U;
+        chartInstance->c12_GetCupEventEventCounter++;
+      } else {
+        _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 18U, chartInstance->c12_sfEvent);
+        chartInstance->c12_tp_prepare_CoffeeLatte = 0U;
         _SFD_CS_CALL(STATE_INACTIVE_TAG, 9U, chartInstance->c12_sfEvent);
         chartInstance->c12_is_c12_AllinOne = c12_IN_Init;
-        _SFD_CS_CALL(STATE_ACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
+        _SFD_CS_CALL(STATE_ACTIVE_TAG, 3U, chartInstance->c12_sfEvent);
         chartInstance->c12_tp_Init = 1U;
         *chartInstance->c12_CoffeeAmount = 0.0;
         _SFD_DATA_RANGE_CHECK(*chartInstance->c12_CoffeeAmount, 3U);
@@ -1256,76 +1279,52 @@ static void initSimStructsc12_AllinOne(SFc12_AllinOneInstanceStruct
   (void)chartInstance;
 }
 
-static void c12_Init(SFc12_AllinOneInstanceStruct *chartInstance)
+static void c12_BeltStep2(SFc12_AllinOneInstanceStruct *chartInstance)
 {
   boolean_T c12_out;
+  boolean_T c12_temp;
   boolean_T c12_b_out;
-  boolean_T c12_c_out;
-  _SFD_CT_CALL(TRANSITION_BEFORE_PROCESSING_TAG, 1U, chartInstance->c12_sfEvent);
-  c12_out = (CV_TRANSITION_EVAL(1U, (int32_T)_SFD_CCP_CALL(1U, 0,
-    chartInstance->c12_sfEvent == c12_event_AmericanCoffee != 0U,
+  _SFD_CT_CALL(TRANSITION_BEFORE_PROCESSING_TAG, 25U, chartInstance->c12_sfEvent);
+  c12_out = (CV_TRANSITION_EVAL(25U, (int32_T)_SFD_CCP_CALL(25U, 0,
+    chartInstance->c12_sfEvent == c12_event_StepEvent != 0U,
     chartInstance->c12_sfEvent)) != 0);
   if (c12_out) {
-    _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
-    chartInstance->c12_tp_Init = 0U;
+    _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 25U, chartInstance->c12_sfEvent);
+    chartInstance->c12_tp_BeltStep2 = 0U;
+    _SFD_CS_CALL(STATE_ENTER_EXIT_FUNCTION_TAG, 1U, chartInstance->c12_sfEvent);
+    *chartInstance->c12_NextStep = 0.0;
+    _SFD_DATA_RANGE_CHECK(*chartInstance->c12_NextStep, 7U);
+    _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 1U, chartInstance->c12_sfEvent);
     _SFD_CS_CALL(STATE_INACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
-    chartInstance->c12_is_c12_AllinOne = c12_IN_prepare_CoffeeLatte;
-    _SFD_CS_CALL(STATE_ACTIVE_TAG, 7U, chartInstance->c12_sfEvent);
-    chartInstance->c12_tp_prepare_CoffeeLatte = 1U;
-    chartInstance->c12_CoffeeRecipe = 10.0;
-    _SFD_DATA_RANGE_CHECK(chartInstance->c12_CoffeeRecipe, 11U);
-    chartInstance->c12_MilkRecipe = 80.0;
-    _SFD_DATA_RANGE_CHECK(chartInstance->c12_MilkRecipe, 12U);
-    chartInstance->c12_SugarRecipe = 10.0;
-    _SFD_DATA_RANGE_CHECK(chartInstance->c12_SugarRecipe, 13U);
-    chartInstance->c12_WaterRecipe = 40.0;
-    _SFD_DATA_RANGE_CHECK(chartInstance->c12_WaterRecipe, 14U);
+    chartInstance->c12_is_c12_AllinOne = c12_IN_TakeOut;
+    _SFD_CS_CALL(STATE_ACTIVE_TAG, 4U, chartInstance->c12_sfEvent);
+    chartInstance->c12_tp_TakeOut = 1U;
   } else {
-    _SFD_CT_CALL(TRANSITION_BEFORE_PROCESSING_TAG, 26U,
+    _SFD_CT_CALL(TRANSITION_BEFORE_PROCESSING_TAG, 44U,
                  chartInstance->c12_sfEvent);
-    c12_b_out = (CV_TRANSITION_EVAL(26U, (int32_T)_SFD_CCP_CALL(26U, 0,
-      chartInstance->c12_sfEvent == c12_event_CoffeeLatte != 0U,
-      chartInstance->c12_sfEvent)) != 0);
+    c12_temp = (_SFD_CCP_CALL(44U, 0, chartInstance->c12_sfEvent ==
+      c12_event_Tick != 0U, chartInstance->c12_sfEvent) != 0);
+    if (c12_temp) {
+      c12_temp = (_SFD_CCP_CALL(44U, 1, chartInstance->c12_temporalCounter_i1 >=
+        10000U != 0U, chartInstance->c12_sfEvent) != 0);
+    }
+
+    c12_b_out = (CV_TRANSITION_EVAL(44U, (int32_T)c12_temp) != 0);
     if (c12_b_out) {
-      _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 26U, chartInstance->c12_sfEvent);
-      chartInstance->c12_tp_Init = 0U;
+      _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 44U, chartInstance->c12_sfEvent);
+      _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 45U, chartInstance->c12_sfEvent);
+      chartInstance->c12_tp_BeltStep2 = 0U;
+      _SFD_CS_CALL(STATE_ENTER_EXIT_FUNCTION_TAG, 1U, chartInstance->c12_sfEvent);
+      *chartInstance->c12_NextStep = 0.0;
+      _SFD_DATA_RANGE_CHECK(*chartInstance->c12_NextStep, 7U);
+      _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 1U, chartInstance->c12_sfEvent);
       _SFD_CS_CALL(STATE_INACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
-      chartInstance->c12_is_c12_AllinOne = c12_IN_working_Cappuccino;
-      _SFD_CS_CALL(STATE_ACTIVE_TAG, 9U, chartInstance->c12_sfEvent);
-      chartInstance->c12_tp_working_Cappuccino = 1U;
-      chartInstance->c12_CoffeeRecipe = 10.0;
-      _SFD_DATA_RANGE_CHECK(chartInstance->c12_CoffeeRecipe, 11U);
-      chartInstance->c12_MilkRecipe = 100.0;
-      _SFD_DATA_RANGE_CHECK(chartInstance->c12_MilkRecipe, 12U);
-      chartInstance->c12_SugarRecipe = 10.0;
-      _SFD_DATA_RANGE_CHECK(chartInstance->c12_SugarRecipe, 13U);
-      chartInstance->c12_WaterRecipe = 20.0;
-      _SFD_DATA_RANGE_CHECK(chartInstance->c12_WaterRecipe, 14U);
+      chartInstance->c12_is_c12_AllinOne = c12_IN_error;
+      _SFD_CS_CALL(STATE_ACTIVE_TAG, 6U, chartInstance->c12_sfEvent);
+      chartInstance->c12_tp_error = 1U;
     } else {
-      _SFD_CT_CALL(TRANSITION_BEFORE_PROCESSING_TAG, 27U,
+      _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 1U,
                    chartInstance->c12_sfEvent);
-      c12_c_out = (CV_TRANSITION_EVAL(27U, (int32_T)_SFD_CCP_CALL(27U, 0,
-        chartInstance->c12_sfEvent == c12_event_Cappuccino != 0U,
-        chartInstance->c12_sfEvent)) != 0);
-      if (c12_c_out) {
-        _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 27U, chartInstance->c12_sfEvent);
-        chartInstance->c12_tp_Init = 0U;
-        _SFD_CS_CALL(STATE_INACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
-        chartInstance->c12_is_c12_AllinOne = c12_IN_working_AmerricanCoffee;
-        _SFD_CS_CALL(STATE_ACTIVE_TAG, 8U, chartInstance->c12_sfEvent);
-        chartInstance->c12_tp_working_AmerricanCoffee = 1U;
-        chartInstance->c12_CoffeeRecipe = 10.0;
-        _SFD_DATA_RANGE_CHECK(chartInstance->c12_CoffeeRecipe, 11U);
-        chartInstance->c12_MilkRecipe = 60.0;
-        _SFD_DATA_RANGE_CHECK(chartInstance->c12_MilkRecipe, 12U);
-        chartInstance->c12_SugarRecipe = 10.0;
-        _SFD_DATA_RANGE_CHECK(chartInstance->c12_SugarRecipe, 13U);
-        chartInstance->c12_WaterRecipe = 60.0;
-        _SFD_DATA_RANGE_CHECK(chartInstance->c12_WaterRecipe, 14U);
-      } else {
-        _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 1U,
-                     chartInstance->c12_sfEvent);
-      }
     }
   }
 
@@ -1344,14 +1343,14 @@ static void c12_GetCup(SFc12_AllinOneInstanceStruct *chartInstance)
   if (c12_out) {
     _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 24U, chartInstance->c12_sfEvent);
     chartInstance->c12_tp_GetCup = 0U;
-    _SFD_CS_CALL(STATE_ENTER_EXIT_FUNCTION_TAG, 0U, chartInstance->c12_sfEvent);
+    _SFD_CS_CALL(STATE_ENTER_EXIT_FUNCTION_TAG, 2U, chartInstance->c12_sfEvent);
     chartInstance->c12_GetCupEventEventCounter++;
-    _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 0U, chartInstance->c12_sfEvent);
-    _SFD_CS_CALL(STATE_INACTIVE_TAG, 0U, chartInstance->c12_sfEvent);
-    chartInstance->c12_is_c12_AllinOne = c12_IN_Step1;
-    _SFD_CS_CALL(STATE_ACTIVE_TAG, 2U, chartInstance->c12_sfEvent);
+    _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 2U, chartInstance->c12_sfEvent);
+    _SFD_CS_CALL(STATE_INACTIVE_TAG, 2U, chartInstance->c12_sfEvent);
+    chartInstance->c12_is_c12_AllinOne = c12_IN_BeltStep1;
+    _SFD_CS_CALL(STATE_ACTIVE_TAG, 0U, chartInstance->c12_sfEvent);
     chartInstance->c12_temporalCounter_i1 = 0U;
-    chartInstance->c12_tp_Step1 = 1U;
+    chartInstance->c12_tp_BeltStep1 = 1U;
     *chartInstance->c12_NextStep = 50.0;
     _SFD_DATA_RANGE_CHECK(*chartInstance->c12_NextStep, 7U);
   } else {
@@ -1369,20 +1368,20 @@ static void c12_GetCup(SFc12_AllinOneInstanceStruct *chartInstance)
       _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 42U, chartInstance->c12_sfEvent);
       _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 45U, chartInstance->c12_sfEvent);
       chartInstance->c12_tp_GetCup = 0U;
-      _SFD_CS_CALL(STATE_ENTER_EXIT_FUNCTION_TAG, 0U, chartInstance->c12_sfEvent);
+      _SFD_CS_CALL(STATE_ENTER_EXIT_FUNCTION_TAG, 2U, chartInstance->c12_sfEvent);
       chartInstance->c12_GetCupEventEventCounter++;
-      _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 0U, chartInstance->c12_sfEvent);
-      _SFD_CS_CALL(STATE_INACTIVE_TAG, 0U, chartInstance->c12_sfEvent);
+      _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 2U, chartInstance->c12_sfEvent);
+      _SFD_CS_CALL(STATE_INACTIVE_TAG, 2U, chartInstance->c12_sfEvent);
       chartInstance->c12_is_c12_AllinOne = c12_IN_error;
       _SFD_CS_CALL(STATE_ACTIVE_TAG, 6U, chartInstance->c12_sfEvent);
       chartInstance->c12_tp_error = 1U;
     } else {
-      _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 0U,
+      _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 2U,
                    chartInstance->c12_sfEvent);
     }
   }
 
-  _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 0U, chartInstance->c12_sfEvent);
+  _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 2U, chartInstance->c12_sfEvent);
 }
 
 static void c12_working_Coffee(SFc12_AllinOneInstanceStruct *chartInstance)
@@ -1405,10 +1404,10 @@ static void c12_working_Coffee(SFc12_AllinOneInstanceStruct *chartInstance)
     c12_exit_internal_working_Coffee(chartInstance);
     chartInstance->c12_tp_working_Coffee = 0U;
     _SFD_CS_CALL(STATE_INACTIVE_TAG, 10U, chartInstance->c12_sfEvent);
-    chartInstance->c12_is_c12_AllinOne = c12_IN_Step2;
-    _SFD_CS_CALL(STATE_ACTIVE_TAG, 3U, chartInstance->c12_sfEvent);
+    chartInstance->c12_is_c12_AllinOne = c12_IN_BeltStep2;
+    _SFD_CS_CALL(STATE_ACTIVE_TAG, 1U, chartInstance->c12_sfEvent);
     chartInstance->c12_temporalCounter_i1 = 0U;
-    chartInstance->c12_tp_Step2 = 1U;
+    chartInstance->c12_tp_BeltStep2 = 1U;
     *chartInstance->c12_NextStep = 50.0;
     _SFD_DATA_RANGE_CHECK(*chartInstance->c12_NextStep, 7U);
   } else {
@@ -1749,7 +1748,7 @@ static void c12_exit_internal_working_Coffee(SFc12_AllinOneInstanceStruct
   _SFD_CS_CALL(STATE_INACTIVE_TAG, 20U, chartInstance->c12_sfEvent);
 }
 
-static void c12_Step1(SFc12_AllinOneInstanceStruct *chartInstance)
+static void c12_BeltStep1(SFc12_AllinOneInstanceStruct *chartInstance)
 {
   boolean_T c12_out;
   boolean_T c12_temp;
@@ -1760,12 +1759,12 @@ static void c12_Step1(SFc12_AllinOneInstanceStruct *chartInstance)
     chartInstance->c12_sfEvent)) != 0);
   if (c12_out) {
     _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 40U, chartInstance->c12_sfEvent);
-    chartInstance->c12_tp_Step1 = 0U;
-    _SFD_CS_CALL(STATE_ENTER_EXIT_FUNCTION_TAG, 2U, chartInstance->c12_sfEvent);
+    chartInstance->c12_tp_BeltStep1 = 0U;
+    _SFD_CS_CALL(STATE_ENTER_EXIT_FUNCTION_TAG, 0U, chartInstance->c12_sfEvent);
     *chartInstance->c12_NextStep = 0.0;
     _SFD_DATA_RANGE_CHECK(*chartInstance->c12_NextStep, 7U);
-    _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 2U, chartInstance->c12_sfEvent);
-    _SFD_CS_CALL(STATE_INACTIVE_TAG, 2U, chartInstance->c12_sfEvent);
+    _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 0U, chartInstance->c12_sfEvent);
+    _SFD_CS_CALL(STATE_INACTIVE_TAG, 0U, chartInstance->c12_sfEvent);
     chartInstance->c12_is_c12_AllinOne = c12_IN_working_Coffee;
     _SFD_CS_CALL(STATE_ACTIVE_TAG, 10U, chartInstance->c12_sfEvent);
     chartInstance->c12_temporalCounter_i2 = 0U;
@@ -1821,22 +1820,22 @@ static void c12_Step1(SFc12_AllinOneInstanceStruct *chartInstance)
     if (c12_b_out) {
       _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 41U, chartInstance->c12_sfEvent);
       _SFD_CT_CALL(TRANSITION_ACTIVE_TAG, 45U, chartInstance->c12_sfEvent);
-      chartInstance->c12_tp_Step1 = 0U;
-      _SFD_CS_CALL(STATE_ENTER_EXIT_FUNCTION_TAG, 2U, chartInstance->c12_sfEvent);
+      chartInstance->c12_tp_BeltStep1 = 0U;
+      _SFD_CS_CALL(STATE_ENTER_EXIT_FUNCTION_TAG, 0U, chartInstance->c12_sfEvent);
       *chartInstance->c12_NextStep = 0.0;
       _SFD_DATA_RANGE_CHECK(*chartInstance->c12_NextStep, 7U);
-      _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 2U, chartInstance->c12_sfEvent);
-      _SFD_CS_CALL(STATE_INACTIVE_TAG, 2U, chartInstance->c12_sfEvent);
+      _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 0U, chartInstance->c12_sfEvent);
+      _SFD_CS_CALL(STATE_INACTIVE_TAG, 0U, chartInstance->c12_sfEvent);
       chartInstance->c12_is_c12_AllinOne = c12_IN_error;
       _SFD_CS_CALL(STATE_ACTIVE_TAG, 6U, chartInstance->c12_sfEvent);
       chartInstance->c12_tp_error = 1U;
     } else {
-      _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 2U,
+      _SFD_CS_CALL(STATE_ENTER_DURING_FUNCTION_TAG, 0U,
                    chartInstance->c12_sfEvent);
     }
   }
 
-  _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 2U, chartInstance->c12_sfEvent);
+  _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 0U, chartInstance->c12_sfEvent);
 }
 
 static void init_script_number_translation(uint32_T c12_machineNumber, uint32_T
@@ -2494,10 +2493,10 @@ extern void utFree(void*);
 
 void sf_c12_AllinOne_get_check_sum(mxArray *plhs[])
 {
-  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(3458852723U);
-  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(3658478632U);
-  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(1386882413U);
-  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(2048323324U);
+  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(1828955435U);
+  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(1505853268U);
+  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(1707358117U);
+  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(310490444U);
 }
 
 mxArray* sf_c12_AllinOne_get_post_codegen_info(void);
@@ -3271,7 +3270,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
           static int sRelationalopEps[] = { -1 };
 
-          static int sRelationalopType[] = { 2, 2, 2 };
+          static int sRelationalopType[] = { 2 };
 
           _SFD_CV_INIT_TRANSITION_RELATIONALOP(3,1,&(sStartRelationalopMap[0]),
             &(sEndRelationalopMap[0]),&(sRelationalopEps[0]),
@@ -3296,7 +3295,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
           static int sRelationalopEps[] = { -1 };
 
-          static int sRelationalopType[] = { 2, 2, 2 };
+          static int sRelationalopType[] = { 2 };
 
           _SFD_CV_INIT_TRANSITION_RELATIONALOP(7,1,&(sStartRelationalopMap[0]),
             &(sEndRelationalopMap[0]),&(sRelationalopEps[0]),
@@ -3321,7 +3320,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
           static int sRelationalopEps[] = { -1 };
 
-          static int sRelationalopType[] = { 2, 2, 2 };
+          static int sRelationalopType[] = { 2 };
 
           _SFD_CV_INIT_TRANSITION_RELATIONALOP(8,1,&(sStartRelationalopMap[0]),
             &(sEndRelationalopMap[0]),&(sRelationalopEps[0]),
@@ -3346,7 +3345,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
           static int sRelationalopEps[] = { -1 };
 
-          static int sRelationalopType[] = { 2, 2, 2 };
+          static int sRelationalopType[] = { 2 };
 
           _SFD_CV_INIT_TRANSITION_RELATIONALOP(11,1,&(sStartRelationalopMap[0]),
             &(sEndRelationalopMap[0]),&(sRelationalopEps[0]),
@@ -3371,7 +3370,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
           static int sRelationalopEps[] = { -1 };
 
-          static int sRelationalopType[] = { 3, 3, 3 };
+          static int sRelationalopType[] = { 3 };
 
           _SFD_CV_INIT_TRANSITION_RELATIONALOP(16,1,&(sStartRelationalopMap[0]),
             &(sEndRelationalopMap[0]),&(sRelationalopEps[0]),
@@ -3396,7 +3395,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
           static int sRelationalopEps[] = { -1 };
 
-          static int sRelationalopType[] = { 3, 3, 3 };
+          static int sRelationalopType[] = { 3 };
 
           _SFD_CV_INIT_TRANSITION_RELATIONALOP(22,1,&(sStartRelationalopMap[0]),
             &(sEndRelationalopMap[0]),&(sRelationalopEps[0]),
@@ -3570,7 +3569,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
 static const char* sf_get_instance_specialization(void)
 {
-  return "AdtYVb8COUYR90eJPBEZyG";
+  return "qqDv59zgLOSRV8swcuJCcF";
 }
 
 static void sf_opaque_initialize_c12_AllinOne(void *chartInstanceVar)
@@ -3707,10 +3706,10 @@ static void mdlSetWorkWidths_c12_AllinOne(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(2352448292U));
-  ssSetChecksum1(S,(2843228166U));
-  ssSetChecksum2(S,(2166155163U));
-  ssSetChecksum3(S,(3074671326U));
+  ssSetChecksum0(S,(2982961629U));
+  ssSetChecksum1(S,(2610937591U));
+  ssSetChecksum2(S,(807732119U));
+  ssSetChecksum3(S,(3115825575U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
   ssSupportsMultipleExecInstances(S,1);
