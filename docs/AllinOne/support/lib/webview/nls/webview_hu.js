@@ -1,4 +1,0 @@
-//>>built
-define("webview/nls/webview_hu",{"webview/resources/slreportgen_webview/nls/modelbrowser":{Open:"Open",OpenInNewTab:"Open In New Tab",Title:"Model Browser"},"webview/resources/slreportgen_webview/nls/modelinspector":{ParameterAttributes:"Parameter Attributes"},"dijit/nls/loading":{loadingState:"Bet\u00f6lt\u00e9s...",errorState:"Sajn\u00e1lom, hiba t\u00f6rt\u00e9nt"},"webview/resources/slreportgen_webview/nls/modelviewer":{ModelBrowserButtonLabel:"Hide/Show Model Browser",ExplorerBarButtonLabel:"Hide/Show Explorer Bar",
-OpenInNewTab:"Open In New Tab",MarqueeZoomButtonLabel:"Zoom",NoExport:"This system was not exported.",ViewAll:"View All",FitToViewButtonLabel:"Fit to View",Open:"Open"},"dijit/nls/common":{buttonOk:"OK",buttonCancel:"M\u00e9gse",buttonSave:"Ment\u00e9s",itemClose:"Bez\u00e1r\u00e1s"}});
-//@ sourceMappingURL=webview_hu.js.map

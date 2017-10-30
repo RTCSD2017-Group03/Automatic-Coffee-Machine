@@ -1,4 +1,0 @@
-//>>built
-define("webview/nls/webview_ca",{"webview/resources/slreportgen_webview/nls/modelbrowser":{Open:"Open",OpenInNewTab:"Open In New Tab",Title:"Model Browser"},"webview/resources/slreportgen_webview/nls/modelinspector":{ParameterAttributes:"Parameter Attributes"},"dijit/nls/loading":{loadingState:"S'est\u00e0 carregant...",errorState:"Ens sap greu. S'ha produ\u00eft un error."},"webview/resources/slreportgen_webview/nls/modelviewer":{ModelBrowserButtonLabel:"Hide/Show Model Browser",ExplorerBarButtonLabel:"Hide/Show Explorer Bar",
-OpenInNewTab:"Open In New Tab",MarqueeZoomButtonLabel:"Zoom",NoExport:"This system was not exported.",ViewAll:"View All",FitToViewButtonLabel:"Fit to View",Open:"Open"},"dijit/nls/common":{buttonOk:"D'acord",buttonCancel:"Cancel\u00b7la",buttonSave:"Desa",itemClose:"Tanca"}});
-//@ sourceMappingURL=webview_ca.js.map

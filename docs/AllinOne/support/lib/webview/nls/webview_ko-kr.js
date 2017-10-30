@@ -1,4 +1,0 @@
-//>>built
-define("webview/nls/webview_ko-kr",{"webview/resources/slreportgen_webview/nls/modelbrowser":{Open:"Open",OpenInNewTab:"Open In New Tab",Title:"Model Browser"},"webview/resources/slreportgen_webview/nls/modelinspector":{ParameterAttributes:"Parameter Attributes"},"dijit/nls/loading":{loadingState:"\ub85c\ub4dc \uc911...",errorState:"\uc8c4\uc1a1\ud569\ub2c8\ub2e4. \uc624\ub958\uac00 \ubc1c\uc0dd\ud588\uc2b5\ub2c8\ub2e4."},"webview/resources/slreportgen_webview/nls/modelviewer":{ModelBrowserButtonLabel:"Hide/Show Model Browser",
-ExplorerBarButtonLabel:"Hide/Show Explorer Bar",OpenInNewTab:"Open In New Tab",MarqueeZoomButtonLabel:"Zoom",NoExport:"This system was not exported.",ViewAll:"View All",FitToViewButtonLabel:"Fit to View",Open:"Open"},"dijit/nls/common":{buttonOk:"\ud655\uc778",buttonCancel:"\ucde8\uc18c",buttonSave:"\uc800\uc7a5",itemClose:"\ub2eb\uae30"}});
-//@ sourceMappingURL=webview_ko-kr.js.map
