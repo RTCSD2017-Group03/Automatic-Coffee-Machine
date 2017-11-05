@@ -6,19 +6,19 @@ To open it with a specific instance of MATLAB,
  b) Browse to this file using the Current Folder Browser, and
  c) Double-click on this file
 
-Copyright 2016 The MathWorks, Inc.
+Copyright 2014 The MathWorks, Inc.
 -->
 <MWSignpost>
 
   <PackageInfo version="1.0">
     <SignpostData>
        <Repository>MathWorks</Repository>
-       <Name>QEMU Emulator</Name>
+       <Name>ARM Cortex-M</Name>
        <BaseProduct>Embedded Coder</BaseProduct>
-       <FullName>Embedded Coder Interface to QEMU Emulator</FullName>
-       <BaseCode>QEMU_EMULATOR</BaseCode>
+       <FullName>Embedded Coder Support Package for ARM Cortex-M Processors</FullName>
+       <BaseCode>ECCORTEXM</BaseCode>
     </SignpostData>
-    <Signature>047643F6C335303FBA1D1D1D56C74E9D</Signature>
+    <Signature>5B9BA4092646347F6CEB4009F4002A65</Signature>
   </PackageInfo>
 
 </MWSignpost>
