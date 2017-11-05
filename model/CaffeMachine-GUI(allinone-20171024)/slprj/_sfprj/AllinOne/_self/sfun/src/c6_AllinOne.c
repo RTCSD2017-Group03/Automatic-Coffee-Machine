@@ -2,11 +2,11 @@
 
 #include <stddef.h>
 #include "blas.h"
-#include "AllinOne_2014a_sfun.h"
-#include "c6_AllinOne_2014a.h"
+#include "AllinOne_sfun.h"
+#include "c6_AllinOne.h"
 #define CHARTINSTANCE_CHARTNUMBER      (chartInstance->chartNumber)
 #define CHARTINSTANCE_INSTANCENUMBER   (chartInstance->instanceNumber)
-#include "AllinOne_2014a_sfun_debug_macros.h"
+#include "AllinOne_sfun_debug_macros.h"
 #define _SF_MEX_LISTEN_FOR_CTRL_C(S)   sf_mex_listen_for_ctrl_c(sfGlobalDebugInstanceStruct,S);
 
 /* Type Definitions */
@@ -58,78 +58,69 @@ static const char * c6_l_debug_family_names[3] = { "nargin", "nargout",
 static boolean_T c6_dataWrittenToVector[2];
 
 /* Function Declarations */
-static void initialize_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
+static void initialize_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance);
+static void initialize_params_c6_AllinOne(SFc6_AllinOneInstanceStruct
   *chartInstance);
-static void initialize_params_c6_AllinOne_2014a
-  (SFc6_AllinOne_2014aInstanceStruct *chartInstance);
-static void enable_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
+static void enable_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance);
+static void disable_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance);
+static void c6_update_debugger_state_c6_AllinOne(SFc6_AllinOneInstanceStruct
   *chartInstance);
-static void disable_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
+static const mxArray *get_sim_state_c6_AllinOne(SFc6_AllinOneInstanceStruct
   *chartInstance);
-static void c6_update_debugger_state_c6_AllinOne_2014a
-  (SFc6_AllinOne_2014aInstanceStruct *chartInstance);
-static const mxArray *get_sim_state_c6_AllinOne_2014a
-  (SFc6_AllinOne_2014aInstanceStruct *chartInstance);
-static void set_sim_state_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c6_st);
-static void c6_set_sim_state_side_effects_c6_AllinOne_2014a
-  (SFc6_AllinOne_2014aInstanceStruct *chartInstance);
-static void finalize_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance);
-static void sf_gateway_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance);
-static void c6_chartstep_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance);
-static void initSimStructsc6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance);
+static void set_sim_state_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c6_st);
+static void c6_set_sim_state_side_effects_c6_AllinOne
+  (SFc6_AllinOneInstanceStruct *chartInstance);
+static void finalize_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance);
+static void sf_gateway_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance);
+static void c6_chartstep_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance);
+static void initSimStructsc6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance);
 static void init_script_number_translation(uint32_T c6_machineNumber, uint32_T
   c6_chartNumber, uint32_T c6_instanceNumber);
 static const mxArray *c6_sf_marshallOut(void *chartInstanceVoid, void *c6_inData);
-static real_T c6_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c6_nargout, const char_T *c6_identifier);
-static real_T c6_b_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId);
+static real_T c6_emlrt_marshallIn(SFc6_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c6_nargout, const char_T *c6_identifier);
+static real_T c6_b_emlrt_marshallIn(SFc6_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId);
 static void c6_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c6_mxArrayInData, const char_T *c6_varName, void *c6_outData);
 static const mxArray *c6_b_sf_marshallOut(void *chartInstanceVoid, void
   *c6_inData);
-static boolean_T c6_c_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
+static boolean_T c6_c_emlrt_marshallIn(SFc6_AllinOneInstanceStruct
   *chartInstance, const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId);
 static void c6_b_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c6_mxArrayInData, const char_T *c6_varName, void *c6_outData);
 static const mxArray *c6_c_sf_marshallOut(void *chartInstanceVoid, void
   *c6_inData);
-static int8_T c6_d_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId);
+static int8_T c6_d_emlrt_marshallIn(SFc6_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId);
 static void c6_c_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c6_mxArrayInData, const char_T *c6_varName, void *c6_outData);
 static const mxArray *c6_d_sf_marshallOut(void *chartInstanceVoid, void
   *c6_inData);
-static int32_T c6_e_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId);
+static int32_T c6_e_emlrt_marshallIn(SFc6_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId);
 static void c6_d_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c6_mxArrayInData, const char_T *c6_varName, void *c6_outData);
 static const mxArray *c6_e_sf_marshallOut(void *chartInstanceVoid, void
   *c6_inData);
-static uint8_T c6_f_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c6_b_tp_InFlow, const char_T *c6_identifier);
-static uint8_T c6_g_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId);
+static uint8_T c6_f_emlrt_marshallIn(SFc6_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c6_b_tp_InFlow, const char_T *c6_identifier);
+static uint8_T c6_g_emlrt_marshallIn(SFc6_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId);
 static void c6_e_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c6_mxArrayInData, const char_T *c6_varName, void *c6_outData);
-static const mxArray *c6_h_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
+static const mxArray *c6_h_emlrt_marshallIn(SFc6_AllinOneInstanceStruct
   *chartInstance, const mxArray *c6_b_setSimStateSideEffectsInfo, const char_T
   *c6_identifier);
-static const mxArray *c6_i_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
+static const mxArray *c6_i_emlrt_marshallIn(SFc6_AllinOneInstanceStruct
   *chartInstance, const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId);
-static void c6_updateDataWrittenToVector(SFc6_AllinOne_2014aInstanceStruct
+static void c6_updateDataWrittenToVector(SFc6_AllinOneInstanceStruct
   *chartInstance, uint32_T c6_vectorIndex);
-static void init_dsm_address_info(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance);
+static void init_dsm_address_info(SFc6_AllinOneInstanceStruct *chartInstance);
 
 /* Function Definitions */
-static void initialize_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void initialize_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance)
 {
   _sfTime_ = sf_get_time(chartInstance->S);
   chartInstance->c6_doSetSimStateSideEffects = 0U;
@@ -144,35 +135,33 @@ static void initialize_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
   chartInstance->c6_tp_InFlow = 0U;
   chartInstance->c6_tp_GetInFlow = 0U;
   chartInstance->c6_tp_OFF = 0U;
-  chartInstance->c6_is_active_c6_AllinOne_2014a = 0U;
+  chartInstance->c6_is_active_c6_AllinOne = 0U;
 }
 
-static void initialize_params_c6_AllinOne_2014a
-  (SFc6_AllinOne_2014aInstanceStruct *chartInstance)
+static void initialize_params_c6_AllinOne(SFc6_AllinOneInstanceStruct
+  *chartInstance)
 {
   (void)chartInstance;
 }
 
-static void enable_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void enable_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance)
 {
   _sfTime_ = sf_get_time(chartInstance->S);
 }
 
-static void disable_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void disable_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance)
 {
   _sfTime_ = sf_get_time(chartInstance->S);
 }
 
-static void c6_update_debugger_state_c6_AllinOne_2014a
-  (SFc6_AllinOne_2014aInstanceStruct *chartInstance)
+static void c6_update_debugger_state_c6_AllinOne(SFc6_AllinOneInstanceStruct
+  *chartInstance)
 {
   uint32_T c6_prevAniVal;
   c6_prevAniVal = _SFD_GET_ANIMATION();
   _SFD_SET_ANIMATION(0U);
   _SFD_SET_HONOR_BREAKPOINTS(0U);
-  if (chartInstance->c6_is_active_c6_AllinOne_2014a == 1U) {
+  if (chartInstance->c6_is_active_c6_AllinOne == 1U) {
     _SFD_CC_CALL(CHART_ACTIVE_TAG, 5U, chartInstance->c6_sfEvent);
   }
 
@@ -217,8 +206,8 @@ static void c6_update_debugger_state_c6_AllinOne_2014a
   _SFD_ANIMATE();
 }
 
-static const mxArray *get_sim_state_c6_AllinOne_2014a
-  (SFc6_AllinOne_2014aInstanceStruct *chartInstance)
+static const mxArray *get_sim_state_c6_AllinOne(SFc6_AllinOneInstanceStruct
+  *chartInstance)
 {
   const mxArray *c6_st;
   const mxArray *c6_y = NULL;
@@ -261,7 +250,7 @@ static const mxArray *get_sim_state_c6_AllinOne_2014a
   c6_c_y = NULL;
   sf_mex_assign(&c6_c_y, sf_mex_create("y", &c6_b_u, 0, 0U, 0U, 0U, 0), false);
   sf_mex_setcell(c6_y, 1, c6_c_y);
-  c6_c_hoistedGlobal = chartInstance->c6_is_active_c6_AllinOne_2014a;
+  c6_c_hoistedGlobal = chartInstance->c6_is_active_c6_AllinOne;
   c6_c_u = c6_c_hoistedGlobal;
   c6_d_y = NULL;
   sf_mex_assign(&c6_d_y, sf_mex_create("y", &c6_c_u, 3, 0U, 0U, 0U, 0), false);
@@ -290,8 +279,8 @@ static const mxArray *get_sim_state_c6_AllinOne_2014a
   return c6_st;
 }
 
-static void set_sim_state_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c6_st)
+static void set_sim_state_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c6_st)
 {
   const mxArray *c6_u;
   real_T *c6_HeatSwitch;
@@ -303,9 +292,8 @@ static void set_sim_state_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
     (c6_u, 0)), "HeatSwitch");
   *c6_InFlowSwitch = c6_emlrt_marshallIn(chartInstance, sf_mex_dup
     (sf_mex_getcell(c6_u, 1)), "InFlowSwitch");
-  chartInstance->c6_is_active_c6_AllinOne_2014a = c6_f_emlrt_marshallIn
-    (chartInstance, sf_mex_dup(sf_mex_getcell(c6_u, 2)),
-     "is_active_c6_AllinOne_2014a");
+  chartInstance->c6_is_active_c6_AllinOne = c6_f_emlrt_marshallIn(chartInstance,
+    sf_mex_dup(sf_mex_getcell(c6_u, 2)), "is_active_c6_AllinOne");
   chartInstance->c6_is_active_Heater = c6_f_emlrt_marshallIn(chartInstance,
     sf_mex_dup(sf_mex_getcell(c6_u, 3)), "is_active_Heater");
   chartInstance->c6_is_active_InFlow = c6_f_emlrt_marshallIn(chartInstance,
@@ -319,12 +307,12 @@ static void set_sim_state_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
     (c6_u, 7)), "setSimStateSideEffectsInfo"), true);
   sf_mex_destroy(&c6_u);
   chartInstance->c6_doSetSimStateSideEffects = 1U;
-  c6_update_debugger_state_c6_AllinOne_2014a(chartInstance);
+  c6_update_debugger_state_c6_AllinOne(chartInstance);
   sf_mex_destroy(&c6_st);
 }
 
-static void c6_set_sim_state_side_effects_c6_AllinOne_2014a
-  (SFc6_AllinOne_2014aInstanceStruct *chartInstance)
+static void c6_set_sim_state_side_effects_c6_AllinOne
+  (SFc6_AllinOneInstanceStruct *chartInstance)
 {
   if (chartInstance->c6_doSetSimStateSideEffects != 0) {
     if (chartInstance->c6_is_active_Heater == 1U) {
@@ -367,14 +355,12 @@ static void c6_set_sim_state_side_effects_c6_AllinOne_2014a
   }
 }
 
-static void finalize_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void finalize_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance)
 {
   sf_mex_destroy(&chartInstance->c6_setSimStateSideEffectsInfo);
 }
 
-static void sf_gateway_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void sf_gateway_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance)
 {
   real_T *c6_InnerTemp;
   real_T *c6_InnerAmount;
@@ -384,7 +370,7 @@ static void sf_gateway_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
   c6_HeatSwitch = (real_T *)ssGetOutputPortSignal(chartInstance->S, 1);
   c6_InnerAmount = (real_T *)ssGetInputPortSignal(chartInstance->S, 1);
   c6_InnerTemp = (real_T *)ssGetInputPortSignal(chartInstance->S, 0);
-  c6_set_sim_state_side_effects_c6_AllinOne_2014a(chartInstance);
+  c6_set_sim_state_side_effects_c6_AllinOne(chartInstance);
   _SFD_SYMBOL_SCOPE_PUSH(0U, 0U);
   _sfTime_ = sf_get_time(chartInstance->S);
   _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 5U, chartInstance->c6_sfEvent);
@@ -395,16 +381,15 @@ static void sf_gateway_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
   chartInstance->c6_sfEvent = c6_event_Tick;
   _SFD_CE_CALL(EVENT_BEFORE_BROADCAST_TAG, c6_event_Tick,
                chartInstance->c6_sfEvent);
-  c6_chartstep_c6_AllinOne_2014a(chartInstance);
+  c6_chartstep_c6_AllinOne(chartInstance);
   _SFD_CE_CALL(EVENT_AFTER_BROADCAST_TAG, c6_event_Tick,
                chartInstance->c6_sfEvent);
   _SFD_SYMBOL_SCOPE_POP();
-  _SFD_CHECK_FOR_STATE_INCONSISTENCY(_AllinOne_2014aMachineNumber_,
+  _SFD_CHECK_FOR_STATE_INCONSISTENCY(_AllinOneMachineNumber_,
     chartInstance->chartNumber, chartInstance->instanceNumber);
 }
 
-static void c6_chartstep_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void c6_chartstep_c6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance)
 {
   uint32_T c6_debug_family_var_map[2];
   real_T c6_nargin = 0.0;
@@ -441,9 +426,9 @@ static void c6_chartstep_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
   c6_InnerAmount = (real_T *)ssGetInputPortSignal(chartInstance->S, 1);
   c6_InnerTemp = (real_T *)ssGetInputPortSignal(chartInstance->S, 0);
   _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 5U, chartInstance->c6_sfEvent);
-  if (chartInstance->c6_is_active_c6_AllinOne_2014a == 0U) {
+  if (chartInstance->c6_is_active_c6_AllinOne == 0U) {
     _SFD_CC_CALL(CHART_ENTER_ENTRY_FUNCTION_TAG, 5U, chartInstance->c6_sfEvent);
-    chartInstance->c6_is_active_c6_AllinOne_2014a = 1U;
+    chartInstance->c6_is_active_c6_AllinOne = 1U;
     _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 5U, chartInstance->c6_sfEvent);
     chartInstance->c6_is_active_Heater = 1U;
     _SFD_CS_CALL(STATE_ACTIVE_TAG, 0U, chartInstance->c6_sfEvent);
@@ -661,8 +646,7 @@ static void c6_chartstep_c6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
   _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 5U, chartInstance->c6_sfEvent);
 }
 
-static void initSimStructsc6_AllinOne_2014a(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void initSimStructsc6_AllinOne(SFc6_AllinOneInstanceStruct *chartInstance)
 {
   (void)chartInstance;
 }
@@ -680,8 +664,8 @@ static const mxArray *c6_sf_marshallOut(void *chartInstanceVoid, void *c6_inData
   const mxArray *c6_mxArrayOutData = NULL;
   real_T c6_u;
   const mxArray *c6_y = NULL;
-  SFc6_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc6_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc6_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc6_AllinOneInstanceStruct *)chartInstanceVoid;
   c6_mxArrayOutData = NULL;
   c6_u = *(real_T *)c6_inData;
   c6_y = NULL;
@@ -690,8 +674,8 @@ static const mxArray *c6_sf_marshallOut(void *chartInstanceVoid, void *c6_inData
   return c6_mxArrayOutData;
 }
 
-static real_T c6_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c6_nargout, const char_T *c6_identifier)
+static real_T c6_emlrt_marshallIn(SFc6_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c6_nargout, const char_T *c6_identifier)
 {
   real_T c6_y;
   emlrtMsgIdentifier c6_thisId;
@@ -702,8 +686,8 @@ static real_T c6_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
   return c6_y;
 }
 
-static real_T c6_b_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId)
+static real_T c6_b_emlrt_marshallIn(SFc6_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId)
 {
   real_T c6_y;
   real_T c6_d0;
@@ -721,8 +705,8 @@ static void c6_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const char_T *c6_identifier;
   emlrtMsgIdentifier c6_thisId;
   real_T c6_y;
-  SFc6_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc6_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc6_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc6_AllinOneInstanceStruct *)chartInstanceVoid;
   c6_nargout = sf_mex_dup(c6_mxArrayInData);
   c6_identifier = c6_varName;
   c6_thisId.fIdentifier = c6_identifier;
@@ -739,8 +723,8 @@ static const mxArray *c6_b_sf_marshallOut(void *chartInstanceVoid, void
   const mxArray *c6_mxArrayOutData = NULL;
   boolean_T c6_u;
   const mxArray *c6_y = NULL;
-  SFc6_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc6_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc6_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc6_AllinOneInstanceStruct *)chartInstanceVoid;
   c6_mxArrayOutData = NULL;
   c6_u = *(boolean_T *)c6_inData;
   c6_y = NULL;
@@ -749,7 +733,7 @@ static const mxArray *c6_b_sf_marshallOut(void *chartInstanceVoid, void
   return c6_mxArrayOutData;
 }
 
-static boolean_T c6_c_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
+static boolean_T c6_c_emlrt_marshallIn(SFc6_AllinOneInstanceStruct
   *chartInstance, const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId)
 {
   boolean_T c6_y;
@@ -768,8 +752,8 @@ static void c6_b_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const char_T *c6_identifier;
   emlrtMsgIdentifier c6_thisId;
   boolean_T c6_y;
-  SFc6_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc6_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc6_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc6_AllinOneInstanceStruct *)chartInstanceVoid;
   c6_sf_internal_predicateOutput = sf_mex_dup(c6_mxArrayInData);
   c6_identifier = c6_varName;
   c6_thisId.fIdentifier = c6_identifier;
@@ -781,7 +765,7 @@ static void c6_b_sf_marshallIn(void *chartInstanceVoid, const mxArray
   sf_mex_destroy(&c6_mxArrayInData);
 }
 
-const mxArray *sf_c6_AllinOne_2014a_get_eml_resolved_functions_info(void)
+const mxArray *sf_c6_AllinOne_get_eml_resolved_functions_info(void)
 {
   const mxArray *c6_nameCaptureInfo = NULL;
   c6_nameCaptureInfo = NULL;
@@ -796,8 +780,8 @@ static const mxArray *c6_c_sf_marshallOut(void *chartInstanceVoid, void
   const mxArray *c6_mxArrayOutData = NULL;
   int8_T c6_u;
   const mxArray *c6_y = NULL;
-  SFc6_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc6_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc6_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc6_AllinOneInstanceStruct *)chartInstanceVoid;
   c6_mxArrayOutData = NULL;
   c6_u = *(int8_T *)c6_inData;
   c6_y = NULL;
@@ -806,8 +790,8 @@ static const mxArray *c6_c_sf_marshallOut(void *chartInstanceVoid, void
   return c6_mxArrayOutData;
 }
 
-static int8_T c6_d_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId)
+static int8_T c6_d_emlrt_marshallIn(SFc6_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId)
 {
   int8_T c6_y;
   int8_T c6_i0;
@@ -825,8 +809,8 @@ static void c6_c_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const char_T *c6_identifier;
   emlrtMsgIdentifier c6_thisId;
   int8_T c6_y;
-  SFc6_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc6_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc6_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc6_AllinOneInstanceStruct *)chartInstanceVoid;
   c6_Tick = sf_mex_dup(c6_mxArrayInData);
   c6_identifier = c6_varName;
   c6_thisId.fIdentifier = c6_identifier;
@@ -843,8 +827,8 @@ static const mxArray *c6_d_sf_marshallOut(void *chartInstanceVoid, void
   const mxArray *c6_mxArrayOutData = NULL;
   int32_T c6_u;
   const mxArray *c6_y = NULL;
-  SFc6_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc6_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc6_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc6_AllinOneInstanceStruct *)chartInstanceVoid;
   c6_mxArrayOutData = NULL;
   c6_u = *(int32_T *)c6_inData;
   c6_y = NULL;
@@ -853,8 +837,8 @@ static const mxArray *c6_d_sf_marshallOut(void *chartInstanceVoid, void
   return c6_mxArrayOutData;
 }
 
-static int32_T c6_e_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId)
+static int32_T c6_e_emlrt_marshallIn(SFc6_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId)
 {
   int32_T c6_y;
   int32_T c6_i1;
@@ -872,8 +856,8 @@ static void c6_d_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const char_T *c6_identifier;
   emlrtMsgIdentifier c6_thisId;
   int32_T c6_y;
-  SFc6_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc6_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc6_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc6_AllinOneInstanceStruct *)chartInstanceVoid;
   c6_b_sfEvent = sf_mex_dup(c6_mxArrayInData);
   c6_identifier = c6_varName;
   c6_thisId.fIdentifier = c6_identifier;
@@ -891,8 +875,8 @@ static const mxArray *c6_e_sf_marshallOut(void *chartInstanceVoid, void
   const mxArray *c6_mxArrayOutData = NULL;
   uint8_T c6_u;
   const mxArray *c6_y = NULL;
-  SFc6_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc6_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc6_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc6_AllinOneInstanceStruct *)chartInstanceVoid;
   c6_mxArrayOutData = NULL;
   c6_u = *(uint8_T *)c6_inData;
   c6_y = NULL;
@@ -901,8 +885,8 @@ static const mxArray *c6_e_sf_marshallOut(void *chartInstanceVoid, void
   return c6_mxArrayOutData;
 }
 
-static uint8_T c6_f_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c6_b_tp_InFlow, const char_T *c6_identifier)
+static uint8_T c6_f_emlrt_marshallIn(SFc6_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c6_b_tp_InFlow, const char_T *c6_identifier)
 {
   uint8_T c6_y;
   emlrtMsgIdentifier c6_thisId;
@@ -914,8 +898,8 @@ static uint8_T c6_f_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
   return c6_y;
 }
 
-static uint8_T c6_g_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId)
+static uint8_T c6_g_emlrt_marshallIn(SFc6_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId)
 {
   uint8_T c6_y;
   uint8_T c6_u0;
@@ -933,8 +917,8 @@ static void c6_e_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const char_T *c6_identifier;
   emlrtMsgIdentifier c6_thisId;
   uint8_T c6_y;
-  SFc6_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc6_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc6_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc6_AllinOneInstanceStruct *)chartInstanceVoid;
   c6_b_tp_InFlow = sf_mex_dup(c6_mxArrayInData);
   c6_identifier = c6_varName;
   c6_thisId.fIdentifier = c6_identifier;
@@ -946,7 +930,7 @@ static void c6_e_sf_marshallIn(void *chartInstanceVoid, const mxArray
   sf_mex_destroy(&c6_mxArrayInData);
 }
 
-static const mxArray *c6_h_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
+static const mxArray *c6_h_emlrt_marshallIn(SFc6_AllinOneInstanceStruct
   *chartInstance, const mxArray *c6_b_setSimStateSideEffectsInfo, const char_T
   *c6_identifier)
 {
@@ -961,7 +945,7 @@ static const mxArray *c6_h_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
   return c6_y;
 }
 
-static const mxArray *c6_i_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
+static const mxArray *c6_i_emlrt_marshallIn(SFc6_AllinOneInstanceStruct
   *chartInstance, const mxArray *c6_u, const emlrtMsgIdentifier *c6_parentId)
 {
   const mxArray *c6_y = NULL;
@@ -973,7 +957,7 @@ static const mxArray *c6_i_emlrt_marshallIn(SFc6_AllinOne_2014aInstanceStruct
   return c6_y;
 }
 
-static void c6_updateDataWrittenToVector(SFc6_AllinOne_2014aInstanceStruct
+static void c6_updateDataWrittenToVector(SFc6_AllinOneInstanceStruct
   *chartInstance, uint32_T c6_vectorIndex)
 {
   (void)chartInstance;
@@ -981,8 +965,7 @@ static void c6_updateDataWrittenToVector(SFc6_AllinOne_2014aInstanceStruct
     c6_vectorIndex, 0, 1, 1, 0)] = true;
 }
 
-static void init_dsm_address_info(SFc6_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void init_dsm_address_info(SFc6_AllinOneInstanceStruct *chartInstance)
 {
   (void)chartInstance;
 }
@@ -1008,7 +991,7 @@ extern void utFree(void*);
 
 #endif
 
-void sf_c6_AllinOne_2014a_get_check_sum(mxArray *plhs[])
+void sf_c6_AllinOne_get_check_sum(mxArray *plhs[])
 {
   ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(191031977U);
   ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(640484726U);
@@ -1016,7 +999,7 @@ void sf_c6_AllinOne_2014a_get_check_sum(mxArray *plhs[])
   ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(662173713U);
 }
 
-mxArray *sf_c6_AllinOne_2014a_get_autoinheritance_info(void)
+mxArray *sf_c6_AllinOne_get_autoinheritance_info(void)
 {
   const char *autoinheritanceFields[] = { "checksum", "inputs", "parameters",
     "outputs", "locals" };
@@ -1131,30 +1114,30 @@ mxArray *sf_c6_AllinOne_2014a_get_autoinheritance_info(void)
   return(mxAutoinheritanceInfo);
 }
 
-mxArray *sf_c6_AllinOne_2014a_third_party_uses_info(void)
+mxArray *sf_c6_AllinOne_third_party_uses_info(void)
 {
   mxArray * mxcell3p = mxCreateCellMatrix(1,0);
   return(mxcell3p);
 }
 
-mxArray *sf_c6_AllinOne_2014a_updateBuildInfo_args_info(void)
+mxArray *sf_c6_AllinOne_updateBuildInfo_args_info(void)
 {
   mxArray *mxBIArgs = mxCreateCellMatrix(1,0);
   return mxBIArgs;
 }
 
-static const mxArray *sf_get_sim_state_info_c6_AllinOne_2014a(void)
+static const mxArray *sf_get_sim_state_info_c6_AllinOne(void)
 {
   const char *infoFields[] = { "chartChecksum", "varInfo" };
 
   mxArray *mxInfo = mxCreateStructMatrix(1, 1, 2, infoFields);
   const char *infoEncStr[] = {
-    "100 S1x7'type','srcId','name','auxInfo'{{M[1],M[26],T\"HeatSwitch\",},{M[1],M[27],T\"InFlowSwitch\",},{M[8],M[0],T\"is_active_c6_AllinOne_2014a\",},{M[8],M[1],T\"is_active_Heater\",},{M[8],M[16],T\"is_active_InFlow\",},{M[9],M[1],T\"is_Heater\",},{M[9],M[16],T\"is_InFlow\",}}"
+    "100 S1x7'type','srcId','name','auxInfo'{{M[1],M[26],T\"HeatSwitch\",},{M[1],M[27],T\"InFlowSwitch\",},{M[8],M[0],T\"is_active_c6_AllinOne\",},{M[8],M[1],T\"is_active_Heater\",},{M[8],M[16],T\"is_active_InFlow\",},{M[9],M[1],T\"is_Heater\",},{M[9],M[16],T\"is_InFlow\",}}"
   };
 
   mxArray *mxVarInfo = sf_mex_decode_encoded_mx_struct_array(infoEncStr, 7, 10);
   mxArray *mxChecksum = mxCreateDoubleMatrix(1, 4, mxREAL);
-  sf_c6_AllinOne_2014a_get_check_sum(&mxChecksum);
+  sf_c6_AllinOne_get_check_sum(&mxChecksum);
   mxSetField(mxInfo, 0, infoFields[0], mxChecksum);
   mxSetField(mxInfo, 0, infoFields[1], mxVarInfo);
   return mxInfo;
@@ -1164,18 +1147,17 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
   fullDebuggerInitialization)
 {
   if (!sim_mode_is_rtw_gen(S)) {
-    SFc6_AllinOne_2014aInstanceStruct *chartInstance;
+    SFc6_AllinOneInstanceStruct *chartInstance;
     ChartRunTimeInfo * crtInfo = (ChartRunTimeInfo *)(ssGetUserData(S));
     ChartInfoStruct * chartInfo = (ChartInfoStruct *)(crtInfo->instanceInfo);
-    chartInstance = (SFc6_AllinOne_2014aInstanceStruct *)
-      chartInfo->chartInstance;
+    chartInstance = (SFc6_AllinOneInstanceStruct *) chartInfo->chartInstance;
     if (ssIsFirstInitCond(S) && fullDebuggerInitialization==1) {
       /* do this only if simulation is starting */
       {
         unsigned int chartAlreadyPresent;
         chartAlreadyPresent = sf_debug_initialize_chart
           (sfGlobalDebugInstanceStruct,
-           _AllinOne_2014aMachineNumber_,
+           _AllinOneMachineNumber_,
            6,
            6,
            6,
@@ -1191,15 +1173,15 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
            (void *)S);
 
         /* Each instance must initialize ist own list of scripts */
-        init_script_number_translation(_AllinOne_2014aMachineNumber_,
+        init_script_number_translation(_AllinOneMachineNumber_,
           chartInstance->chartNumber,chartInstance->instanceNumber);
         if (chartAlreadyPresent==0) {
           /* this is the first instance */
           sf_debug_set_chart_disable_implicit_casting
-            (sfGlobalDebugInstanceStruct,_AllinOne_2014aMachineNumber_,
+            (sfGlobalDebugInstanceStruct,_AllinOneMachineNumber_,
              chartInstance->chartNumber,1);
           sf_debug_set_chart_event_thresholds(sfGlobalDebugInstanceStruct,
-            _AllinOne_2014aMachineNumber_,
+            _AllinOneMachineNumber_,
             chartInstance->chartNumber,
             1,
             1,
@@ -1303,7 +1285,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
       }
     } else {
       sf_debug_reset_current_state_configuration(sfGlobalDebugInstanceStruct,
-        _AllinOne_2014aMachineNumber_,chartInstance->chartNumber,
+        _AllinOneMachineNumber_,chartInstance->chartNumber,
         chartInstance->instanceNumber);
     }
   }
@@ -1314,34 +1296,30 @@ static const char* sf_get_instance_specialization(void)
   return "D4FkRXFQpdcLudHeMYfweB";
 }
 
-static void sf_opaque_initialize_c6_AllinOne_2014a(void *chartInstanceVar)
+static void sf_opaque_initialize_c6_AllinOne(void *chartInstanceVar)
 {
-  chart_debug_initialization(((SFc6_AllinOne_2014aInstanceStruct*)
-    chartInstanceVar)->S,0);
-  initialize_params_c6_AllinOne_2014a((SFc6_AllinOne_2014aInstanceStruct*)
-    chartInstanceVar);
-  initialize_c6_AllinOne_2014a((SFc6_AllinOne_2014aInstanceStruct*)
-    chartInstanceVar);
+  chart_debug_initialization(((SFc6_AllinOneInstanceStruct*) chartInstanceVar)
+    ->S,0);
+  initialize_params_c6_AllinOne((SFc6_AllinOneInstanceStruct*) chartInstanceVar);
+  initialize_c6_AllinOne((SFc6_AllinOneInstanceStruct*) chartInstanceVar);
 }
 
-static void sf_opaque_enable_c6_AllinOne_2014a(void *chartInstanceVar)
+static void sf_opaque_enable_c6_AllinOne(void *chartInstanceVar)
 {
-  enable_c6_AllinOne_2014a((SFc6_AllinOne_2014aInstanceStruct*) chartInstanceVar);
+  enable_c6_AllinOne((SFc6_AllinOneInstanceStruct*) chartInstanceVar);
 }
 
-static void sf_opaque_disable_c6_AllinOne_2014a(void *chartInstanceVar)
+static void sf_opaque_disable_c6_AllinOne(void *chartInstanceVar)
 {
-  disable_c6_AllinOne_2014a((SFc6_AllinOne_2014aInstanceStruct*)
-    chartInstanceVar);
+  disable_c6_AllinOne((SFc6_AllinOneInstanceStruct*) chartInstanceVar);
 }
 
-static void sf_opaque_gateway_c6_AllinOne_2014a(void *chartInstanceVar)
+static void sf_opaque_gateway_c6_AllinOne(void *chartInstanceVar)
 {
-  sf_gateway_c6_AllinOne_2014a((SFc6_AllinOne_2014aInstanceStruct*)
-    chartInstanceVar);
+  sf_gateway_c6_AllinOne((SFc6_AllinOneInstanceStruct*) chartInstanceVar);
 }
 
-extern const mxArray* sf_internal_get_sim_state_c6_AllinOne_2014a(SimStruct* S)
+extern const mxArray* sf_internal_get_sim_state_c6_AllinOne(SimStruct* S)
 {
   ChartRunTimeInfo * crtInfo = (ChartRunTimeInfo *)(ssGetUserData(S));
   ChartInfoStruct * chartInfo = (ChartInfoStruct *)(crtInfo->instanceInfo);
@@ -1351,9 +1329,9 @@ extern const mxArray* sf_internal_get_sim_state_c6_AllinOne_2014a(SimStruct* S)
   int mxError = 0;
   prhs[0] = mxCreateString("chart_simctx_raw2high");
   prhs[1] = mxCreateDoubleScalar(ssGetSFuncBlockHandle(S));
-  prhs[2] = (mxArray*) get_sim_state_c6_AllinOne_2014a
-    ((SFc6_AllinOne_2014aInstanceStruct*)chartInfo->chartInstance);/* raw sim ctx */
-  prhs[3] = (mxArray*) sf_get_sim_state_info_c6_AllinOne_2014a();/* state var info */
+  prhs[2] = (mxArray*) get_sim_state_c6_AllinOne((SFc6_AllinOneInstanceStruct*)
+    chartInfo->chartInstance);         /* raw sim ctx */
+  prhs[3] = (mxArray*) sf_get_sim_state_info_c6_AllinOne();/* state var info */
   mxError = sf_mex_call_matlab(1, plhs, 4, prhs, "sfprivate");
   mxDestroyArray(prhs[0]);
   mxDestroyArray(prhs[1]);
@@ -1366,8 +1344,8 @@ extern const mxArray* sf_internal_get_sim_state_c6_AllinOne_2014a(SimStruct* S)
   return plhs[0];
 }
 
-extern void sf_internal_set_sim_state_c6_AllinOne_2014a(SimStruct* S, const
-  mxArray *st)
+extern void sf_internal_set_sim_state_c6_AllinOne(SimStruct* S, const mxArray
+  *st)
 {
   ChartRunTimeInfo * crtInfo = (ChartRunTimeInfo *)(ssGetUserData(S));
   ChartInfoStruct * chartInfo = (ChartInfoStruct *)(crtInfo->instanceInfo);
@@ -1377,7 +1355,7 @@ extern void sf_internal_set_sim_state_c6_AllinOne_2014a(SimStruct* S, const
   int mxError = 0;
   prhs[0] = mxCreateString("chart_simctx_high2raw");
   prhs[1] = mxDuplicateArray(st);      /* high level simctx */
-  prhs[2] = (mxArray*) sf_get_sim_state_info_c6_AllinOne_2014a();/* state var info */
+  prhs[2] = (mxArray*) sf_get_sim_state_info_c6_AllinOne();/* state var info */
   mxError = sf_mex_call_matlab(1, plhs, 3, prhs, "sfprivate");
   mxDestroyArray(prhs[0]);
   mxDestroyArray(prhs[1]);
@@ -1386,34 +1364,32 @@ extern void sf_internal_set_sim_state_c6_AllinOne_2014a(SimStruct* S, const
     sf_mex_error_message("Stateflow Internal Error: \nError calling 'chart_simctx_high2raw'.\n");
   }
 
-  set_sim_state_c6_AllinOne_2014a((SFc6_AllinOne_2014aInstanceStruct*)
+  set_sim_state_c6_AllinOne((SFc6_AllinOneInstanceStruct*)
     chartInfo->chartInstance, mxDuplicateArray(plhs[0]));
   mxDestroyArray(plhs[0]);
 }
 
-static const mxArray* sf_opaque_get_sim_state_c6_AllinOne_2014a(SimStruct* S)
+static const mxArray* sf_opaque_get_sim_state_c6_AllinOne(SimStruct* S)
 {
-  return sf_internal_get_sim_state_c6_AllinOne_2014a(S);
+  return sf_internal_get_sim_state_c6_AllinOne(S);
 }
 
-static void sf_opaque_set_sim_state_c6_AllinOne_2014a(SimStruct* S, const
-  mxArray *st)
+static void sf_opaque_set_sim_state_c6_AllinOne(SimStruct* S, const mxArray *st)
 {
-  sf_internal_set_sim_state_c6_AllinOne_2014a(S, st);
+  sf_internal_set_sim_state_c6_AllinOne(S, st);
 }
 
-static void sf_opaque_terminate_c6_AllinOne_2014a(void *chartInstanceVar)
+static void sf_opaque_terminate_c6_AllinOne(void *chartInstanceVar)
 {
   if (chartInstanceVar!=NULL) {
-    SimStruct *S = ((SFc6_AllinOne_2014aInstanceStruct*) chartInstanceVar)->S;
+    SimStruct *S = ((SFc6_AllinOneInstanceStruct*) chartInstanceVar)->S;
     ChartRunTimeInfo * crtInfo = (ChartRunTimeInfo *)(ssGetUserData(S));
     if (sim_mode_is_rtw_gen(S) || sim_mode_is_external(S)) {
       sf_clear_rtw_identifier(S);
-      unload_AllinOne_2014a_optimization_info();
+      unload_AllinOne_optimization_info();
     }
 
-    finalize_c6_AllinOne_2014a((SFc6_AllinOne_2014aInstanceStruct*)
-      chartInstanceVar);
+    finalize_c6_AllinOne((SFc6_AllinOneInstanceStruct*) chartInstanceVar);
     utFree((void *)chartInstanceVar);
     if (crtInfo != NULL) {
       utFree((void *)crtInfo);
@@ -1425,12 +1401,11 @@ static void sf_opaque_terminate_c6_AllinOne_2014a(void *chartInstanceVar)
 
 static void sf_opaque_init_subchart_simstructs(void *chartInstanceVar)
 {
-  initSimStructsc6_AllinOne_2014a((SFc6_AllinOne_2014aInstanceStruct*)
-    chartInstanceVar);
+  initSimStructsc6_AllinOne((SFc6_AllinOneInstanceStruct*) chartInstanceVar);
 }
 
 extern unsigned int sf_machine_global_initializer_called(void);
-static void mdlProcessParameters_c6_AllinOne_2014a(SimStruct *S)
+static void mdlProcessParameters_c6_AllinOne(SimStruct *S)
 {
   int i;
   for (i=0;i<ssGetNumRunTimeParams(S);i++) {
@@ -1442,15 +1417,15 @@ static void mdlProcessParameters_c6_AllinOne_2014a(SimStruct *S)
   if (sf_machine_global_initializer_called()) {
     ChartRunTimeInfo * crtInfo = (ChartRunTimeInfo *)(ssGetUserData(S));
     ChartInfoStruct * chartInfo = (ChartInfoStruct *)(crtInfo->instanceInfo);
-    initialize_params_c6_AllinOne_2014a((SFc6_AllinOne_2014aInstanceStruct*)
+    initialize_params_c6_AllinOne((SFc6_AllinOneInstanceStruct*)
       (chartInfo->chartInstance));
   }
 }
 
-static void mdlSetWorkWidths_c6_AllinOne_2014a(SimStruct *S)
+static void mdlSetWorkWidths_c6_AllinOne(SimStruct *S)
 {
   if (sim_mode_is_rtw_gen(S) || sim_mode_is_external(S)) {
-    mxArray *infoStruct = load_AllinOne_2014a_optimization_info();
+    mxArray *infoStruct = load_AllinOne_optimization_info();
     int_T chartIsInlinable =
       (int_T)sf_is_chart_inlinable(sf_get_instance_specialization(),infoStruct,6);
     ssSetStateflowIsInlinable(S,chartIsInlinable);
@@ -1502,21 +1477,21 @@ static void mdlSetWorkWidths_c6_AllinOne_2014a(SimStruct *S)
   ssSupportsMultipleExecInstances(S,1);
 }
 
-static void mdlRTW_c6_AllinOne_2014a(SimStruct *S)
+static void mdlRTW_c6_AllinOne(SimStruct *S)
 {
   if (sim_mode_is_rtw_gen(S)) {
     ssWriteRTWStrParam(S, "StateflowChartType", "Stateflow");
   }
 }
 
-static void mdlStart_c6_AllinOne_2014a(SimStruct *S)
+static void mdlStart_c6_AllinOne(SimStruct *S)
 {
-  SFc6_AllinOne_2014aInstanceStruct *chartInstance;
+  SFc6_AllinOneInstanceStruct *chartInstance;
   ChartRunTimeInfo * crtInfo = (ChartRunTimeInfo *)utMalloc(sizeof
     (ChartRunTimeInfo));
-  chartInstance = (SFc6_AllinOne_2014aInstanceStruct *)utMalloc(sizeof
-    (SFc6_AllinOne_2014aInstanceStruct));
-  memset(chartInstance, 0, sizeof(SFc6_AllinOne_2014aInstanceStruct));
+  chartInstance = (SFc6_AllinOneInstanceStruct *)utMalloc(sizeof
+    (SFc6_AllinOneInstanceStruct));
+  memset(chartInstance, 0, sizeof(SFc6_AllinOneInstanceStruct));
   if (chartInstance==NULL) {
     sf_mex_error_message("Could not allocate memory for chart instance.");
   }
@@ -1524,26 +1499,20 @@ static void mdlStart_c6_AllinOne_2014a(SimStruct *S)
   chartInstance->chartInfo.chartInstance = chartInstance;
   chartInstance->chartInfo.isEMLChart = 0;
   chartInstance->chartInfo.chartInitialized = 0;
-  chartInstance->chartInfo.sFunctionGateway =
-    sf_opaque_gateway_c6_AllinOne_2014a;
-  chartInstance->chartInfo.initializeChart =
-    sf_opaque_initialize_c6_AllinOne_2014a;
-  chartInstance->chartInfo.terminateChart =
-    sf_opaque_terminate_c6_AllinOne_2014a;
-  chartInstance->chartInfo.enableChart = sf_opaque_enable_c6_AllinOne_2014a;
-  chartInstance->chartInfo.disableChart = sf_opaque_disable_c6_AllinOne_2014a;
-  chartInstance->chartInfo.getSimState =
-    sf_opaque_get_sim_state_c6_AllinOne_2014a;
-  chartInstance->chartInfo.setSimState =
-    sf_opaque_set_sim_state_c6_AllinOne_2014a;
-  chartInstance->chartInfo.getSimStateInfo =
-    sf_get_sim_state_info_c6_AllinOne_2014a;
+  chartInstance->chartInfo.sFunctionGateway = sf_opaque_gateway_c6_AllinOne;
+  chartInstance->chartInfo.initializeChart = sf_opaque_initialize_c6_AllinOne;
+  chartInstance->chartInfo.terminateChart = sf_opaque_terminate_c6_AllinOne;
+  chartInstance->chartInfo.enableChart = sf_opaque_enable_c6_AllinOne;
+  chartInstance->chartInfo.disableChart = sf_opaque_disable_c6_AllinOne;
+  chartInstance->chartInfo.getSimState = sf_opaque_get_sim_state_c6_AllinOne;
+  chartInstance->chartInfo.setSimState = sf_opaque_set_sim_state_c6_AllinOne;
+  chartInstance->chartInfo.getSimStateInfo = sf_get_sim_state_info_c6_AllinOne;
   chartInstance->chartInfo.zeroCrossings = NULL;
   chartInstance->chartInfo.outputs = NULL;
   chartInstance->chartInfo.derivatives = NULL;
-  chartInstance->chartInfo.mdlRTW = mdlRTW_c6_AllinOne_2014a;
-  chartInstance->chartInfo.mdlStart = mdlStart_c6_AllinOne_2014a;
-  chartInstance->chartInfo.mdlSetWorkWidths = mdlSetWorkWidths_c6_AllinOne_2014a;
+  chartInstance->chartInfo.mdlRTW = mdlRTW_c6_AllinOne;
+  chartInstance->chartInfo.mdlStart = mdlStart_c6_AllinOne;
+  chartInstance->chartInfo.mdlSetWorkWidths = mdlSetWorkWidths_c6_AllinOne;
   chartInstance->chartInfo.extModeExec = NULL;
   chartInstance->chartInfo.restoreLastMajorStepConfiguration = NULL;
   chartInstance->chartInfo.restoreBeforeLastMajorStepConfiguration = NULL;
@@ -1561,25 +1530,25 @@ static void mdlStart_c6_AllinOne_2014a(SimStruct *S)
   chart_debug_initialization(S,1);
 }
 
-void c6_AllinOne_2014a_method_dispatcher(SimStruct *S, int_T method, void *data)
+void c6_AllinOne_method_dispatcher(SimStruct *S, int_T method, void *data)
 {
   switch (method) {
    case SS_CALL_MDL_START:
-    mdlStart_c6_AllinOne_2014a(S);
+    mdlStart_c6_AllinOne(S);
     break;
 
    case SS_CALL_MDL_SET_WORK_WIDTHS:
-    mdlSetWorkWidths_c6_AllinOne_2014a(S);
+    mdlSetWorkWidths_c6_AllinOne(S);
     break;
 
    case SS_CALL_MDL_PROCESS_PARAMETERS:
-    mdlProcessParameters_c6_AllinOne_2014a(S);
+    mdlProcessParameters_c6_AllinOne(S);
     break;
 
    default:
     /* Unhandled method */
     sf_mex_error_message("Stateflow Internal Error:\n"
-                         "Error calling c6_AllinOne_2014a_method_dispatcher.\n"
+                         "Error calling c6_AllinOne_method_dispatcher.\n"
                          "Can't handle method %d.\n", method);
     break;
   }

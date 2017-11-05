@@ -2,12 +2,12 @@
 
 #include <stddef.h>
 #include "blas.h"
-#include "AllinOne_2014a_sfun.h"
-#include "c1_AllinOne_2014a.h"
+#include "AllinOne_sfun.h"
+#include "c1_AllinOne.h"
 #include "mwmathutil.h"
 #define CHARTINSTANCE_CHARTNUMBER      (chartInstance->chartNumber)
 #define CHARTINSTANCE_INSTANCENUMBER   (chartInstance->instanceNumber)
-#include "AllinOne_2014a_sfun_debug_macros.h"
+#include "AllinOne_sfun_debug_macros.h"
 #define _SF_MEX_LISTEN_FOR_CTRL_C(S)   sf_mex_listen_for_ctrl_c(sfGlobalDebugInstanceStruct,S);
 
 /* Type Definitions */
@@ -113,47 +113,40 @@ static const char * c1_db_debug_family_names[3] = { "nargin", "nargout",
 static boolean_T c1_dataWrittenToVector[4];
 
 /* Function Declarations */
-static void initialize_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
+static void initialize_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance);
+static void initialize_params_c1_AllinOne(SFc1_AllinOneInstanceStruct
   *chartInstance);
-static void initialize_params_c1_AllinOne_2014a
-  (SFc1_AllinOne_2014aInstanceStruct *chartInstance);
-static void enable_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
+static void enable_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance);
+static void disable_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance);
+static void c1_update_debugger_state_c1_AllinOne(SFc1_AllinOneInstanceStruct
   *chartInstance);
-static void disable_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
+static const mxArray *get_sim_state_c1_AllinOne(SFc1_AllinOneInstanceStruct
   *chartInstance);
-static void c1_update_debugger_state_c1_AllinOne_2014a
-  (SFc1_AllinOne_2014aInstanceStruct *chartInstance);
-static const mxArray *get_sim_state_c1_AllinOne_2014a
-  (SFc1_AllinOne_2014aInstanceStruct *chartInstance);
-static void set_sim_state_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_st);
-static void c1_set_sim_state_side_effects_c1_AllinOne_2014a
-  (SFc1_AllinOne_2014aInstanceStruct *chartInstance);
-static void finalize_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance);
-static void sf_gateway_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance);
-static void c1_chartstep_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance);
-static void initSimStructsc1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance);
-static void c1_CupTransmit(SFc1_AllinOne_2014aInstanceStruct *chartInstance);
-static void c1_eps(SFc1_AllinOne_2014aInstanceStruct *chartInstance);
+static void set_sim_state_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_st);
+static void c1_set_sim_state_side_effects_c1_AllinOne
+  (SFc1_AllinOneInstanceStruct *chartInstance);
+static void finalize_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance);
+static void sf_gateway_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance);
+static void c1_chartstep_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance);
+static void initSimStructsc1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance);
+static void c1_CupTransmit(SFc1_AllinOneInstanceStruct *chartInstance);
+static void c1_eps(SFc1_AllinOneInstanceStruct *chartInstance);
 static void init_script_number_translation(uint32_T c1_machineNumber, uint32_T
   c1_chartNumber, uint32_T c1_instanceNumber);
 static const mxArray *c1_sf_marshallOut(void *chartInstanceVoid, void *c1_inData);
-static real_T c1_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_nargout, const char_T *c1_identifier);
-static real_T c1_b_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId);
+static real_T c1_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_nargout, const char_T *c1_identifier);
+static real_T c1_b_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId);
 static void c1_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c1_mxArrayInData, const char_T *c1_varName, void *c1_outData);
 static const mxArray *c1_b_sf_marshallOut(void *chartInstanceVoid, void
   *c1_inData);
-static boolean_T c1_c_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
+static boolean_T c1_c_emlrt_marshallIn(SFc1_AllinOneInstanceStruct
   *chartInstance, const mxArray *c1_sf_internal_predicateOutput, const char_T
   *c1_identifier);
-static boolean_T c1_d_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
+static boolean_T c1_d_emlrt_marshallIn(SFc1_AllinOneInstanceStruct
   *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId);
 static void c1_b_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c1_mxArrayInData, const char_T *c1_varName, void *c1_outData);
@@ -162,62 +155,57 @@ static const mxArray *c1_emlrt_marshallOut(const char * c1_u);
 static const mxArray *c1_b_emlrt_marshallOut(const uint32_T c1_u);
 static const mxArray *c1_c_sf_marshallOut(void *chartInstanceVoid, void
   *c1_inData);
-static int8_T c1_e_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId);
+static int8_T c1_e_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId);
 static void c1_c_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c1_mxArrayInData, const char_T *c1_varName, void *c1_outData);
 static const mxArray *c1_d_sf_marshallOut(void *chartInstanceVoid, void
   *c1_inData);
-static uint32_T c1_f_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_b_StepEventEventCounter, const char_T
-  *c1_identifier);
-static uint32_T c1_g_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId);
+static uint32_T c1_f_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_b_StepEventEventCounter, const char_T *c1_identifier);
+static uint32_T c1_g_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId);
 static void c1_d_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c1_mxArrayInData, const char_T *c1_varName, void *c1_outData);
 static const mxArray *c1_e_sf_marshallOut(void *chartInstanceVoid, void
   *c1_inData);
-static int32_T c1_h_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId);
+static int32_T c1_h_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId);
 static void c1_e_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c1_mxArrayInData, const char_T *c1_varName, void *c1_outData);
 static const mxArray *c1_f_sf_marshallOut(void *chartInstanceVoid, void
   *c1_inData);
-static uint8_T c1_i_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_b_tp_MixtrueMonitor, const char_T
-  *c1_identifier);
-static uint8_T c1_j_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId);
+static uint8_T c1_i_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_b_tp_MixtrueMonitor, const char_T *c1_identifier);
+static uint8_T c1_j_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId);
 static void c1_f_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c1_mxArrayInData, const char_T *c1_varName, void *c1_outData);
 static const mxArray *c1_InMixtrue_bus_io(void *chartInstanceVoid, void
   *c1_pData);
 static const mxArray *c1_g_sf_marshallOut(void *chartInstanceVoid, void
   *c1_inData);
-static c1_Mixtrue c1_k_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
+static c1_Mixtrue c1_k_emlrt_marshallIn(SFc1_AllinOneInstanceStruct
   *chartInstance, const mxArray *c1_b_LocalMixtrue, const char_T *c1_identifier);
-static c1_Mixtrue c1_l_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
+static c1_Mixtrue c1_l_emlrt_marshallIn(SFc1_AllinOneInstanceStruct
   *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId);
-static void c1_m_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId,
-  real_T c1_y[2]);
+static void c1_m_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId, real_T c1_y[2]);
 static void c1_g_sf_marshallIn(void *chartInstanceVoid, const mxArray
   *c1_mxArrayInData, const char_T *c1_varName, void *c1_outData);
-static const mxArray *c1_n_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
+static const mxArray *c1_n_emlrt_marshallIn(SFc1_AllinOneInstanceStruct
   *chartInstance, const mxArray *c1_b_setSimStateSideEffectsInfo, const char_T
   *c1_identifier);
-static const mxArray *c1_o_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
+static const mxArray *c1_o_emlrt_marshallIn(SFc1_AllinOneInstanceStruct
   *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId);
-static void c1_updateDataWrittenToVector(SFc1_AllinOne_2014aInstanceStruct
+static void c1_updateDataWrittenToVector(SFc1_AllinOneInstanceStruct
   *chartInstance, uint32_T c1_vectorIndex);
-static void c1_errorIfDataNotWrittenToFcn(SFc1_AllinOne_2014aInstanceStruct
+static void c1_errorIfDataNotWrittenToFcn(SFc1_AllinOneInstanceStruct
   *chartInstance, uint32_T c1_vectorIndex, uint32_T c1_dataNumber);
-static void init_dsm_address_info(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance);
+static void init_dsm_address_info(SFc1_AllinOneInstanceStruct *chartInstance);
 
 /* Function Definitions */
-static void initialize_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void initialize_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance)
 {
   uint32_T c1_debug_family_var_map[2];
   real_T c1_nargin = 0.0;
@@ -248,11 +236,11 @@ static void initialize_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
   chartInstance->c1_tp_MixtrueMonitor = 0U;
   chartInstance->c1_tp_Adding = 0U;
   chartInstance->c1_tp_Waiting = 0U;
-  chartInstance->c1_is_active_c1_AllinOne_2014a = 0U;
+  chartInstance->c1_is_active_c1_AllinOne = 0U;
   chartInstance->c1_StepEventEventCounter = 0U;
   *c1_StepEvent = false;
   _SFD_CC_CALL(CHART_ENTER_ENTRY_FUNCTION_TAG, 0U, chartInstance->c1_sfEvent);
-  chartInstance->c1_is_active_c1_AllinOne_2014a = 1U;
+  chartInstance->c1_is_active_c1_AllinOne = 1U;
   _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 0U, chartInstance->c1_sfEvent);
   _SFD_CC_CALL(CHART_ENTER_DURING_FUNCTION_TAG, 0U, chartInstance->c1_sfEvent);
   chartInstance->c1_is_active_CupTransmit = 1U;
@@ -287,36 +275,34 @@ static void initialize_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
   _SFD_CS_CALL(STATE_ACTIVE_TAG, 2U, chartInstance->c1_sfEvent);
   chartInstance->c1_b_tp_Waiting = 1U;
   _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 0U, chartInstance->c1_sfEvent);
-  _SFD_CHECK_FOR_STATE_INCONSISTENCY(_AllinOne_2014aMachineNumber_,
+  _SFD_CHECK_FOR_STATE_INCONSISTENCY(_AllinOneMachineNumber_,
     chartInstance->chartNumber, chartInstance->instanceNumber);
 }
 
-static void initialize_params_c1_AllinOne_2014a
-  (SFc1_AllinOne_2014aInstanceStruct *chartInstance)
+static void initialize_params_c1_AllinOne(SFc1_AllinOneInstanceStruct
+  *chartInstance)
 {
   (void)chartInstance;
 }
 
-static void enable_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void enable_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance)
 {
   _sfTime_ = sf_get_time(chartInstance->S);
 }
 
-static void disable_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void disable_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance)
 {
   _sfTime_ = sf_get_time(chartInstance->S);
 }
 
-static void c1_update_debugger_state_c1_AllinOne_2014a
-  (SFc1_AllinOne_2014aInstanceStruct *chartInstance)
+static void c1_update_debugger_state_c1_AllinOne(SFc1_AllinOneInstanceStruct
+  *chartInstance)
 {
   uint32_T c1_prevAniVal;
   c1_prevAniVal = _SFD_GET_ANIMATION();
   _SFD_SET_ANIMATION(0U);
   _SFD_SET_HONOR_BREAKPOINTS(0U);
-  if (chartInstance->c1_is_active_c1_AllinOne_2014a == 1U) {
+  if (chartInstance->c1_is_active_c1_AllinOne == 1U) {
     _SFD_CC_CALL(CHART_ACTIVE_TAG, 0U, chartInstance->c1_sfEvent);
   }
 
@@ -403,8 +389,8 @@ static void c1_update_debugger_state_c1_AllinOne_2014a
   _SFD_ANIMATE();
 }
 
-static const mxArray *get_sim_state_c1_AllinOne_2014a
-  (SFc1_AllinOne_2014aInstanceStruct *chartInstance)
+static const mxArray *get_sim_state_c1_AllinOne(SFc1_AllinOneInstanceStruct
+  *chartInstance)
 {
   const mxArray *c1_st;
   const mxArray *c1_y = NULL;
@@ -538,7 +524,7 @@ static const mxArray *get_sim_state_c1_AllinOne_2014a
   c1_o_y = NULL;
   sf_mex_assign(&c1_o_y, sf_mex_create("y", &c1_l_u, 7, 0U, 0U, 0U, 0), false);
   sf_mex_setcell(c1_y, 5, c1_o_y);
-  c1_e_hoistedGlobal = chartInstance->c1_is_active_c1_AllinOne_2014a;
+  c1_e_hoistedGlobal = chartInstance->c1_is_active_c1_AllinOne;
   c1_m_u = c1_e_hoistedGlobal;
   c1_p_y = NULL;
   sf_mex_assign(&c1_p_y, sf_mex_create("y", &c1_m_u, 3, 0U, 0U, 0U, 0), false);
@@ -582,8 +568,8 @@ static const mxArray *get_sim_state_c1_AllinOne_2014a
   return c1_st;
 }
 
-static void set_sim_state_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_st)
+static void set_sim_state_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_st)
 {
   const mxArray *c1_u;
   c1_Mixtrue c1_r0;
@@ -615,9 +601,8 @@ static void set_sim_state_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
     (c1_u, 4)), "StepEvent");
   chartInstance->c1_StepEventEventCounter = c1_f_emlrt_marshallIn(chartInstance,
     sf_mex_dup(sf_mex_getcell(c1_u, 5)), "StepEventEventCounter");
-  chartInstance->c1_is_active_c1_AllinOne_2014a = c1_i_emlrt_marshallIn
-    (chartInstance, sf_mex_dup(sf_mex_getcell(c1_u, 6)),
-     "is_active_c1_AllinOne_2014a");
+  chartInstance->c1_is_active_c1_AllinOne = c1_i_emlrt_marshallIn(chartInstance,
+    sf_mex_dup(sf_mex_getcell(c1_u, 6)), "is_active_c1_AllinOne");
   chartInstance->c1_is_active_CupTransmit = c1_i_emlrt_marshallIn(chartInstance,
     sf_mex_dup(sf_mex_getcell(c1_u, 7)), "is_active_CupTransmit");
   chartInstance->c1_is_active_MixtrueMonitor = c1_i_emlrt_marshallIn
@@ -638,12 +623,12 @@ static void set_sim_state_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
     (c1_u, 14)), "setSimStateSideEffectsInfo"), true);
   sf_mex_destroy(&c1_u);
   chartInstance->c1_doSetSimStateSideEffects = 1U;
-  c1_update_debugger_state_c1_AllinOne_2014a(chartInstance);
+  c1_update_debugger_state_c1_AllinOne(chartInstance);
   sf_mex_destroy(&c1_st);
 }
 
-static void c1_set_sim_state_side_effects_c1_AllinOne_2014a
-  (SFc1_AllinOne_2014aInstanceStruct *chartInstance)
+static void c1_set_sim_state_side_effects_c1_AllinOne
+  (SFc1_AllinOneInstanceStruct *chartInstance)
 {
   if (chartInstance->c1_doSetSimStateSideEffects != 0) {
     if (chartInstance->c1_is_active_CupTransmit == 1U) {
@@ -736,14 +721,12 @@ static void c1_set_sim_state_side_effects_c1_AllinOne_2014a
   }
 }
 
-static void finalize_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void finalize_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance)
 {
   sf_mex_destroy(&chartInstance->c1_setSimStateSideEffectsInfo);
 }
 
-static void sf_gateway_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void sf_gateway_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance)
 {
   int32_T c1_inputEventFiredFlag;
   real_T *c1_Step;
@@ -759,7 +742,7 @@ static void sf_gateway_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
   c1_OutCup = (real_T *)ssGetOutputPortSignal(chartInstance->S, 2);
   c1_InCup = (real_T *)ssGetInputPortSignal(chartInstance->S, 2);
   c1_Step = (real_T *)ssGetInputPortSignal(chartInstance->S, 0);
-  c1_set_sim_state_side_effects_c1_AllinOne_2014a(chartInstance);
+  c1_set_sim_state_side_effects_c1_AllinOne(chartInstance);
   _SFD_SYMBOL_SCOPE_PUSH(0U, 0U);
   _sfTime_ = sf_get_time(chartInstance->S);
   _SFD_CC_CALL(CHART_ENTER_SFUNCTION_TAG, 0U, chartInstance->c1_sfEvent);
@@ -777,7 +760,7 @@ static void sf_gateway_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
     chartInstance->c1_sfEvent = c1_event_Tick;
     _SFD_CE_CALL(EVENT_BEFORE_BROADCAST_TAG, c1_event_Tick,
                  chartInstance->c1_sfEvent);
-    c1_chartstep_c1_AllinOne_2014a(chartInstance);
+    c1_chartstep_c1_AllinOne(chartInstance);
     _SFD_CE_CALL(EVENT_AFTER_BROADCAST_TAG, c1_event_Tick,
                  chartInstance->c1_sfEvent);
   }
@@ -787,7 +770,7 @@ static void sf_gateway_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
     chartInstance->c1_sfEvent = c1_event_TakeOutEvent;
     _SFD_CE_CALL(EVENT_BEFORE_BROADCAST_TAG, c1_event_TakeOutEvent,
                  chartInstance->c1_sfEvent);
-    c1_chartstep_c1_AllinOne_2014a(chartInstance);
+    c1_chartstep_c1_AllinOne(chartInstance);
     _SFD_CE_CALL(EVENT_AFTER_BROADCAST_TAG, c1_event_TakeOutEvent,
                  chartInstance->c1_sfEvent);
   }
@@ -800,12 +783,11 @@ static void sf_gateway_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
   }
 
   _SFD_SYMBOL_SCOPE_POP();
-  _SFD_CHECK_FOR_STATE_INCONSISTENCY(_AllinOne_2014aMachineNumber_,
+  _SFD_CHECK_FOR_STATE_INCONSISTENCY(_AllinOneMachineNumber_,
     chartInstance->chartNumber, chartInstance->instanceNumber);
 }
 
-static void c1_chartstep_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void c1_chartstep_c1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance)
 {
   uint32_T c1_debug_family_var_map[3];
   real_T c1_nargin = 0.0;
@@ -1052,13 +1034,12 @@ static void c1_chartstep_c1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
   _SFD_CC_CALL(EXIT_OUT_OF_FUNCTION_TAG, 0U, chartInstance->c1_sfEvent);
 }
 
-static void initSimStructsc1_AllinOne_2014a(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void initSimStructsc1_AllinOne(SFc1_AllinOneInstanceStruct *chartInstance)
 {
   (void)chartInstance;
 }
 
-static void c1_CupTransmit(SFc1_AllinOne_2014aInstanceStruct *chartInstance)
+static void c1_CupTransmit(SFc1_AllinOneInstanceStruct *chartInstance)
 {
   uint32_T c1_debug_family_var_map[3];
   real_T c1_nargin = 0.0;
@@ -1411,7 +1392,7 @@ static void c1_CupTransmit(SFc1_AllinOne_2014aInstanceStruct *chartInstance)
   _SFD_CS_CALL(EXIT_OUT_OF_FUNCTION_TAG, 3U, chartInstance->c1_sfEvent);
 }
 
-static void c1_eps(SFc1_AllinOne_2014aInstanceStruct *chartInstance)
+static void c1_eps(SFc1_AllinOneInstanceStruct *chartInstance)
 {
   (void)chartInstance;
 }
@@ -1429,8 +1410,8 @@ static const mxArray *c1_sf_marshallOut(void *chartInstanceVoid, void *c1_inData
   const mxArray *c1_mxArrayOutData = NULL;
   real_T c1_u;
   const mxArray *c1_y = NULL;
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc1_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_mxArrayOutData = NULL;
   c1_u = *(real_T *)c1_inData;
   c1_y = NULL;
@@ -1439,8 +1420,8 @@ static const mxArray *c1_sf_marshallOut(void *chartInstanceVoid, void *c1_inData
   return c1_mxArrayOutData;
 }
 
-static real_T c1_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_nargout, const char_T *c1_identifier)
+static real_T c1_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_nargout, const char_T *c1_identifier)
 {
   real_T c1_y;
   emlrtMsgIdentifier c1_thisId;
@@ -1451,8 +1432,8 @@ static real_T c1_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
   return c1_y;
 }
 
-static real_T c1_b_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId)
+static real_T c1_b_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId)
 {
   real_T c1_y;
   real_T c1_d0;
@@ -1470,8 +1451,8 @@ static void c1_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const char_T *c1_identifier;
   emlrtMsgIdentifier c1_thisId;
   real_T c1_y;
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc1_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_nargout = sf_mex_dup(c1_mxArrayInData);
   c1_identifier = c1_varName;
   c1_thisId.fIdentifier = c1_identifier;
@@ -1488,8 +1469,8 @@ static const mxArray *c1_b_sf_marshallOut(void *chartInstanceVoid, void
   const mxArray *c1_mxArrayOutData = NULL;
   boolean_T c1_u;
   const mxArray *c1_y = NULL;
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc1_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_mxArrayOutData = NULL;
   c1_u = *(boolean_T *)c1_inData;
   c1_y = NULL;
@@ -1498,7 +1479,7 @@ static const mxArray *c1_b_sf_marshallOut(void *chartInstanceVoid, void
   return c1_mxArrayOutData;
 }
 
-static boolean_T c1_c_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
+static boolean_T c1_c_emlrt_marshallIn(SFc1_AllinOneInstanceStruct
   *chartInstance, const mxArray *c1_sf_internal_predicateOutput, const char_T
   *c1_identifier)
 {
@@ -1512,7 +1493,7 @@ static boolean_T c1_c_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
   return c1_y;
 }
 
-static boolean_T c1_d_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
+static boolean_T c1_d_emlrt_marshallIn(SFc1_AllinOneInstanceStruct
   *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId)
 {
   boolean_T c1_y;
@@ -1531,8 +1512,8 @@ static void c1_b_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const char_T *c1_identifier;
   emlrtMsgIdentifier c1_thisId;
   boolean_T c1_y;
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc1_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_sf_internal_predicateOutput = sf_mex_dup(c1_mxArrayInData);
   c1_identifier = c1_varName;
   c1_thisId.fIdentifier = c1_identifier;
@@ -1544,7 +1525,7 @@ static void c1_b_sf_marshallIn(void *chartInstanceVoid, const mxArray
   sf_mex_destroy(&c1_mxArrayInData);
 }
 
-const mxArray *sf_c1_AllinOne_2014a_get_eml_resolved_functions_info(void)
+const mxArray *sf_c1_AllinOne_get_eml_resolved_functions_info(void)
 {
   const mxArray *c1_nameCaptureInfo = NULL;
   c1_nameCaptureInfo = NULL;
@@ -1731,8 +1712,8 @@ static const mxArray *c1_c_sf_marshallOut(void *chartInstanceVoid, void
   const mxArray *c1_mxArrayOutData = NULL;
   int8_T c1_u;
   const mxArray *c1_y = NULL;
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc1_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_mxArrayOutData = NULL;
   c1_u = *(int8_T *)c1_inData;
   c1_y = NULL;
@@ -1741,8 +1722,8 @@ static const mxArray *c1_c_sf_marshallOut(void *chartInstanceVoid, void
   return c1_mxArrayOutData;
 }
 
-static int8_T c1_e_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId)
+static int8_T c1_e_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId)
 {
   int8_T c1_y;
   int8_T c1_i6;
@@ -1760,8 +1741,8 @@ static void c1_c_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const char_T *c1_identifier;
   emlrtMsgIdentifier c1_thisId;
   int8_T c1_y;
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc1_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_Tick = sf_mex_dup(c1_mxArrayInData);
   c1_identifier = c1_varName;
   c1_thisId.fIdentifier = c1_identifier;
@@ -1778,8 +1759,8 @@ static const mxArray *c1_d_sf_marshallOut(void *chartInstanceVoid, void
   const mxArray *c1_mxArrayOutData = NULL;
   uint32_T c1_u;
   const mxArray *c1_y = NULL;
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc1_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_mxArrayOutData = NULL;
   c1_u = *(uint32_T *)c1_inData;
   c1_y = NULL;
@@ -1788,9 +1769,8 @@ static const mxArray *c1_d_sf_marshallOut(void *chartInstanceVoid, void
   return c1_mxArrayOutData;
 }
 
-static uint32_T c1_f_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_b_StepEventEventCounter, const char_T
-  *c1_identifier)
+static uint32_T c1_f_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_b_StepEventEventCounter, const char_T *c1_identifier)
 {
   uint32_T c1_y;
   emlrtMsgIdentifier c1_thisId;
@@ -1802,8 +1782,8 @@ static uint32_T c1_f_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
   return c1_y;
 }
 
-static uint32_T c1_g_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId)
+static uint32_T c1_g_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId)
 {
   uint32_T c1_y;
   uint32_T c1_u0;
@@ -1821,8 +1801,8 @@ static void c1_d_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const char_T *c1_identifier;
   emlrtMsgIdentifier c1_thisId;
   uint32_T c1_y;
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc1_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_b_StepEventEventCounter = sf_mex_dup(c1_mxArrayInData);
   c1_identifier = c1_varName;
   c1_thisId.fIdentifier = c1_identifier;
@@ -1840,8 +1820,8 @@ static const mxArray *c1_e_sf_marshallOut(void *chartInstanceVoid, void
   const mxArray *c1_mxArrayOutData = NULL;
   int32_T c1_u;
   const mxArray *c1_y = NULL;
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc1_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_mxArrayOutData = NULL;
   c1_u = *(int32_T *)c1_inData;
   c1_y = NULL;
@@ -1850,8 +1830,8 @@ static const mxArray *c1_e_sf_marshallOut(void *chartInstanceVoid, void
   return c1_mxArrayOutData;
 }
 
-static int32_T c1_h_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId)
+static int32_T c1_h_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId)
 {
   int32_T c1_y;
   int32_T c1_i7;
@@ -1869,8 +1849,8 @@ static void c1_e_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const char_T *c1_identifier;
   emlrtMsgIdentifier c1_thisId;
   int32_T c1_y;
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc1_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_b_sfEvent = sf_mex_dup(c1_mxArrayInData);
   c1_identifier = c1_varName;
   c1_thisId.fIdentifier = c1_identifier;
@@ -1888,8 +1868,8 @@ static const mxArray *c1_f_sf_marshallOut(void *chartInstanceVoid, void
   const mxArray *c1_mxArrayOutData = NULL;
   uint8_T c1_u;
   const mxArray *c1_y = NULL;
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc1_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_mxArrayOutData = NULL;
   c1_u = *(uint8_T *)c1_inData;
   c1_y = NULL;
@@ -1898,9 +1878,8 @@ static const mxArray *c1_f_sf_marshallOut(void *chartInstanceVoid, void
   return c1_mxArrayOutData;
 }
 
-static uint8_T c1_i_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_b_tp_MixtrueMonitor, const char_T
-  *c1_identifier)
+static uint8_T c1_i_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_b_tp_MixtrueMonitor, const char_T *c1_identifier)
 {
   uint8_T c1_y;
   emlrtMsgIdentifier c1_thisId;
@@ -1912,8 +1891,8 @@ static uint8_T c1_i_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
   return c1_y;
 }
 
-static uint8_T c1_j_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId)
+static uint8_T c1_j_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId)
 {
   uint8_T c1_y;
   uint8_T c1_u1;
@@ -1931,8 +1910,8 @@ static void c1_f_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const char_T *c1_identifier;
   emlrtMsgIdentifier c1_thisId;
   uint8_T c1_y;
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc1_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_b_tp_MixtrueMonitor = sf_mex_dup(c1_mxArrayInData);
   c1_identifier = c1_varName;
   c1_thisId.fIdentifier = c1_identifier;
@@ -1950,8 +1929,8 @@ static const mxArray *c1_InMixtrue_bus_io(void *chartInstanceVoid, void
   const mxArray *c1_mxVal = NULL;
   int32_T c1_i8;
   c1_Mixtrue c1_tmp;
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc1_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_mxVal = NULL;
   for (c1_i8 = 0; c1_i8 < 2; c1_i8++) {
     c1_tmp.Water[c1_i8] = ((real_T *)((char_T *)c1_pData + 0))[c1_i8];
@@ -1979,8 +1958,8 @@ static const mxArray *c1_g_sf_marshallOut(void *chartInstanceVoid, void
   const mxArray *c1_d_y = NULL;
   real_T c1_e_u;
   const mxArray *c1_e_y = NULL;
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc1_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_mxArrayOutData = NULL;
   c1_u = *(c1_Mixtrue *)c1_inData;
   c1_y = NULL;
@@ -2008,7 +1987,7 @@ static const mxArray *c1_g_sf_marshallOut(void *chartInstanceVoid, void
   return c1_mxArrayOutData;
 }
 
-static c1_Mixtrue c1_k_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
+static c1_Mixtrue c1_k_emlrt_marshallIn(SFc1_AllinOneInstanceStruct
   *chartInstance, const mxArray *c1_b_LocalMixtrue, const char_T *c1_identifier)
 {
   c1_Mixtrue c1_y;
@@ -2021,7 +2000,7 @@ static c1_Mixtrue c1_k_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
   return c1_y;
 }
 
-static c1_Mixtrue c1_l_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
+static c1_Mixtrue c1_l_emlrt_marshallIn(SFc1_AllinOneInstanceStruct
   *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId)
 {
   c1_Mixtrue c1_y;
@@ -2046,9 +2025,8 @@ static c1_Mixtrue c1_l_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
   return c1_y;
 }
 
-static void c1_m_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId,
-  real_T c1_y[2])
+static void c1_m_emlrt_marshallIn(SFc1_AllinOneInstanceStruct *chartInstance,
+  const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId, real_T c1_y[2])
 {
   real_T c1_dv0[2];
   int32_T c1_i10;
@@ -2068,8 +2046,8 @@ static void c1_g_sf_marshallIn(void *chartInstanceVoid, const mxArray
   const char_T *c1_identifier;
   emlrtMsgIdentifier c1_thisId;
   c1_Mixtrue c1_y;
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)chartInstanceVoid;
+  SFc1_AllinOneInstanceStruct *chartInstance;
+  chartInstance = (SFc1_AllinOneInstanceStruct *)chartInstanceVoid;
   c1_b_LocalMixtrue = sf_mex_dup(c1_mxArrayInData);
   c1_identifier = c1_varName;
   c1_thisId.fIdentifier = c1_identifier;
@@ -2081,7 +2059,7 @@ static void c1_g_sf_marshallIn(void *chartInstanceVoid, const mxArray
   sf_mex_destroy(&c1_mxArrayInData);
 }
 
-static const mxArray *c1_n_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
+static const mxArray *c1_n_emlrt_marshallIn(SFc1_AllinOneInstanceStruct
   *chartInstance, const mxArray *c1_b_setSimStateSideEffectsInfo, const char_T
   *c1_identifier)
 {
@@ -2096,7 +2074,7 @@ static const mxArray *c1_n_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
   return c1_y;
 }
 
-static const mxArray *c1_o_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
+static const mxArray *c1_o_emlrt_marshallIn(SFc1_AllinOneInstanceStruct
   *chartInstance, const mxArray *c1_u, const emlrtMsgIdentifier *c1_parentId)
 {
   const mxArray *c1_y = NULL;
@@ -2108,7 +2086,7 @@ static const mxArray *c1_o_emlrt_marshallIn(SFc1_AllinOne_2014aInstanceStruct
   return c1_y;
 }
 
-static void c1_updateDataWrittenToVector(SFc1_AllinOne_2014aInstanceStruct
+static void c1_updateDataWrittenToVector(SFc1_AllinOneInstanceStruct
   *chartInstance, uint32_T c1_vectorIndex)
 {
   (void)chartInstance;
@@ -2116,7 +2094,7 @@ static void c1_updateDataWrittenToVector(SFc1_AllinOne_2014aInstanceStruct
     c1_vectorIndex, 0, 3, 1, 0)] = true;
 }
 
-static void c1_errorIfDataNotWrittenToFcn(SFc1_AllinOne_2014aInstanceStruct
+static void c1_errorIfDataNotWrittenToFcn(SFc1_AllinOneInstanceStruct
   *chartInstance, uint32_T c1_vectorIndex, uint32_T c1_dataNumber)
 {
   (void)chartInstance;
@@ -2125,8 +2103,7 @@ static void c1_errorIfDataNotWrittenToFcn(SFc1_AllinOne_2014aInstanceStruct
     0)]);
 }
 
-static void init_dsm_address_info(SFc1_AllinOne_2014aInstanceStruct
-  *chartInstance)
+static void init_dsm_address_info(SFc1_AllinOneInstanceStruct *chartInstance)
 {
   (void)chartInstance;
 }
@@ -2152,7 +2129,7 @@ extern void utFree(void*);
 
 #endif
 
-void sf_c1_AllinOne_2014a_get_check_sum(mxArray *plhs[])
+void sf_c1_AllinOne_get_check_sum(mxArray *plhs[])
 {
   ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(4109887972U);
   ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(2956639921U);
@@ -2160,7 +2137,7 @@ void sf_c1_AllinOne_2014a_get_check_sum(mxArray *plhs[])
   ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(1271962112U);
 }
 
-mxArray *sf_c1_AllinOne_2014a_get_autoinheritance_info(void)
+mxArray *sf_c1_AllinOne_get_autoinheritance_info(void)
 {
   const char *autoinheritanceFields[] = { "checksum", "inputs", "parameters",
     "outputs", "locals" };
@@ -2335,31 +2312,31 @@ mxArray *sf_c1_AllinOne_2014a_get_autoinheritance_info(void)
   return(mxAutoinheritanceInfo);
 }
 
-mxArray *sf_c1_AllinOne_2014a_third_party_uses_info(void)
+mxArray *sf_c1_AllinOne_third_party_uses_info(void)
 {
   mxArray * mxcell3p = mxCreateCellMatrix(1,0);
   return(mxcell3p);
 }
 
-mxArray *sf_c1_AllinOne_2014a_updateBuildInfo_args_info(void)
+mxArray *sf_c1_AllinOne_updateBuildInfo_args_info(void)
 {
   mxArray *mxBIArgs = mxCreateCellMatrix(1,0);
   return mxBIArgs;
 }
 
-static const mxArray *sf_get_sim_state_info_c1_AllinOne_2014a(void)
+static const mxArray *sf_get_sim_state_info_c1_AllinOne(void)
 {
   const char *infoFields[] = { "chartChecksum", "varInfo" };
 
   mxArray *mxInfo = mxCreateStructMatrix(1, 1, 2, infoFields);
   const char *infoEncStr[] = {
-    "100 S1x10'type','srcId','name','auxInfo'{{M[1],M[80],T\"OutCup\",},{M[1],M[78],T\"OutMixtrue\",},{M[3],M[76],T\"CupLocation\",},{M[3],M[118],T\"LocalMixtrue\",},{M[6],M[81],T\"StepEvent\",},{M[7],M[81],T\"StepEventEventCounter\",},{M[8],M[0],T\"is_active_c1_AllinOne_2014a\",},{M[8],M[130],T\"is_active_CupTransmit\",},{M[8],M[131],T\"is_active_MixtrueMonitor\",},{M[8],M[137],T\"is_active_CupMonitor\",}}",
+    "100 S1x10'type','srcId','name','auxInfo'{{M[1],M[80],T\"OutCup\",},{M[1],M[78],T\"OutMixtrue\",},{M[3],M[76],T\"CupLocation\",},{M[3],M[118],T\"LocalMixtrue\",},{M[6],M[81],T\"StepEvent\",},{M[7],M[81],T\"StepEventEventCounter\",},{M[8],M[0],T\"is_active_c1_AllinOne\",},{M[8],M[130],T\"is_active_CupTransmit\",},{M[8],M[131],T\"is_active_MixtrueMonitor\",},{M[8],M[137],T\"is_active_CupMonitor\",}}",
     "100 S1x4'type','srcId','name','auxInfo'{{M[9],M[130],T\"is_CupTransmit\",},{M[9],M[131],T\"is_MixtrueMonitor\",},{M[9],M[137],T\"is_CupMonitor\",},{M[11],M[21],T\"temporalCounter_i1\",S'et','os','ct'{{T\"ev\",M1x2[125 128],M[1]}}}}"
   };
 
   mxArray *mxVarInfo = sf_mex_decode_encoded_mx_struct_array(infoEncStr, 14, 10);
   mxArray *mxChecksum = mxCreateDoubleMatrix(1, 4, mxREAL);
-  sf_c1_AllinOne_2014a_get_check_sum(&mxChecksum);
+  sf_c1_AllinOne_get_check_sum(&mxChecksum);
   mxSetField(mxInfo, 0, infoFields[0], mxChecksum);
   mxSetField(mxInfo, 0, infoFields[1], mxVarInfo);
   return mxInfo;
@@ -2369,18 +2346,17 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
   fullDebuggerInitialization)
 {
   if (!sim_mode_is_rtw_gen(S)) {
-    SFc1_AllinOne_2014aInstanceStruct *chartInstance;
+    SFc1_AllinOneInstanceStruct *chartInstance;
     ChartRunTimeInfo * crtInfo = (ChartRunTimeInfo *)(ssGetUserData(S));
     ChartInfoStruct * chartInfo = (ChartInfoStruct *)(crtInfo->instanceInfo);
-    chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)
-      chartInfo->chartInstance;
+    chartInstance = (SFc1_AllinOneInstanceStruct *) chartInfo->chartInstance;
     if (ssIsFirstInitCond(S) && fullDebuggerInitialization==1) {
       /* do this only if simulation is starting */
       {
         unsigned int chartAlreadyPresent;
         chartAlreadyPresent = sf_debug_initialize_chart
           (sfGlobalDebugInstanceStruct,
-           _AllinOne_2014aMachineNumber_,
+           _AllinOneMachineNumber_,
            1,
            13,
            14,
@@ -2396,15 +2372,15 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
            (void *)S);
 
         /* Each instance must initialize ist own list of scripts */
-        init_script_number_translation(_AllinOne_2014aMachineNumber_,
+        init_script_number_translation(_AllinOneMachineNumber_,
           chartInstance->chartNumber,chartInstance->instanceNumber);
         if (chartAlreadyPresent==0) {
           /* this is the first instance */
           sf_debug_set_chart_disable_implicit_casting
-            (sfGlobalDebugInstanceStruct,_AllinOne_2014aMachineNumber_,
+            (sfGlobalDebugInstanceStruct,_AllinOneMachineNumber_,
              chartInstance->chartNumber,1);
           sf_debug_set_chart_event_thresholds(sfGlobalDebugInstanceStruct,
-            _AllinOne_2014aMachineNumber_,
+            _AllinOneMachineNumber_,
             chartInstance->chartNumber,
             3,
             3,
@@ -2633,7 +2609,7 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
       }
     } else {
       sf_debug_reset_current_state_configuration(sfGlobalDebugInstanceStruct,
-        _AllinOne_2014aMachineNumber_,chartInstance->chartNumber,
+        _AllinOneMachineNumber_,chartInstance->chartNumber,
         chartInstance->instanceNumber);
     }
   }
@@ -2644,34 +2620,30 @@ static const char* sf_get_instance_specialization(void)
   return "rt9X2NcoWn5qK1X5ACUhXG";
 }
 
-static void sf_opaque_initialize_c1_AllinOne_2014a(void *chartInstanceVar)
+static void sf_opaque_initialize_c1_AllinOne(void *chartInstanceVar)
 {
-  chart_debug_initialization(((SFc1_AllinOne_2014aInstanceStruct*)
-    chartInstanceVar)->S,0);
-  initialize_params_c1_AllinOne_2014a((SFc1_AllinOne_2014aInstanceStruct*)
-    chartInstanceVar);
-  initialize_c1_AllinOne_2014a((SFc1_AllinOne_2014aInstanceStruct*)
-    chartInstanceVar);
+  chart_debug_initialization(((SFc1_AllinOneInstanceStruct*) chartInstanceVar)
+    ->S,0);
+  initialize_params_c1_AllinOne((SFc1_AllinOneInstanceStruct*) chartInstanceVar);
+  initialize_c1_AllinOne((SFc1_AllinOneInstanceStruct*) chartInstanceVar);
 }
 
-static void sf_opaque_enable_c1_AllinOne_2014a(void *chartInstanceVar)
+static void sf_opaque_enable_c1_AllinOne(void *chartInstanceVar)
 {
-  enable_c1_AllinOne_2014a((SFc1_AllinOne_2014aInstanceStruct*) chartInstanceVar);
+  enable_c1_AllinOne((SFc1_AllinOneInstanceStruct*) chartInstanceVar);
 }
 
-static void sf_opaque_disable_c1_AllinOne_2014a(void *chartInstanceVar)
+static void sf_opaque_disable_c1_AllinOne(void *chartInstanceVar)
 {
-  disable_c1_AllinOne_2014a((SFc1_AllinOne_2014aInstanceStruct*)
-    chartInstanceVar);
+  disable_c1_AllinOne((SFc1_AllinOneInstanceStruct*) chartInstanceVar);
 }
 
-static void sf_opaque_gateway_c1_AllinOne_2014a(void *chartInstanceVar)
+static void sf_opaque_gateway_c1_AllinOne(void *chartInstanceVar)
 {
-  sf_gateway_c1_AllinOne_2014a((SFc1_AllinOne_2014aInstanceStruct*)
-    chartInstanceVar);
+  sf_gateway_c1_AllinOne((SFc1_AllinOneInstanceStruct*) chartInstanceVar);
 }
 
-extern const mxArray* sf_internal_get_sim_state_c1_AllinOne_2014a(SimStruct* S)
+extern const mxArray* sf_internal_get_sim_state_c1_AllinOne(SimStruct* S)
 {
   ChartRunTimeInfo * crtInfo = (ChartRunTimeInfo *)(ssGetUserData(S));
   ChartInfoStruct * chartInfo = (ChartInfoStruct *)(crtInfo->instanceInfo);
@@ -2681,9 +2653,9 @@ extern const mxArray* sf_internal_get_sim_state_c1_AllinOne_2014a(SimStruct* S)
   int mxError = 0;
   prhs[0] = mxCreateString("chart_simctx_raw2high");
   prhs[1] = mxCreateDoubleScalar(ssGetSFuncBlockHandle(S));
-  prhs[2] = (mxArray*) get_sim_state_c1_AllinOne_2014a
-    ((SFc1_AllinOne_2014aInstanceStruct*)chartInfo->chartInstance);/* raw sim ctx */
-  prhs[3] = (mxArray*) sf_get_sim_state_info_c1_AllinOne_2014a();/* state var info */
+  prhs[2] = (mxArray*) get_sim_state_c1_AllinOne((SFc1_AllinOneInstanceStruct*)
+    chartInfo->chartInstance);         /* raw sim ctx */
+  prhs[3] = (mxArray*) sf_get_sim_state_info_c1_AllinOne();/* state var info */
   mxError = sf_mex_call_matlab(1, plhs, 4, prhs, "sfprivate");
   mxDestroyArray(prhs[0]);
   mxDestroyArray(prhs[1]);
@@ -2696,8 +2668,8 @@ extern const mxArray* sf_internal_get_sim_state_c1_AllinOne_2014a(SimStruct* S)
   return plhs[0];
 }
 
-extern void sf_internal_set_sim_state_c1_AllinOne_2014a(SimStruct* S, const
-  mxArray *st)
+extern void sf_internal_set_sim_state_c1_AllinOne(SimStruct* S, const mxArray
+  *st)
 {
   ChartRunTimeInfo * crtInfo = (ChartRunTimeInfo *)(ssGetUserData(S));
   ChartInfoStruct * chartInfo = (ChartInfoStruct *)(crtInfo->instanceInfo);
@@ -2707,7 +2679,7 @@ extern void sf_internal_set_sim_state_c1_AllinOne_2014a(SimStruct* S, const
   int mxError = 0;
   prhs[0] = mxCreateString("chart_simctx_high2raw");
   prhs[1] = mxDuplicateArray(st);      /* high level simctx */
-  prhs[2] = (mxArray*) sf_get_sim_state_info_c1_AllinOne_2014a();/* state var info */
+  prhs[2] = (mxArray*) sf_get_sim_state_info_c1_AllinOne();/* state var info */
   mxError = sf_mex_call_matlab(1, plhs, 3, prhs, "sfprivate");
   mxDestroyArray(prhs[0]);
   mxDestroyArray(prhs[1]);
@@ -2716,34 +2688,32 @@ extern void sf_internal_set_sim_state_c1_AllinOne_2014a(SimStruct* S, const
     sf_mex_error_message("Stateflow Internal Error: \nError calling 'chart_simctx_high2raw'.\n");
   }
 
-  set_sim_state_c1_AllinOne_2014a((SFc1_AllinOne_2014aInstanceStruct*)
+  set_sim_state_c1_AllinOne((SFc1_AllinOneInstanceStruct*)
     chartInfo->chartInstance, mxDuplicateArray(plhs[0]));
   mxDestroyArray(plhs[0]);
 }
 
-static const mxArray* sf_opaque_get_sim_state_c1_AllinOne_2014a(SimStruct* S)
+static const mxArray* sf_opaque_get_sim_state_c1_AllinOne(SimStruct* S)
 {
-  return sf_internal_get_sim_state_c1_AllinOne_2014a(S);
+  return sf_internal_get_sim_state_c1_AllinOne(S);
 }
 
-static void sf_opaque_set_sim_state_c1_AllinOne_2014a(SimStruct* S, const
-  mxArray *st)
+static void sf_opaque_set_sim_state_c1_AllinOne(SimStruct* S, const mxArray *st)
 {
-  sf_internal_set_sim_state_c1_AllinOne_2014a(S, st);
+  sf_internal_set_sim_state_c1_AllinOne(S, st);
 }
 
-static void sf_opaque_terminate_c1_AllinOne_2014a(void *chartInstanceVar)
+static void sf_opaque_terminate_c1_AllinOne(void *chartInstanceVar)
 {
   if (chartInstanceVar!=NULL) {
-    SimStruct *S = ((SFc1_AllinOne_2014aInstanceStruct*) chartInstanceVar)->S;
+    SimStruct *S = ((SFc1_AllinOneInstanceStruct*) chartInstanceVar)->S;
     ChartRunTimeInfo * crtInfo = (ChartRunTimeInfo *)(ssGetUserData(S));
     if (sim_mode_is_rtw_gen(S) || sim_mode_is_external(S)) {
       sf_clear_rtw_identifier(S);
-      unload_AllinOne_2014a_optimization_info();
+      unload_AllinOne_optimization_info();
     }
 
-    finalize_c1_AllinOne_2014a((SFc1_AllinOne_2014aInstanceStruct*)
-      chartInstanceVar);
+    finalize_c1_AllinOne((SFc1_AllinOneInstanceStruct*) chartInstanceVar);
     utFree((void *)chartInstanceVar);
     if (crtInfo != NULL) {
       utFree((void *)crtInfo);
@@ -2755,12 +2725,11 @@ static void sf_opaque_terminate_c1_AllinOne_2014a(void *chartInstanceVar)
 
 static void sf_opaque_init_subchart_simstructs(void *chartInstanceVar)
 {
-  initSimStructsc1_AllinOne_2014a((SFc1_AllinOne_2014aInstanceStruct*)
-    chartInstanceVar);
+  initSimStructsc1_AllinOne((SFc1_AllinOneInstanceStruct*) chartInstanceVar);
 }
 
 extern unsigned int sf_machine_global_initializer_called(void);
-static void mdlProcessParameters_c1_AllinOne_2014a(SimStruct *S)
+static void mdlProcessParameters_c1_AllinOne(SimStruct *S)
 {
   int i;
   for (i=0;i<ssGetNumRunTimeParams(S);i++) {
@@ -2772,15 +2741,15 @@ static void mdlProcessParameters_c1_AllinOne_2014a(SimStruct *S)
   if (sf_machine_global_initializer_called()) {
     ChartRunTimeInfo * crtInfo = (ChartRunTimeInfo *)(ssGetUserData(S));
     ChartInfoStruct * chartInfo = (ChartInfoStruct *)(crtInfo->instanceInfo);
-    initialize_params_c1_AllinOne_2014a((SFc1_AllinOne_2014aInstanceStruct*)
+    initialize_params_c1_AllinOne((SFc1_AllinOneInstanceStruct*)
       (chartInfo->chartInstance));
   }
 }
 
-static void mdlSetWorkWidths_c1_AllinOne_2014a(SimStruct *S)
+static void mdlSetWorkWidths_c1_AllinOne(SimStruct *S)
 {
   if (sim_mode_is_rtw_gen(S) || sim_mode_is_external(S)) {
-    mxArray *infoStruct = load_AllinOne_2014a_optimization_info();
+    mxArray *infoStruct = load_AllinOne_optimization_info();
     int_T chartIsInlinable =
       (int_T)sf_is_chart_inlinable(sf_get_instance_specialization(),infoStruct,1);
     ssSetStateflowIsInlinable(S,chartIsInlinable);
@@ -2834,21 +2803,21 @@ static void mdlSetWorkWidths_c1_AllinOne_2014a(SimStruct *S)
   ssSupportsMultipleExecInstances(S,1);
 }
 
-static void mdlRTW_c1_AllinOne_2014a(SimStruct *S)
+static void mdlRTW_c1_AllinOne(SimStruct *S)
 {
   if (sim_mode_is_rtw_gen(S)) {
     ssWriteRTWStrParam(S, "StateflowChartType", "Stateflow");
   }
 }
 
-static void mdlStart_c1_AllinOne_2014a(SimStruct *S)
+static void mdlStart_c1_AllinOne(SimStruct *S)
 {
-  SFc1_AllinOne_2014aInstanceStruct *chartInstance;
+  SFc1_AllinOneInstanceStruct *chartInstance;
   ChartRunTimeInfo * crtInfo = (ChartRunTimeInfo *)utMalloc(sizeof
     (ChartRunTimeInfo));
-  chartInstance = (SFc1_AllinOne_2014aInstanceStruct *)utMalloc(sizeof
-    (SFc1_AllinOne_2014aInstanceStruct));
-  memset(chartInstance, 0, sizeof(SFc1_AllinOne_2014aInstanceStruct));
+  chartInstance = (SFc1_AllinOneInstanceStruct *)utMalloc(sizeof
+    (SFc1_AllinOneInstanceStruct));
+  memset(chartInstance, 0, sizeof(SFc1_AllinOneInstanceStruct));
   if (chartInstance==NULL) {
     sf_mex_error_message("Could not allocate memory for chart instance.");
   }
@@ -2856,26 +2825,20 @@ static void mdlStart_c1_AllinOne_2014a(SimStruct *S)
   chartInstance->chartInfo.chartInstance = chartInstance;
   chartInstance->chartInfo.isEMLChart = 0;
   chartInstance->chartInfo.chartInitialized = 0;
-  chartInstance->chartInfo.sFunctionGateway =
-    sf_opaque_gateway_c1_AllinOne_2014a;
-  chartInstance->chartInfo.initializeChart =
-    sf_opaque_initialize_c1_AllinOne_2014a;
-  chartInstance->chartInfo.terminateChart =
-    sf_opaque_terminate_c1_AllinOne_2014a;
-  chartInstance->chartInfo.enableChart = sf_opaque_enable_c1_AllinOne_2014a;
-  chartInstance->chartInfo.disableChart = sf_opaque_disable_c1_AllinOne_2014a;
-  chartInstance->chartInfo.getSimState =
-    sf_opaque_get_sim_state_c1_AllinOne_2014a;
-  chartInstance->chartInfo.setSimState =
-    sf_opaque_set_sim_state_c1_AllinOne_2014a;
-  chartInstance->chartInfo.getSimStateInfo =
-    sf_get_sim_state_info_c1_AllinOne_2014a;
+  chartInstance->chartInfo.sFunctionGateway = sf_opaque_gateway_c1_AllinOne;
+  chartInstance->chartInfo.initializeChart = sf_opaque_initialize_c1_AllinOne;
+  chartInstance->chartInfo.terminateChart = sf_opaque_terminate_c1_AllinOne;
+  chartInstance->chartInfo.enableChart = sf_opaque_enable_c1_AllinOne;
+  chartInstance->chartInfo.disableChart = sf_opaque_disable_c1_AllinOne;
+  chartInstance->chartInfo.getSimState = sf_opaque_get_sim_state_c1_AllinOne;
+  chartInstance->chartInfo.setSimState = sf_opaque_set_sim_state_c1_AllinOne;
+  chartInstance->chartInfo.getSimStateInfo = sf_get_sim_state_info_c1_AllinOne;
   chartInstance->chartInfo.zeroCrossings = NULL;
   chartInstance->chartInfo.outputs = NULL;
   chartInstance->chartInfo.derivatives = NULL;
-  chartInstance->chartInfo.mdlRTW = mdlRTW_c1_AllinOne_2014a;
-  chartInstance->chartInfo.mdlStart = mdlStart_c1_AllinOne_2014a;
-  chartInstance->chartInfo.mdlSetWorkWidths = mdlSetWorkWidths_c1_AllinOne_2014a;
+  chartInstance->chartInfo.mdlRTW = mdlRTW_c1_AllinOne;
+  chartInstance->chartInfo.mdlStart = mdlStart_c1_AllinOne;
+  chartInstance->chartInfo.mdlSetWorkWidths = mdlSetWorkWidths_c1_AllinOne;
   chartInstance->chartInfo.extModeExec = NULL;
   chartInstance->chartInfo.restoreLastMajorStepConfiguration = NULL;
   chartInstance->chartInfo.restoreBeforeLastMajorStepConfiguration = NULL;
@@ -2893,25 +2856,25 @@ static void mdlStart_c1_AllinOne_2014a(SimStruct *S)
   chart_debug_initialization(S,1);
 }
 
-void c1_AllinOne_2014a_method_dispatcher(SimStruct *S, int_T method, void *data)
+void c1_AllinOne_method_dispatcher(SimStruct *S, int_T method, void *data)
 {
   switch (method) {
    case SS_CALL_MDL_START:
-    mdlStart_c1_AllinOne_2014a(S);
+    mdlStart_c1_AllinOne(S);
     break;
 
    case SS_CALL_MDL_SET_WORK_WIDTHS:
-    mdlSetWorkWidths_c1_AllinOne_2014a(S);
+    mdlSetWorkWidths_c1_AllinOne(S);
     break;
 
    case SS_CALL_MDL_PROCESS_PARAMETERS:
-    mdlProcessParameters_c1_AllinOne_2014a(S);
+    mdlProcessParameters_c1_AllinOne(S);
     break;
 
    default:
     /* Unhandled method */
     sf_mex_error_message("Stateflow Internal Error:\n"
-                         "Error calling c1_AllinOne_2014a_method_dispatcher.\n"
+                         "Error calling c1_AllinOne_method_dispatcher.\n"
                          "Can't handle method %d.\n", method);
     break;
   }

@@ -29,17 +29,11 @@ typedef struct {
   uint8_T c2_is_c2_AllinOne;
   real_T c2_TargetAmount;
   uint8_T c2_temporalCounter_i1;
-  boolean_T c2_dataWrittenToVector[2];
   uint8_T c2_doSetSimStateSideEffects;
   const mxArray *c2_setSimStateSideEffectsInfo;
   void *c2_dataSetLogObjVector[1];
   rtwCAPI_ModelMappingInfo c2_testPointMappingInfo;
   void *c2_testPointAddrMap[1];
-  boolean_T *c2_ClearIntegratorEvent;
-  int8_T *c2_Tick;
-  real_T *c2_SettingAmount;
-  real_T *c2_RemainLiquid;
-  real_T *c2_OutLiquid;
 } SFc2_AllinOneInstanceStruct;
 
 #endif                                 /*typedef_SFc2_AllinOneInstanceStruct*/
@@ -47,7 +41,6 @@ typedef struct {
 /* Named Constants */
 
 /* Variable Declarations */
-extern struct SfDebugInstanceStruct *sfGlobalDebugInstanceStruct;
 
 /* Variable Definitions */
 

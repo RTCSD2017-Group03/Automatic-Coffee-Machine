@@ -187,10 +187,10 @@ unsigned int sf_AllinOne_2014a_process_check_sum_call( int nlhs, mxArray * plhs[
       return 0;
     }
   } else {
-    ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(3621732932U);
-    ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(2664297149U);
-    ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(3145867982U);
-    ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(2152241157U);
+    ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(2080152880U);
+    ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(3054694559U);
+    ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(440028724U);
+    ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(2038837713U);
   }
 
   return 1;
@@ -228,7 +228,7 @@ unsigned int sf_AllinOne_2014a_autoinheritance_info( int nlhs, mxArray * plhs[],
     switch (chartFileNumber) {
      case 1:
       {
-        if (strcmp(aiChksum, "7fazLJrMrBmbZgBA0V1IaG") == 0) {
+        if (strcmp(aiChksum, "xlfuh6IKLwg1YRj19cjXaE") == 0) {
           extern mxArray *sf_c1_AllinOne_2014a_get_autoinheritance_info(void);
           plhs[0] = sf_c1_AllinOne_2014a_get_autoinheritance_info();
           break;
@@ -288,7 +288,7 @@ unsigned int sf_AllinOne_2014a_autoinheritance_info( int nlhs, mxArray * plhs[],
 
      case 6:
       {
-        if (strcmp(aiChksum, "mtWWrAHgfa7FweFocGjp2") == 0) {
+        if (strcmp(aiChksum, "e4w0fbvKXSPTHnK9sMUwWD") == 0) {
           extern mxArray *sf_c6_AllinOne_2014a_get_autoinheritance_info(void);
           plhs[0] = sf_c6_AllinOne_2014a_get_autoinheritance_info();
           break;
@@ -482,7 +482,7 @@ unsigned int sf_AllinOne_2014a_third_party_uses_info( int nlhs, mxArray * plhs[]
     switch (chartFileNumber) {
      case 1:
       {
-        if (strcmp(tpChksum, "Uqj2J46KmhH4ICJOkR9k9E") == 0) {
+        if (strcmp(tpChksum, "rt9X2NcoWn5qK1X5ACUhXG") == 0) {
           extern mxArray *sf_c1_AllinOne_2014a_third_party_uses_info(void);
           plhs[0] = sf_c1_AllinOne_2014a_third_party_uses_info();
           break;
@@ -527,7 +527,7 @@ unsigned int sf_AllinOne_2014a_third_party_uses_info( int nlhs, mxArray * plhs[]
 
      case 6:
       {
-        if (strcmp(tpChksum, "RLdmMvmza10DNdM1iWWhCF") == 0) {
+        if (strcmp(tpChksum, "D4FkRXFQpdcLudHeMYfweB") == 0) {
           extern mxArray *sf_c6_AllinOne_2014a_third_party_uses_info(void);
           plhs[0] = sf_c6_AllinOne_2014a_third_party_uses_info();
           break;
@@ -545,7 +545,7 @@ unsigned int sf_AllinOne_2014a_third_party_uses_info( int nlhs, mxArray * plhs[]
 
      case 12:
       {
-        if (strcmp(tpChksum, "rBXsByFxX85iPeQ2YyFurE") == 0) {
+        if (strcmp(tpChksum, "bnHkRVvRENM6oJGrNiiUz") == 0) {
           extern mxArray *sf_c12_AllinOne_2014a_third_party_uses_info(void);
           plhs[0] = sf_c12_AllinOne_2014a_third_party_uses_info();
           break;
@@ -582,7 +582,7 @@ unsigned int sf_AllinOne_2014a_updateBuildInfo_args_info( int nlhs, mxArray *
     switch (chartFileNumber) {
      case 1:
       {
-        if (strcmp(tpChksum, "Uqj2J46KmhH4ICJOkR9k9E") == 0) {
+        if (strcmp(tpChksum, "rt9X2NcoWn5qK1X5ACUhXG") == 0) {
           extern mxArray *sf_c1_AllinOne_2014a_updateBuildInfo_args_info(void);
           plhs[0] = sf_c1_AllinOne_2014a_updateBuildInfo_args_info();
           break;
@@ -627,7 +627,7 @@ unsigned int sf_AllinOne_2014a_updateBuildInfo_args_info( int nlhs, mxArray *
 
      case 6:
       {
-        if (strcmp(tpChksum, "RLdmMvmza10DNdM1iWWhCF") == 0) {
+        if (strcmp(tpChksum, "D4FkRXFQpdcLudHeMYfweB") == 0) {
           extern mxArray *sf_c6_AllinOne_2014a_updateBuildInfo_args_info(void);
           plhs[0] = sf_c6_AllinOne_2014a_updateBuildInfo_args_info();
           break;
@@ -645,7 +645,7 @@ unsigned int sf_AllinOne_2014a_updateBuildInfo_args_info( int nlhs, mxArray *
 
      case 12:
       {
-        if (strcmp(tpChksum, "rBXsByFxX85iPeQ2YyFurE") == 0) {
+        if (strcmp(tpChksum, "bnHkRVvRENM6oJGrNiiUz") == 0) {
           extern mxArray *sf_c12_AllinOne_2014a_updateBuildInfo_args_info(void);
           plhs[0] = sf_c12_AllinOne_2014a_updateBuildInfo_args_info();
           break;

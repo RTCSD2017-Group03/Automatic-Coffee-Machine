@@ -16,37 +16,6 @@ unsigned int sf_process_check_sum_call( int nlhs, mxArray * plhs[], int nrhs,
   return 0;
 }
 
-unsigned int sf_process_machine_uses_exported_functions_call( int nlhs, mxArray *
-  plhs[], int nrhs, const mxArray * prhs[] )
-{
-  extern void sf_AllinOne_uses_exported_functions( int nlhs, mxArray * plhs[],
-    int nrhs, const mxArray * prhs[] );
-  char commandName[64];
-  char machineName[128];
-  if (nrhs < 2) {
-    return 0;
-  }
-
-  if (!mxIsChar(prhs[0]) || !mxIsChar(prhs[1])) {
-    return 0;
-  }
-
-  mxGetString(prhs[0], commandName,sizeof(commandName)/sizeof(char));
-  commandName[(sizeof(commandName)/sizeof(char)-1)] = '\0';
-  if (strcmp(commandName,"uses_exported_functions")) {
-    return 0;
-  }
-
-  mxGetString(prhs[1], machineName,sizeof(machineName)/sizeof(char));
-  machineName[(sizeof(machineName)/sizeof(char)-1)] = '\0';
-  if (strcmp(machineName, "AllinOne") == 0) {
-    sf_AllinOne_uses_exported_functions(nlhs, plhs, nrhs-2, prhs+2);
-    return 1;
-  }
-
-  return 0;
-}
-
 unsigned int sf_process_autoinheritance_call( int nlhs, mxArray * plhs[], int
   nrhs, const mxArray * prhs[] )
 {
@@ -104,37 +73,6 @@ unsigned int sf_process_get_third_party_uses_info_call( int nlhs, mxArray *
     newRhs[1] = prhs[2];
     newRhs[2] = prhs[3];
     return sf_AllinOne_third_party_uses_info(nlhs,plhs,3,newRhs);
-  }
-
-  return 0;
-}
-
-unsigned int sf_process_get_jit_fallback_info_call( int nlhs, mxArray * plhs[],
-  int nrhs, const mxArray * prhs[] )
-{
-  extern unsigned int sf_AllinOne_jit_fallback_info( int nlhs, mxArray * plhs[],
-    int nrhs, const mxArray * prhs[] );
-  char commandName[64];
-  char machineName[128];
-  if (nrhs < 4) {
-    return 0;
-  }
-
-  if (!mxIsChar(prhs[0]) || !mxIsChar(prhs[1]))
-    return 0;
-  mxGetString(prhs[0], commandName,sizeof(commandName)/sizeof(char));
-  commandName[(sizeof(commandName)/sizeof(char)-1)] = '\0';
-  if (strcmp(commandName,"get_jit_fallback_info"))
-    return 0;
-  mxGetString(prhs[1], machineName,sizeof(machineName)/sizeof(char));
-  machineName[(sizeof(machineName)/sizeof(char)-1)] = '\0';
-  if (strcmp(machineName, "AllinOne") == 0) {
-    const mxArray *newRhs[3] = { NULL, NULL, NULL };
-
-    newRhs[0] = prhs[0];
-    newRhs[1] = prhs[2];
-    newRhs[2] = prhs[3];
-    return sf_AllinOne_jit_fallback_info(nlhs,plhs,3,newRhs);
   }
 
   return 0;
@@ -201,43 +139,14 @@ unsigned int sf_process_get_eml_resolved_functions_info_call( int nlhs, mxArray 
   return 0;
 }
 
-unsigned int sf_process_get_post_codegen_info(int nlhs, mxArray * plhs[], int
-  nrhs, const mxArray * prhs[])
-{
-  extern void sf_AllinOne_get_post_codegen_info( int nlhs, mxArray * plhs[], int
-    nrhs, const mxArray * prhs[] );
-  char commandName[64];
-  char machineName[128];
-  if (nrhs < 3) {
-    return 0;
-  }
-
-  if (!mxIsChar(prhs[0]) || !mxIsChar(prhs[1])) {
-    return 0;
-  }
-
-  mxGetString(prhs[0], commandName,sizeof(commandName)/sizeof(char));
-  commandName[(sizeof(commandName)/sizeof(char)-1)] = '\0';
-  if (strcmp(commandName,"get_post_codegen_info")) {
-    return 0;
-  }
-
-  mxGetString(prhs[1], machineName,sizeof(machineName)/sizeof(char));
-  machineName[(sizeof(machineName)/sizeof(char)-1)] = '\0';
-  if (strcmp(machineName, "AllinOne") == 0) {
-    sf_AllinOne_get_post_codegen_info(nlhs, plhs, nrhs-2, prhs+2);
-    return 1;
-  }
-
-  return 1;
-}
-
 unsigned int sf_mex_unlock_call( int nlhs, mxArray * plhs[], int nrhs, const
   mxArray * prhs[] )
 {
   char commandName[20];
   if (nrhs<1 || !mxIsChar(prhs[0]) )
     return 0;
+
+  /* Possible call to get the checksum */
   mxGetString(prhs[0], commandName,sizeof(commandName)/sizeof(char));
   commandName[(sizeof(commandName)/sizeof(char)-1)] = '\0';
   if (strcmp(commandName,"sf_mex_unlock"))
@@ -270,15 +179,9 @@ static unsigned int ProcessMexSfunctionCmdLineCall(int nlhs, mxArray * plhs[],
     return 1;
   if (sf_process_get_third_party_uses_info_call(nlhs,plhs,nrhs,prhs))
     return 1;
-  if (sf_process_get_jit_fallback_info_call(nlhs,plhs,nrhs,prhs))
-    return 1;
   if (sf_process_get_updateBuildInfo_args_info_call(nlhs,plhs,nrhs,prhs))
     return 1;
   if (sf_process_get_eml_resolved_functions_info_call(nlhs,plhs,nrhs,prhs))
-    return 1;
-  if (sf_process_get_post_codegen_info(nlhs,plhs,nrhs,prhs))
-    return 1;
-  if (sf_process_machine_uses_exported_functions_call(nlhs,plhs,nrhs,prhs))
     return 1;
   mexErrMsgTxt("Unsuccessful command.");
   return 0;
