@@ -8,7 +8,9 @@
 #include "sf_runtime/sf_runtime_errors.h"
 #include "rtwtypes.h"
 #include "simtarget/slClientServerAPIBridge.h"
+#include "sf_runtime/sfc_sdi.h"
 #include "multiword_types.h"
+#include "sf_runtime/sfc_messages.h"
 #include "sf_runtime/sfcdebug.h"
 #define rtInf                          (mxGetInf())
 #define rtMinusInf                     (-(mxGetInf()))
