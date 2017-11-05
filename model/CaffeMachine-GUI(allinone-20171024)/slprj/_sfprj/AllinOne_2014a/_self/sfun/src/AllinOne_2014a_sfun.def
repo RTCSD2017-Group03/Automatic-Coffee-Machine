@@ -1,0 +1,3 @@
+LIBRARY AllinOne_2014a_sfun.mexw64
+EXPORTS
+mexFunction
