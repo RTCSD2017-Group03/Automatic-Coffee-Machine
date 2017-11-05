@@ -193,7 +193,7 @@ global coffeetext;
 global milktext;
 global sugartext;
 fig = hObject;
-axes = fig.Children(1).Children(1);
+axes = findobj('Type', 'axes');
 axis(axes, [0, 1, 0, 1]);
 sideline = line([0.1, 0.2, 0.8, 0.9], [0.9, 0.1, 0.1, 0.9], 'Parent', axes, 'Color', 'k', 'Visible', 'off');
 water = 100;

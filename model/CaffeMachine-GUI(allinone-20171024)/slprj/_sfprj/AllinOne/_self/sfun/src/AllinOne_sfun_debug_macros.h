@@ -7,31 +7,36 @@
 		sf_debug_unset_instance_data_value_ptr(sfGlobalDebugInstanceStruct, _AllinOneMachineNumber_,CHARTINSTANCE_CHARTNUMBER,CHARTINSTANCE_INSTANCENUMBER,v1);
 	#define _SFD_SET_DATA_VALUE_PTR_VAR_DIM(v1,v2,v3)\
 		sf_debug_set_instance_data_value_ptr(sfGlobalDebugInstanceStruct, _AllinOneMachineNumber_,CHARTINSTANCE_CHARTNUMBER,CHARTINSTANCE_INSTANCENUMBER,v1,(void *)(v2),(void *)(v3));
-	#define _SFD_DATA_RANGE_CHECK_MIN_MAX(dVal,dNum,dMin,dMax)\
+	#define _SFD_DATA_RANGE_CHECK_MIN_MAX(dVal,dNum,objectTypeEnum,objectNumber,activeEventNumber,isFasterRuntimeOn,dMin,dMax,ssid,offset,length)\
 	                      sf_debug_data_range_error_wrapper_min_max(sfGlobalDebugInstanceStruct, _AllinOneMachineNumber_,\
 	CHARTINSTANCE_CHARTNUMBER,\
 	CHARTINSTANCE_INSTANCENUMBER,\
-	                                             dNum,(double)(dVal),(double)dMin,(double)dMax)
-	#define _SFD_DATA_RANGE_CHECK_MIN(dVal,dNum,dMin)\
+	                                             dNum,(double)(dVal),\
+ (unsigned int)objectTypeEnum,(unsigned int)objectNumber,(int)activeEventNumber,_sfTime_,(bool)isFasterRuntimeOn,(double)dMin,(double)dMax,ssid,offset,length)
+	#define _SFD_DATA_RANGE_CHECK_MIN(dVal,dNum,objectTypeEnum,objectNumber,activeEventNumber,isFasterRuntimeOn,dMin,ssid,offset,length)\
 	                      sf_debug_data_range_error_wrapper_min(sfGlobalDebugInstanceStruct, _AllinOneMachineNumber_,\
 	CHARTINSTANCE_CHARTNUMBER,\
 	CHARTINSTANCE_INSTANCENUMBER,\
-	                                             dNum,(double)(dVal),(double)dMin)
-	#define _SFD_DATA_RANGE_CHECK_MAX(dVal,dNum,dMax)\
+	                                             dNum,(double)(dVal),\
+ (unsigned int)objectTypeEnum,(unsigned int)objectNumber,(int)activeEventNumber,_sfTime_,(bool)isFasterRuntimeOn,(double)dMin,ssid,offset,length)
+	#define _SFD_DATA_RANGE_CHECK_MAX(dVal,dNum,objectTypeEnum,objectNumber,activeEventNumber,isFasterRuntimeOn,dMax,ssid,offset,length)\
 	                      sf_debug_data_range_error_wrapper_max(sfGlobalDebugInstanceStruct, _AllinOneMachineNumber_,\
 	CHARTINSTANCE_CHARTNUMBER,\
 	CHARTINSTANCE_INSTANCENUMBER,\
-	                                             dNum,(double)(dVal),(double)dMax)
-	#define _SFD_DATA_RANGE_CHECK(dVal,dNum)\
+	                                             dNum,(double)(dVal),\
+ (unsigned int)objectTypeEnum,(unsigned int)objectNumber,(int)activeEventNumber,_sfTime_,(bool)isFasterRuntimeOn,(double)dMax,ssid,offset,length)
+	#define _SFD_DATA_RANGE_CHECK(dVal,dNum,objectTypeEnum,objectNumber,activeEventNumber,isFasterRuntimeOn)\
 	                      sf_debug_data_range_wrapper(sfGlobalDebugInstanceStruct, _AllinOneMachineNumber_,\
 	CHARTINSTANCE_CHARTNUMBER,\
 	CHARTINSTANCE_INSTANCENUMBER,\
-	                                             dNum,(double)(dVal))
-	#define _SFD_DATA_READ_BEFORE_WRITE_ERROR(dNum)\
+	                                             dNum,(double)(dVal),\
+ (unsigned int)objectTypeEnum,(unsigned int)objectNumber,(int)activeEventNumber,_sfTime_,(bool)isFasterRuntimeOn)
+	#define _SFD_DATA_READ_BEFORE_WRITE_ERROR(dNum,objectTypeEnum,objectNumber,activeEventNumber,isFasterRuntimeOn)\
 	                      sf_debug_read_before_write_error(sfGlobalDebugInstanceStruct, _AllinOneMachineNumber_,\
 	CHARTINSTANCE_CHARTNUMBER,\
 	CHARTINSTANCE_INSTANCENUMBER,\
-	                                             (unsigned int)(dNum))
+	                                             (unsigned int)(dNum),\
+ (unsigned int)objectTypeEnum,(unsigned int)objectNumber,(int)activeEventNumber,_sfTime_,(bool)isFasterRuntimeOn)
 	#define _SFD_ARRAY_BOUNDS_CHECK(v1,v2,v3,v4,v5,v6) \
 	                      sf_debug_data_array_bounds_error_check(sfGlobalDebugInstanceStruct, _AllinOneMachineNumber_,\
 	CHARTINSTANCE_CHARTNUMBER,\
@@ -104,10 +109,6 @@
 	CHARTINSTANCE_CHARTNUMBER,\
 	CHARTINSTANCE_INSTANCENUMBER,\
 	                                             (v1),0,0)
-	#define _SFD_TRANSITION_CONFLICT(v1,v2) sf_debug_transition_conflict_error(sfGlobalDebugInstanceStruct, _AllinOneMachineNumber_,\
-	CHARTINSTANCE_CHARTNUMBER,\
-	CHARTINSTANCE_INSTANCENUMBER,\
-	v1,v2)
 	#define _SFD_ANIMATE() sf_debug_animate(sfGlobalDebugInstanceStruct, _AllinOneMachineNumber_,\
 	CHARTINSTANCE_CHARTNUMBER,\
 	CHARTINSTANCE_INSTANCENUMBER)
@@ -116,6 +117,14 @@
 	CHARTINSTANCE_INSTANCENUMBER,\
 	CHART_OBJECT,v1,v2,v3,v4,\
 	0,NULL,_sfTime_,1)
+	#define _SFD_MESSAGE_POST_CALL(v1) sf_debug_register_message_post_receive_info(sfGlobalDebugInstanceStruct, _AllinOneMachineNumber_,\
+	CHARTINSTANCE_CHARTNUMBER,\
+	CHARTINSTANCE_INSTANCENUMBER,\
+	v1,_sfTime_,1)
+	#define _SFD_MESSAGE_RECEIVE_CALL(v1) sf_debug_register_message_post_receive_info(sfGlobalDebugInstanceStruct, _AllinOneMachineNumber_,\
+	CHARTINSTANCE_CHARTNUMBER,\
+	CHARTINSTANCE_INSTANCENUMBER,\
+	v1,_sfTime_,0)
 	#define _SFD_CC_CALL(v2,v3,v4) _SFD_CHART_CALL(CHART_OBJECT,v2,v3,v4)
 	#define _SFD_CS_CALL(v2,v3,v4) _SFD_CHART_CALL(STATE_OBJECT,v2,v3,v4)
 	#define _SFD_CT_CALL(v2,v3,v4) _SFD_CHART_CALL(TRANSITION_OBJECT,v2,v3,v4)
@@ -160,6 +169,10 @@
 			  CHARTINSTANCE_CHARTNUMBER,\
 			  CHARTINSTANCE_INSTANCENUMBER,\
 			  (v1),(v2),(v3),(v4),(v5),(v6),(v7),(v8))
+	#define CV_BASIC_BLOCK_EVAL(v1,v2,v3)  cv_eval_basic_block(sfGlobalDebugInstanceStruct,_AllinOneMachineNumber_,\
+			  CHARTINSTANCE_CHARTNUMBER,\
+			  CHARTINSTANCE_INSTANCENUMBER,\
+			  (v1),(v2),(v3))
 	#define CV_SATURATION_EVAL(v1,v2,v3,v4,v5)  cv_eval_saturation(sfGlobalDebugInstanceStruct,_AllinOneMachineNumber_,\
 			  CHARTINSTANCE_CHARTNUMBER,\
 			  CHARTINSTANCE_INSTANCENUMBER,\
@@ -203,17 +216,23 @@
 	#define CV_SCRIPT_COND(v2,v3,v4) CV_SCRIPT_EVAL(CV_SCRIPT_COND_CHECK,(v2),(v3),((v4) != 0))
 	#define CV_SCRIPT_MCDC(v2,v3,v4) CV_SCRIPT_EVAL(CV_SCRIPT_MCDC_CHECK,(v2),(v3),(v4))
 	
-	#define _SFD_CV_INIT_EML(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11) cv_eml_init_script(sfGlobalDebugInstanceStruct, \
+	#define _SFD_CV_INIT_EML(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12) cv_eml_init_script(sfGlobalDebugInstanceStruct, \
 	       _AllinOneMachineNumber_,\
 			  CHARTINSTANCE_CHARTNUMBER,\
 			  CHARTINSTANCE_INSTANCENUMBER,\
-			  (v1),(v2),(v3),(v4),(v5),(v6),(v7),(v8),(v9),(v10),(v11))
+			  (v1),(v2),(v3),(v4),(v5),(v6),(v7),(v8),(v9),(v10),(v11),(v12))
 	
 	#define _SFD_CV_INIT_EML_FCN(v1,v2,v3,v4,v5,v6) cv_eml_init_fcn(sfGlobalDebugInstanceStruct, \
 	       _AllinOneMachineNumber_,\
 			  CHARTINSTANCE_CHARTNUMBER,\
 			  CHARTINSTANCE_INSTANCENUMBER,\
 			  (v1),(v2),(v3),(v4),(v5),(v6))
+	
+	#define _SFD_CV_INIT_EML_BASIC_BLOCK(v1,v2,v3,v4,v5) cv_eml_init_basic_block(sfGlobalDebugInstanceStruct, \
+	       _AllinOneMachineNumber_,\
+			  CHARTINSTANCE_CHARTNUMBER,\
+			  CHARTINSTANCE_INSTANCENUMBER,\
+			  (v1),(v2),(v3),(v4),(v5))
 	
 	#define _SFD_CV_INIT_EML_TESTOBJECTIVE(v1,v2,v3,v4,v5,v6,v7) cv_eml_init_testobjective(sfGlobalDebugInstanceStruct, \
 	       _AllinOneMachineNumber_,\
@@ -263,17 +282,23 @@
 			  CHARTINSTANCE_INSTANCENUMBER,\
 			  (v1),(v2),(v3),(v4),(v5),(v6),(v7),(v8),(v9))
 	
-	#define _SFD_CV_INIT_SCRIPT(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10) cv_script_init_script(sfGlobalDebugInstanceStruct, \
+	#define _SFD_CV_INIT_SCRIPT(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11) cv_script_init_script(sfGlobalDebugInstanceStruct, \
 	       _AllinOneMachineNumber_,\
 			  CHARTINSTANCE_CHARTNUMBER,\
 			  CHARTINSTANCE_INSTANCENUMBER,\
-			  (v1),(v2),(v3),(v4),(v5),(v6),(v7),(v8),(v9),(v10))
+			  (v1),(v2),(v3),(v4),(v5),(v6),(v7),(v8),(v9),(v10),(v11))
 	
 	#define _SFD_CV_INIT_SCRIPT_FCN(v1,v2,v3,v4,v5,v6) cv_script_init_fcn(sfGlobalDebugInstanceStruct, \
 	       _AllinOneMachineNumber_,\
 			  CHARTINSTANCE_CHARTNUMBER,\
 			  CHARTINSTANCE_INSTANCENUMBER,\
 			  (v1),(v2),(v3),(v4),(v5),(v6))
+
+	#define _SFD_CV_INIT_SCRIPT_BASIC_BLOCK(v1,v2,v3,v4,v5) cv_script_init_basic_block(sfGlobalDebugInstanceStruct, \
+	       _AllinOneMachineNumber_,\
+			  CHARTINSTANCE_CHARTNUMBER,\
+			  CHARTINSTANCE_INSTANCENUMBER,\
+			  (v1),(v2),(v3),(v4),(v5))
 	
 	#define _SFD_CV_INIT_SCRIPT_TESTOBJECTIVE(v1,v2,v3,v4,v5,v6) cv_script_init_testobjective(sfGlobalDebugInstanceStruct, \
 	       _AllinOneMachineNumber_,\
@@ -419,6 +444,11 @@
 	#define _SFD_SYMBOL_SCOPE_ADD_VERBOSE(v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14) sf_debug_symbol_scope_add_verbose(sfGlobalDebugInstanceStruct,v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14)
 	#define _SFD_SYMBOL_SWITCH(v0,v1) sf_debug_symbol_switch(sfGlobalDebugInstanceStruct,v0,v1)
 	#define _SFD_CHECK_FOR_STATE_INCONSISTENCY(v0,v1,v2) sf_debug_check_for_state_inconsistency(sfGlobalDebugInstanceStruct,v0,v1,v2)
+	#define _SFD_REPORT_STATE_INCONSISTENCY_ERROR(objectTypeEnum,objectNumber,activeEventNumber,isFasterRuntimeOn) \
+         sf_debug_report_state_inconsistency_error(sfGlobalDebugInstanceStruct, _AllinOneMachineNumber_,\
+		  CHARTINSTANCE_CHARTNUMBER,\
+		  CHARTINSTANCE_INSTANCENUMBER,\
+                                                (unsigned int)objectTypeEnum,(unsigned int)objectNumber,(int)activeEventNumber,_sfTime_,(bool)isFasterRuntimeOn)
 	#define _SFD_SET_HONOR_BREAKPOINTS(v0) sf_debug_set_honor_breakpoints(sfGlobalDebugInstanceStruct, v0)
 	#define _SFD_GET_ANIMATION() sf_debug_get_animation(sfGlobalDebugInstanceStruct)
 	#define _SFD_SET_ANIMATION(v0) sf_debug_set_animation(sfGlobalDebugInstanceStruct,v0)
@@ -431,7 +461,6 @@
 	#define _SFD_VECTOR_VECTOR_INDEX_CHECK(v0,v1,v2,v3) sf_debug_vector_vector_index_check(sfGlobalDebugInstanceStruct,v0,v1,v2,v3)
 	#define _SFD_FOR_LOOP_VECTOR_CHECK(v0,v1,v2,v3,v4) sf_debug_for_loop_vector_check(sfGlobalDebugInstanceStruct,v0,v1,v2,v3,v4)
 	#define _SFD_RUNTIME_ERROR_MSGID(v0) sf_debug_runtime_error_msgid(sfGlobalDebugInstanceStruct,v0)
-	#define _SFD_TRANSITION_CONFLICT_CHECK_ENABLED() sf_debug_transition_conflict_check_enabled(sfGlobalDebugInstanceStruct)
-	#define _SFD_TRANSITION_CONFLICT_CHECK_BEGIN() sf_debug_transition_conflict_check_begin(sfGlobalDebugInstanceStruct)
-	#define _SFD_TRANSITION_CONFLICT_CHECK_END() sf_debug_transition_conflict_check_end(sfGlobalDebugInstanceStruct)
-	#define _SFD_OVERFLOW_DETECTION(v0) sf_debug_overflow_detection(sfGlobalDebugInstanceStruct,v0)    
+	#define _SFD_OVERFLOW_DETECTION(sfDebugOverflowType,sfDebugObjectTypeEnum,ssId,length,offset,objectNumber,activeEventNumber,isFasterRuntimeOn) sf_debug_overflow_detection(sfGlobalDebugInstanceStruct,\
+		                                                            sfDebugOverflowType, CHARTINSTANCE_INSTANCENUMBER, sfDebugObjectTypeEnum,\
+                                                                 (unsigned int)ssId, length, offset, (unsigned int)objectNumber,(int)activeEventNumber,_sfTime_,(bool)isFasterRuntimeOn)
