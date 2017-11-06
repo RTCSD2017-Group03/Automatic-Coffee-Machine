@@ -1,7 +1,7 @@
 # 本项目下文件夹及其功能
 
-Automati_Coffee_Machine PIL测试的测试报告docx以及readme介绍，最重要的PIL的测试文件
-* |---PIL_Test_Report_and_Matlab_Files
+Automati_Coffee_Machine 
+* |---PIL_Test_Report_and_Matlab_Files PIL测试的测试报告docx以及readme介绍，最重要的PIL的测试文件
 	* |---readme.md
 	* |---other PIL Using Files~
 	* |---PIL_Test_Report.docx
