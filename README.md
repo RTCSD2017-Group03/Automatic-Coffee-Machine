@@ -1,6 +1,9 @@
 # 本项目下文件夹及其功能
 
 Automati_Coffee_Machine
+* |---PIL_Test_Report_and_Matlab_Files
+	* |---readme.md
+	* |---other PIL Using Files~
 * |---docs 记录各种文档文件，包括Github Pages文件，项目概要设计说明书，软件规格说明书
 	* |---index.files
 	* |---index.htm
