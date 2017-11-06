@@ -1,0 +1,11 @@
+rtiostream_utils.o: \
+ E:/toolbox/coder/rtiostream/src/utils/rtiostream_utils.c \
+ E:/toolbox/coder/rtiostream/src/utils/rtiostream_utils.h \
+ C:/Users/dell1/Desktop/coffee_machine/model/prepare/ControlSystem_ert_rtw/rtwtypes.h \
+ E:/rtw/c/src/rtiostream.h
+
+E:/toolbox/coder/rtiostream/src/utils/rtiostream_utils.h:
+
+C:/Users/dell1/Desktop/coffee_machine/model/prepare/ControlSystem_ert_rtw/rtwtypes.h:
+
+E:/rtw/c/src/rtiostream.h:

@@ -1,0 +1,5 @@
+startup_gcc.o: \
+ C:/ProgramData/MATLAB/SupportPackages/R2017a/toolbox/target/supportpackages/arm_cortex_m/src/startup_gcc.c \
+ C:/ProgramData/MATLAB/SupportPackages/R2017a/toolbox/target/supportpackages/arm_cortex_m/include/startup_gcc.h
+
+C:/ProgramData/MATLAB/SupportPackages/R2017a/toolbox/target/supportpackages/arm_cortex_m/include/startup_gcc.h:

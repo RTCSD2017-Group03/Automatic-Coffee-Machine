@@ -1,0 +1,32 @@
+CC     = "F:\Program Files\MATLAB\sys\lcc64\lcc64\bin\lcc64.exe"
+LD     = "F:\Program Files\MATLAB\sys\lcc64\lcc64\bin\lcclnk64.exe"
+LIBCMD = "F:\Program Files\MATLAB\sys\lcc64\lcc64\bin\lcclib64.exe"
+CFLAGS = -dll -noregistrylookup  -c -Zp8 -DLCC_WIN64 -DMATLAB_MEX_FILE -DMX_COMPAT_32 -nodeclspec 
+LDFLAGS = -s -dll -L"F:\Program Files\MATLAB\sys\lcc64\lcc64\lib64" -entry LibMain -map sfun.map 
+LIBFLAGS = 
+
+OBJECTS = \
+	"AllinOne_sfun.obj"\
+	"c2_AllinOne.obj"\
+	"c3_AllinOne.obj"\
+	"c4_AllinOne.obj"\
+	"AllinOne_sfun_registry.obj"\
+	"lccstub.obj"\
+
+INCLUDE_PATH= -I"F:\Program Files\MATLAB\sys\lcc64\lcc64\include64"  -I"F:\Program Files\MATLAB\extern\include"  -I"F:\Program Files\MATLAB\simulink\include"  -I"F:\Program Files\MATLAB\simulink\include\sf_runtime"  -I"F:\Program Files\MATLAB\stateflow\c\mex\include"  -I"F:\Program Files\MATLAB\rtw\c\src"  -I"C:\Users\dell1\Desktop\coffee_machine\model\prepare\slprj\_sfprj\AllinOne\_self\sfun\src" 
+ 
+
+AllinOne_sfun.mexw64 : $(MAKEFILE) $(OBJECTS)
+	$(LD) $(LDFLAGS) -o AllinOne_sfun.mexw64 @AllinOne_sfun.lmko
+AllinOne_sfun.obj :	"AllinOne_sfun.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "AllinOne_sfun.c"
+c2_AllinOne.obj :	"c2_AllinOne.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "c2_AllinOne.c"
+c3_AllinOne.obj :	"c3_AllinOne.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "c3_AllinOne.c"
+c4_AllinOne.obj :	"c4_AllinOne.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "c4_AllinOne.c"
+AllinOne_sfun_registry.obj :	"AllinOne_sfun_registry.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "AllinOne_sfun_registry.c"
+lccstub.obj :	"F:\Program Files\MATLAB\sys\lcc64\lcc64\mex\lccstub.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "F:\Program Files\MATLAB\sys\lcc64\lcc64\mex\lccstub.c"
