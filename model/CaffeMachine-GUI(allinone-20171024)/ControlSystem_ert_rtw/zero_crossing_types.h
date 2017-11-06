@@ -7,20 +7,22 @@
  *
  * Code generated for Simulink model 'ControlSystem'.
  *
- * Model version                  : 1.105
- * Simulink Coder version         : 8.9 (R2015b) 13-Aug-2015
- * C/C++ source code generated on : Sun Nov 05 13:53:24 2017
+ * Model version                  : 1.108
+ * Simulink Coder version         : 8.12 (R2017a) 16-Feb-2017
+ * C/C++ source code generated on : Mon Nov 06 12:11:49 2017
  *
  * Target selection: ert.tlc
- * Embedded hardware selection: Intel->x86-64 (Windows64)
+ * Embedded hardware selection: ARM Compatible->ARM Cortex
+ * Emulation hardware selection:
+ *    Differs from embedded hardware (MATLAB Host)
  * Code generation objectives:
  *    1. Execution efficiency
  *    2. RAM efficiency
  * Validation result: Not run
  */
 
-#ifndef __ZERO_CROSSING_TYPES_H__
-#define __ZERO_CROSSING_TYPES_H__
+#ifndef ZERO_CROSSING_TYPES_H
+#define ZERO_CROSSING_TYPES_H
 #include "rtwtypes.h"
 
 /* Trigger directions: falling, either, and rising */
@@ -46,7 +48,7 @@ typedef enum {
   RISING_ZCEVENT = 1
 } ZCEventType;
 
-#endif                                 /* __ZERO_CROSSING_TYPES_H__ */
+#endif                                 /* ZERO_CROSSING_TYPES_H */
 
 /*
  * File trailer for generated code.

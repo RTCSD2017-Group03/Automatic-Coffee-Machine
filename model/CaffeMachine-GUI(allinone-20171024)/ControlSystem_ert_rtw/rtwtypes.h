@@ -7,20 +7,22 @@
  *
  * Code generated for Simulink model 'ControlSystem'.
  *
- * Model version                  : 1.105
- * Simulink Coder version         : 8.9 (R2015b) 13-Aug-2015
- * C/C++ source code generated on : Sun Nov 05 13:53:24 2017
+ * Model version                  : 1.108
+ * Simulink Coder version         : 8.12 (R2017a) 16-Feb-2017
+ * C/C++ source code generated on : Mon Nov 06 12:11:49 2017
  *
  * Target selection: ert.tlc
- * Embedded hardware selection: Intel->x86-64 (Windows64)
+ * Embedded hardware selection: ARM Compatible->ARM Cortex
+ * Emulation hardware selection:
+ *    Differs from embedded hardware (MATLAB Host)
  * Code generation objectives:
  *    1. Execution efficiency
  *    2. RAM efficiency
  * Validation result: Not run
  */
 
-#ifndef __RTWTYPES_H__
-#define __RTWTYPES_H__
+#ifndef RTWTYPES_H
+#define RTWTYPES_H
 
 /* Logical type definitions */
 #if (!defined(__cplusplus))
@@ -62,8 +64,8 @@ typedef float real32_T;
 typedef double real64_T;
 
 /*===========================================================================*
- * Generic type definitions: real_T, time_T, boolean_T, int_T, uint_T,       *
- *                           ulong_T, char_T , ulonglong_T and byte_T.       *
+ * Generic type definitions: boolean_T, char_T, byte_T, int_T, uint_T,       *
+ *                           real_T, time_T, ulong_T, ulonglong_T.           *
  *===========================================================================*/
 typedef double real_T;
 typedef double time_T;
@@ -173,7 +175,7 @@ typedef struct {
 /* Block D-Work pointer type */
 typedef void * pointer_T;
 
-#endif                                 /* __RTWTYPES_H__ */
+#endif                                 /* RTWTYPES_H */
 
 /*
  * File trailer for generated code.

@@ -1,5 +1,5 @@
-#ifndef __RTWTYPES_H__
-#define __RTWTYPES_H__
+#ifndef RTWTYPES_H
+#define RTWTYPES_H
 #include "tmwtypes.h"
 #include "simstruc_types.h"
 #ifndef POINTER_T
@@ -56,4 +56,4 @@ typedef struct {
 } cuint64_T;
 
 #endif
-#endif                                 /* __RTWTYPES_H__ */
+#endif                                 /* RTWTYPES_H */

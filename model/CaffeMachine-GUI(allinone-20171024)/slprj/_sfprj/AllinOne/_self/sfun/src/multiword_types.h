@@ -1,5 +1,5 @@
-#ifndef __MULTIWORD_TYPES_H__
-#define __MULTIWORD_TYPES_H__
+#ifndef MULTIWORD_TYPES_H
+#define MULTIWORD_TYPES_H
 #include "rtwtypes.h"
 
 /*
@@ -280,4 +280,4 @@ typedef struct {
   uint1024m_T im;
 } cuint1024m_T;
 
-#endif                                 /* __MULTIWORD_TYPES_H__ */
+#endif                                 /* MULTIWORD_TYPES_H */

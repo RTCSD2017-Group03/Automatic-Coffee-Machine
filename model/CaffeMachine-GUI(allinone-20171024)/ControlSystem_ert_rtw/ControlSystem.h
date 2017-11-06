@@ -7,12 +7,14 @@
  *
  * Code generated for Simulink model 'ControlSystem'.
  *
- * Model version                  : 1.105
- * Simulink Coder version         : 8.9 (R2015b) 13-Aug-2015
- * C/C++ source code generated on : Sun Nov 05 13:53:24 2017
+ * Model version                  : 1.108
+ * Simulink Coder version         : 8.12 (R2017a) 16-Feb-2017
+ * C/C++ source code generated on : Mon Nov 06 12:11:49 2017
  *
  * Target selection: ert.tlc
- * Embedded hardware selection: Intel->x86-64 (Windows64)
+ * Embedded hardware selection: ARM Compatible->ARM Cortex
+ * Emulation hardware selection:
+ *    Differs from embedded hardware (MATLAB Host)
  * Code generation objectives:
  *    1. Execution efficiency
  *    2. RAM efficiency
@@ -21,11 +23,16 @@
 
 #ifndef RTW_HEADER_ControlSystem_h_
 #define RTW_HEADER_ControlSystem_h_
+#include "rtwtypes.h"
+#include "zero_crossing_types.h"
+#include <stddef.h>
 #ifndef ControlSystem_COMMON_INCLUDES_
 # define ControlSystem_COMMON_INCLUDES_
 #include "rtwtypes.h"
 #include "zero_crossing_types.h"
 #endif                                 /* ControlSystem_COMMON_INCLUDES_ */
+
+#include "MW_target_hardware_resources.h"
 
 /* Macros for accessing real-time model data structure */
 #ifndef rtmGetErrorStatus
@@ -35,6 +42,8 @@
 #ifndef rtmSetErrorStatus
 # define rtmSetErrorStatus(rtm, val)   ((rtm)->errorStatus = (val))
 #endif
+
+#define ControlSystem_M                (rtM)
 
 /* Forward declaration for rtModel */
 typedef struct tag_RTM RT_MODEL;
@@ -46,20 +55,15 @@ typedef struct {
   real_T SugarRecipe;                  /* '<S1>/Control System' */
   real_T WaterRecipe;                  /* '<S1>/Control System' */
   int32_T clockTickCounter;            /* '<S1>/Tick' */
-  int32_T sfEvent;                     /* '<S1>/Control System' */
   uint32_T GetCupEventEventCounter;    /* '<S1>/Control System' */
   uint32_T temporalCounter_i1;         /* '<S1>/Control System' */
   uint16_T temporalCounter_i2;         /* '<S1>/Control System' */
   uint8_T is_active_c12_ControlSystem; /* '<S1>/Control System' */
   uint8_T is_c12_ControlSystem;        /* '<S1>/Control System' */
   uint8_T is_WaterState;               /* '<S1>/Control System' */
-  uint8_T is_active_WaterState;        /* '<S1>/Control System' */
   uint8_T is_SugarDoserState;          /* '<S1>/Control System' */
-  uint8_T is_active_SugarDoserState;   /* '<S1>/Control System' */
   uint8_T is_CoffeeDoserState;         /* '<S1>/Control System' */
-  uint8_T is_active_CoffeeDoserState;  /* '<S1>/Control System' */
   uint8_T is_MilkDoserState;           /* '<S1>/Control System' */
-  uint8_T is_active_MilkDoserState;    /* '<S1>/Control System' */
   boolean_T Memory2_PreviousInput[11]; /* '<S1>/Memory2' */
   boolean_T GetCupEvent;               /* '<S1>/Control System' */
   boolean_T Memory1_PreviousInput;     /* '<S1>/Memory1' */
@@ -100,10 +104,38 @@ typedef struct {
   boolean_T GetCupEvent;               /* '<Root>/GetCupEvent' */
 } ExtY;
 
+/* Parameters (auto storage) */
+struct P_ {
+  real_T Tick_Amp;                     /* Expression: 1
+                                        * Referenced by: '<S1>/Tick'
+                                        */
+  real_T Tick_Period;                  /* Computed Parameter: Tick_Period
+                                        * Referenced by: '<S1>/Tick'
+                                        */
+  real_T Tick_Duty;                    /* Computed Parameter: Tick_Duty
+                                        * Referenced by: '<S1>/Tick'
+                                        */
+  real_T Tick_PhaseDelay;              /* Expression: 0
+                                        * Referenced by: '<S1>/Tick'
+                                        */
+  boolean_T Memory2_X0;                /* Computed Parameter: Memory2_X0
+                                        * Referenced by: '<S1>/Memory2'
+                                        */
+  boolean_T Memory1_X0;                /* Computed Parameter: Memory1_X0
+                                        * Referenced by: '<S1>/Memory1'
+                                        */
+};
+
+/* Parameters (auto storage) */
+typedef struct P_ P;
+
 /* Real-time Model Data Structure */
 struct tag_RTM {
-  const char_T * volatile errorStatus;
+  const char_T *errorStatus;
 };
+
+/* Block parameters (auto storage) */
+extern P rtP;
 
 /* Block signals and states (auto storage) */
 extern DW rtDW;

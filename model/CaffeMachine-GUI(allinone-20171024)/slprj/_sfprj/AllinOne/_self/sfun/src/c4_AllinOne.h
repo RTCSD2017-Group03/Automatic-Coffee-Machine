@@ -23,17 +23,23 @@ typedef struct {
   uint8_T c4_tp_Ready;
   uint8_T c4_tp_Finish;
   uint8_T c4_tp_Transmiting;
-  boolean_T c4_isStable;
   boolean_T c4_doneDoubleBufferReInit;
   uint8_T c4_is_active_c4_AllinOne;
   uint8_T c4_is_c4_AllinOne;
   real_T c4_TargetAmount;
   uint8_T c4_temporalCounter_i1;
+  boolean_T c4_dataWrittenToVector[2];
   uint8_T c4_doSetSimStateSideEffects;
   const mxArray *c4_setSimStateSideEffectsInfo;
   void *c4_dataSetLogObjVector[1];
   rtwCAPI_ModelMappingInfo c4_testPointMappingInfo;
   void *c4_testPointAddrMap[1];
+  boolean_T *c4_ClearIntegratorEvent;
+  int8_T *c4_Tick;
+  void *c4_fEmlrtCtx;
+  real_T *c4_SettingAmount;
+  real_T *c4_RemainLiquid;
+  real_T *c4_OutLiquid;
 } SFc4_AllinOneInstanceStruct;
 
 #endif                                 /*typedef_SFc4_AllinOneInstanceStruct*/
@@ -41,6 +47,7 @@ typedef struct {
 /* Named Constants */
 
 /* Variable Declarations */
+extern struct SfDebugInstanceStruct *sfGlobalDebugInstanceStruct;
 
 /* Variable Definitions */
 

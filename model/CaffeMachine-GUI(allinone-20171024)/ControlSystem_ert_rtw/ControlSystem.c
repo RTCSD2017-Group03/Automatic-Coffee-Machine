@@ -7,12 +7,14 @@
  *
  * Code generated for Simulink model 'ControlSystem'.
  *
- * Model version                  : 1.105
- * Simulink Coder version         : 8.9 (R2015b) 13-Aug-2015
- * C/C++ source code generated on : Sun Nov 05 13:53:24 2017
+ * Model version                  : 1.108
+ * Simulink Coder version         : 8.12 (R2017a) 16-Feb-2017
+ * C/C++ source code generated on : Mon Nov 06 12:11:49 2017
  *
  * Target selection: ert.tlc
- * Embedded hardware selection: Intel->x86-64 (Windows64)
+ * Embedded hardware selection: ARM Compatible->ARM Cortex
+ * Emulation hardware selection:
+ *    Differs from embedded hardware (MATLAB Host)
  * Code generation objectives:
  *    1. Execution efficiency
  *    2. RAM efficiency
@@ -68,7 +70,7 @@ static void exit_internal_working_Coffee(void);
 static boolean_T checkall(real_T waterRemain, real_T waterRecipe, real_T
   milkRemain, real_T milkRecipe, real_T sugarRemain, real_T sugarRecipe, real_T
   coffeeRemain, real_T coffeeRecipe, real_T cupRemain, real_T waterTemp);
-static void chartstep_c12_ControlSystem(void);
+static void chartstep_c12_ControlSystem(const int32_T *sfEvent);
 
 /* Function for Chart: '<S1>/Control System' */
 static void exit_internal_working_Coffee(void)
@@ -76,6 +78,7 @@ static void exit_internal_working_Coffee(void)
   /* Exit Internal 'working_Coffee': '<S2>:297' */
   /* Exit Internal 'MilkDoserState': '<S2>:666' */
   if (rtDW.is_MilkDoserState == IN_Working) {
+    /* Outport: '<Root>/MilkAmount' */
     /* Exit 'Working': '<S2>:664' */
     rtY.MilkAmount = 0.0;
     rtDW.is_MilkDoserState = IN_NO_ACTIVE_CHILD;
@@ -83,10 +86,9 @@ static void exit_internal_working_Coffee(void)
     rtDW.is_MilkDoserState = IN_NO_ACTIVE_CHILD;
   }
 
-  rtDW.is_active_MilkDoserState = 0U;
-
   /* Exit Internal 'CoffeeDoserState': '<S2>:649' */
   if (rtDW.is_CoffeeDoserState == IN_Working) {
+    /* Outport: '<Root>/CoffeeAmount' */
     /* Exit 'Working': '<S2>:651' */
     rtY.CoffeeAmount = 0.0;
     rtDW.is_CoffeeDoserState = IN_NO_ACTIVE_CHILD;
@@ -94,10 +96,9 @@ static void exit_internal_working_Coffee(void)
     rtDW.is_CoffeeDoserState = IN_NO_ACTIVE_CHILD;
   }
 
-  rtDW.is_active_CoffeeDoserState = 0U;
-
   /* Exit Internal 'SugarDoserState': '<S2>:657' */
   if (rtDW.is_SugarDoserState == IN_Working) {
+    /* Outport: '<Root>/SugarAmount' */
     /* Exit 'Working': '<S2>:655' */
     rtY.SugarAmount = 0.0;
     rtDW.is_SugarDoserState = IN_NO_ACTIVE_CHILD;
@@ -105,18 +106,15 @@ static void exit_internal_working_Coffee(void)
     rtDW.is_SugarDoserState = IN_NO_ACTIVE_CHILD;
   }
 
-  rtDW.is_active_SugarDoserState = 0U;
-
   /* Exit Internal 'WaterState': '<S2>:661' */
   if (rtDW.is_WaterState == IN_Working) {
+    /* Outport: '<Root>/WaterAmount' */
     /* Exit 'Working': '<S2>:659' */
     rtY.WaterAmount = 0.0;
     rtDW.is_WaterState = IN_NO_ACTIVE_CHILD;
   } else {
     rtDW.is_WaterState = IN_NO_ACTIVE_CHILD;
   }
-
-  rtDW.is_active_WaterState = 0U;
 }
 
 /* Function for Chart: '<S1>/Control System' */
@@ -188,7 +186,7 @@ static boolean_T checkall(real_T waterRemain, real_T waterRecipe, real_T
 }
 
 /* Function for Chart: '<S1>/Control System' */
-static void chartstep_c12_ControlSystem(void)
+static void chartstep_c12_ControlSystem(const int32_T *sfEvent)
 {
   /* During: ControlSystem/Control System */
   if (rtDW.is_active_c12_ControlSystem == 0U) {
@@ -199,17 +197,27 @@ static void chartstep_c12_ControlSystem(void)
     /* Transition: '<S2>:31' */
     rtDW.is_c12_ControlSystem = IN_Init;
 
+    /* Outport: '<Root>/CoffeeAmount' */
     /* Entry 'Init': '<S2>:30' */
     rtY.CoffeeAmount = 0.0;
+
+    /* Outport: '<Root>/MilkAmount' */
     rtY.MilkAmount = 0.0;
+
+    /* Outport: '<Root>/SugarAmount' */
     rtY.SugarAmount = 0.0;
+
+    /* Outport: '<Root>/WaterAmount' */
     rtY.WaterAmount = 0.0;
+
+    /* Outport: '<Root>/NextStep' */
     rtY.NextStep = 0.0;
   } else {
     switch (rtDW.is_c12_ControlSystem) {
      case IN_BeltStep1:
       /* During 'BeltStep1': '<S2>:417' */
-      if (rtDW.sfEvent == event_StepEvent) {
+      if (*sfEvent == event_StepEvent) {
+        /* Outport: '<Root>/NextStep' */
         /* Transition: '<S2>:669' */
         /* Exit 'BeltStep1': '<S2>:417' */
         rtY.NextStep = 0.0;
@@ -217,42 +225,41 @@ static void chartstep_c12_ControlSystem(void)
         rtDW.temporalCounter_i2 = 0U;
 
         /* Entry Internal 'working_Coffee': '<S2>:297' */
-        rtDW.is_active_WaterState = 1U;
-
         /* Entry Internal 'WaterState': '<S2>:661' */
         /* Transition: '<S2>:660' */
         rtDW.is_WaterState = IN_Working;
         rtDW.temporalCounter_i1 = 0U;
 
+        /* Outport: '<Root>/WaterAmount' */
         /* Entry 'Working': '<S2>:659' */
         rtY.WaterAmount = 1.0;
-        rtDW.is_active_SugarDoserState = 1U;
 
         /* Entry Internal 'SugarDoserState': '<S2>:657' */
         /* Transition: '<S2>:658' */
         rtDW.is_SugarDoserState = IN_Working;
 
+        /* Outport: '<Root>/SugarAmount' */
         /* Entry 'Working': '<S2>:655' */
         rtY.SugarAmount = rtDW.SugarRecipe;
-        rtDW.is_active_CoffeeDoserState = 1U;
 
         /* Entry Internal 'CoffeeDoserState': '<S2>:649' */
         /* Transition: '<S2>:650' */
         rtDW.is_CoffeeDoserState = IN_Working;
 
+        /* Outport: '<Root>/CoffeeAmount' */
         /* Entry 'Working': '<S2>:651' */
         rtY.CoffeeAmount = rtDW.CoffeeRecipe;
-        rtDW.is_active_MilkDoserState = 1U;
 
         /* Entry Internal 'MilkDoserState': '<S2>:666' */
         /* Transition: '<S2>:668' */
         rtDW.is_MilkDoserState = IN_Working;
 
+        /* Outport: '<Root>/MilkAmount' */
         /* Entry 'Working': '<S2>:664' */
         rtY.MilkAmount = rtDW.MilkRecipe;
       } else {
-        if ((rtDW.sfEvent == event_Tick) && (rtDW.temporalCounter_i1 >= 10000U))
-        {
+        if ((*sfEvent == event_Tick) && (rtDW.temporalCounter_i1 >= 10000U)) {
+          /* Outport: '<Root>/NextStep' */
           /* Transition: '<S2>:675' */
           /* Transition: '<S2>:682' */
           /* Exit 'BeltStep1': '<S2>:417' */
@@ -264,7 +271,8 @@ static void chartstep_c12_ControlSystem(void)
 
      case IN_BeltStep2:
       /* During 'BeltStep2': '<S2>:404' */
-      if (rtDW.sfEvent == event_StepEvent) {
+      if (*sfEvent == event_StepEvent) {
+        /* Outport: '<Root>/NextStep' */
         /* Transition: '<S2>:421' */
         /* Exit 'BeltStep2': '<S2>:404' */
         rtY.NextStep = 0.0;
@@ -273,8 +281,8 @@ static void chartstep_c12_ControlSystem(void)
         /* Entry 'TakeOut': '<S2>:687' */
         printf("please take out the coffee; \n");
       } else {
-        if ((rtDW.sfEvent == event_Tick) && (rtDW.temporalCounter_i1 >= 10000U))
-        {
+        if ((*sfEvent == event_Tick) && (rtDW.temporalCounter_i1 >= 10000U)) {
+          /* Outport: '<Root>/NextStep' */
           /* Transition: '<S2>:680' */
           /* Transition: '<S2>:682' */
           /* Exit 'BeltStep2': '<S2>:404' */
@@ -286,7 +294,7 @@ static void chartstep_c12_ControlSystem(void)
 
      case IN_GetCup:
       /* During 'GetCup': '<S2>:414' */
-      if (rtDW.sfEvent == event_FeedFinishEvent) {
+      if (*sfEvent == event_FeedFinishEvent) {
         /* Transition: '<S2>:418' */
         /* Exit 'GetCup': '<S2>:414' */
         /* Event: '<S2>:13' */
@@ -294,11 +302,11 @@ static void chartstep_c12_ControlSystem(void)
         rtDW.is_c12_ControlSystem = IN_BeltStep1;
         rtDW.temporalCounter_i1 = 0U;
 
+        /* Outport: '<Root>/NextStep' */
         /* Entry 'BeltStep1': '<S2>:417' */
         rtY.NextStep = 50.0;
       } else {
-        if ((rtDW.sfEvent == event_Tick) && (rtDW.temporalCounter_i1 >= 10000U))
-        {
+        if ((*sfEvent == event_Tick) && (rtDW.temporalCounter_i1 >= 10000U)) {
           /* Transition: '<S2>:677' */
           /* Transition: '<S2>:682' */
           /* Exit 'GetCup': '<S2>:414' */
@@ -311,7 +319,7 @@ static void chartstep_c12_ControlSystem(void)
 
      case IN_Init:
       /* During 'Init': '<S2>:30' */
-      if (rtDW.sfEvent == event_AmericanCoffee) {
+      if (*sfEvent == event_AmericanCoffee) {
         /* Transition: '<S2>:124' */
         rtDW.is_c12_ControlSystem = IN_prepare_CoffeeLatte;
 
@@ -320,7 +328,7 @@ static void chartstep_c12_ControlSystem(void)
         rtDW.MilkRecipe = 15.0;
         rtDW.SugarRecipe = 10.0;
         rtDW.WaterRecipe = 50.0;
-      } else if (rtDW.sfEvent == event_CoffeeLatte) {
+      } else if (*sfEvent == event_CoffeeLatte) {
         /* Transition: '<S2>:424' */
         rtDW.is_c12_ControlSystem = IN_prepare_Cappuccino;
 
@@ -330,7 +338,7 @@ static void chartstep_c12_ControlSystem(void)
         rtDW.SugarRecipe = 5.0;
         rtDW.WaterRecipe = 50.0;
       } else {
-        if (rtDW.sfEvent == event_Cappuccino) {
+        if (*sfEvent == event_Cappuccino) {
           /* Transition: '<S2>:425' */
           rtDW.is_c12_ControlSystem = IN_prepare_AmerricanCoffee;
 
@@ -345,15 +353,24 @@ static void chartstep_c12_ControlSystem(void)
 
      case IN_TakeOut:
       /* During 'TakeOut': '<S2>:687' */
-      if (rtDW.sfEvent == event_TakeOutEvent) {
+      if (*sfEvent == event_TakeOutEvent) {
         /* Transition: '<S2>:688' */
         rtDW.is_c12_ControlSystem = IN_Init;
 
+        /* Outport: '<Root>/CoffeeAmount' */
         /* Entry 'Init': '<S2>:30' */
         rtY.CoffeeAmount = 0.0;
+
+        /* Outport: '<Root>/MilkAmount' */
         rtY.MilkAmount = 0.0;
+
+        /* Outport: '<Root>/SugarAmount' */
         rtY.SugarAmount = 0.0;
+
+        /* Outport: '<Root>/WaterAmount' */
         rtY.WaterAmount = 0.0;
+
+        /* Outport: '<Root>/NextStep' */
         rtY.NextStep = 0.0;
       }
       break;
@@ -389,11 +406,20 @@ static void chartstep_c12_ControlSystem(void)
         /* Transition: '<S2>:428' */
         rtDW.is_c12_ControlSystem = IN_Init;
 
+        /* Outport: '<Root>/CoffeeAmount' */
         /* Entry 'Init': '<S2>:30' */
         rtY.CoffeeAmount = 0.0;
+
+        /* Outport: '<Root>/MilkAmount' */
         rtY.MilkAmount = 0.0;
+
+        /* Outport: '<Root>/SugarAmount' */
         rtY.SugarAmount = 0.0;
+
+        /* Outport: '<Root>/WaterAmount' */
         rtY.WaterAmount = 0.0;
+
+        /* Outport: '<Root>/NextStep' */
         rtY.NextStep = 0.0;
       }
       break;
@@ -425,11 +451,20 @@ static void chartstep_c12_ControlSystem(void)
         /* Transition: '<S2>:429' */
         rtDW.is_c12_ControlSystem = IN_Init;
 
+        /* Outport: '<Root>/CoffeeAmount' */
         /* Entry 'Init': '<S2>:30' */
         rtY.CoffeeAmount = 0.0;
+
+        /* Outport: '<Root>/MilkAmount' */
         rtY.MilkAmount = 0.0;
+
+        /* Outport: '<Root>/SugarAmount' */
         rtY.SugarAmount = 0.0;
+
+        /* Outport: '<Root>/WaterAmount' */
         rtY.WaterAmount = 0.0;
+
+        /* Outport: '<Root>/NextStep' */
         rtY.NextStep = 0.0;
       }
       break;
@@ -461,36 +496,47 @@ static void chartstep_c12_ControlSystem(void)
         /* Transition: '<S2>:360' */
         rtDW.is_c12_ControlSystem = IN_Init;
 
+        /* Outport: '<Root>/CoffeeAmount' */
         /* Entry 'Init': '<S2>:30' */
         rtY.CoffeeAmount = 0.0;
+
+        /* Outport: '<Root>/MilkAmount' */
         rtY.MilkAmount = 0.0;
+
+        /* Outport: '<Root>/SugarAmount' */
         rtY.SugarAmount = 0.0;
+
+        /* Outport: '<Root>/WaterAmount' */
         rtY.WaterAmount = 0.0;
+
+        /* Outport: '<Root>/NextStep' */
         rtY.NextStep = 0.0;
       }
       break;
 
      default:
       /* During 'working_Coffee': '<S2>:297' */
-      if (rtDW.sfEvent == event_MixFinishEvent) {
+      if (*sfEvent == event_MixFinishEvent) {
         /* Transition: '<S2>:405' */
         exit_internal_working_Coffee();
         rtDW.is_c12_ControlSystem = IN_BeltStep2;
         rtDW.temporalCounter_i1 = 0U;
 
+        /* Outport: '<Root>/NextStep' */
         /* Entry 'BeltStep2': '<S2>:404' */
         rtY.NextStep = 50.0;
-      } else if ((rtDW.sfEvent == event_Tick) && (rtDW.temporalCounter_i2 >=
-                  10000)) {
+      } else if ((*sfEvent == event_Tick) && (rtDW.temporalCounter_i2 >= 10000))
+      {
         /* Transition: '<S2>:679' */
         /* Transition: '<S2>:682' */
         exit_internal_working_Coffee();
         rtDW.is_c12_ControlSystem = IN_error;
       } else {
         /* During 'WaterState': '<S2>:661' */
-        if ((rtDW.is_WaterState != IN_Finished) && ((rtDW.sfEvent == event_Tick)
-             && (rtDW.temporalCounter_i1 >= (uint32_T)(rtDW.WaterRecipe * 100.0))))
+        if ((rtDW.is_WaterState != IN_Finished) && ((*sfEvent == event_Tick) &&
+             (rtDW.temporalCounter_i1 >= (uint32_T)(rtDW.WaterRecipe * 100.0))))
         {
+          /* Outport: '<Root>/WaterAmount' */
           /* During 'Working': '<S2>:659' */
           /* Transition: '<S2>:662' */
           /* Exit 'Working': '<S2>:659' */
@@ -501,8 +547,9 @@ static void chartstep_c12_ControlSystem(void)
         }
 
         /* During 'SugarDoserState': '<S2>:657' */
-        if ((rtDW.is_SugarDoserState != IN_Finished) && (rtDW.sfEvent ==
+        if ((rtDW.is_SugarDoserState != IN_Finished) && (*sfEvent ==
              event_SugarDoserEvent)) {
+          /* Outport: '<Root>/SugarAmount' */
           /* During 'Working': '<S2>:655' */
           /* Transition: '<S2>:656' */
           /* Exit 'Working': '<S2>:655' */
@@ -513,8 +560,9 @@ static void chartstep_c12_ControlSystem(void)
         }
 
         /* During 'CoffeeDoserState': '<S2>:649' */
-        if ((rtDW.is_CoffeeDoserState != IN_Finished) && (rtDW.sfEvent ==
+        if ((rtDW.is_CoffeeDoserState != IN_Finished) && (*sfEvent ==
              event_CoffeeDoserEvent)) {
+          /* Outport: '<Root>/CoffeeAmount' */
           /* During 'Working': '<S2>:651' */
           /* Transition: '<S2>:652' */
           /* Exit 'Working': '<S2>:651' */
@@ -525,8 +573,9 @@ static void chartstep_c12_ControlSystem(void)
         }
 
         /* During 'MilkDoserState': '<S2>:666' */
-        if ((rtDW.is_MilkDoserState != IN_Finished) && (rtDW.sfEvent ==
+        if ((rtDW.is_MilkDoserState != IN_Finished) && (*sfEvent ==
              event_MilkDoserEvent)) {
+          /* Outport: '<Root>/MilkAmount' */
           /* During 'Working': '<S2>:664' */
           /* Transition: '<S2>:667' */
           /* Exit 'Working': '<S2>:664' */
@@ -544,10 +593,12 @@ static void chartstep_c12_ControlSystem(void)
 /* Model step function */
 void ControlSystem_step(void)
 {
-  boolean_T rtb_Memory1;
   boolean_T rtb_Memory2[11];
+  boolean_T rtb_Memory1;
   boolean_T zcEvent[11];
   int8_T rtb_inputevents[11];
+  real_T rtb_Tick;
+  int32_T sfEvent;
   int32_T i;
   boolean_T tmp;
   boolean_T zcEvent_0;
@@ -586,88 +637,88 @@ void ControlSystem_step(void)
       }
 
       /* Event: '<S2>:26' */
-      rtDW.sfEvent = event_Tick;
-      chartstep_c12_ControlSystem();
+      sfEvent = event_Tick;
+      chartstep_c12_ControlSystem(&sfEvent);
     }
 
     if (rtb_inputevents[1U] == 1) {
       i = 1;
 
       /* Event: '<S2>:27' */
-      rtDW.sfEvent = event_AmericanCoffee;
-      chartstep_c12_ControlSystem();
+      sfEvent = event_AmericanCoffee;
+      chartstep_c12_ControlSystem(&sfEvent);
     }
 
     if (rtb_inputevents[2U] == 1) {
       i = 1;
 
       /* Event: '<S2>:28' */
-      rtDW.sfEvent = event_CoffeeLatte;
-      chartstep_c12_ControlSystem();
+      sfEvent = event_CoffeeLatte;
+      chartstep_c12_ControlSystem(&sfEvent);
     }
 
     if (rtb_inputevents[3U] == 1) {
       i = 1;
 
       /* Event: '<S2>:29' */
-      rtDW.sfEvent = event_Cappuccino;
-      chartstep_c12_ControlSystem();
+      sfEvent = event_Cappuccino;
+      chartstep_c12_ControlSystem(&sfEvent);
     }
 
     if (rtb_inputevents[4U] == 1) {
       i = 1;
 
       /* Event: '<S2>:6' */
-      rtDW.sfEvent = event_StepEvent;
-      chartstep_c12_ControlSystem();
+      sfEvent = event_StepEvent;
+      chartstep_c12_ControlSystem(&sfEvent);
     }
 
     if (rtb_inputevents[5U] == 1) {
       i = 1;
 
       /* Event: '<S2>:5' */
-      rtDW.sfEvent = event_FeedFinishEvent;
-      chartstep_c12_ControlSystem();
+      sfEvent = event_FeedFinishEvent;
+      chartstep_c12_ControlSystem(&sfEvent);
     }
 
     if (rtb_inputevents[6U] == 1) {
       i = 1;
 
       /* Event: '<S2>:22' */
-      rtDW.sfEvent = event_MixFinishEvent;
-      chartstep_c12_ControlSystem();
+      sfEvent = event_MixFinishEvent;
+      chartstep_c12_ControlSystem(&sfEvent);
     }
 
     if (rtb_inputevents[7U] == 1) {
       i = 1;
 
       /* Event: '<S2>:12' */
-      rtDW.sfEvent = event_SugarDoserEvent;
-      chartstep_c12_ControlSystem();
+      sfEvent = event_SugarDoserEvent;
+      chartstep_c12_ControlSystem(&sfEvent);
     }
 
     if (rtb_inputevents[8U] == 1) {
       i = 1;
 
       /* Event: '<S2>:10' */
-      rtDW.sfEvent = event_MilkDoserEvent;
-      chartstep_c12_ControlSystem();
+      sfEvent = event_MilkDoserEvent;
+      chartstep_c12_ControlSystem(&sfEvent);
     }
 
     if (rtb_inputevents[9U] == 1) {
       i = 1;
 
       /* Event: '<S2>:9' */
-      rtDW.sfEvent = event_CoffeeDoserEvent;
-      chartstep_c12_ControlSystem();
+      sfEvent = event_CoffeeDoserEvent;
+      chartstep_c12_ControlSystem(&sfEvent);
     }
 
     if (rtb_inputevents[10U] == 1) {
       i = 1;
 
       /* Event: '<S2>:686' */
-      rtDW.sfEvent = event_TakeOutEvent;
-      chartstep_c12_ControlSystem();
+      sfEvent = event_TakeOutEvent;
+      chartstep_c12_ControlSystem(&sfEvent);
     }
 
     if ((i != 0) && (rtDW.GetCupEventEventCounter > 0U)) {
@@ -680,21 +731,19 @@ void ControlSystem_step(void)
     rtPrevZCX.ControlSystem_Trig_ZCE[i] = rtb_Memory2[i];
   }
 
+  /* Outport: '<Root>/GetCupEvent' */
+  rtY.GetCupEvent = rtb_Memory1;
+
   /* DiscretePulseGenerator: '<S1>/Tick' */
-  i = ((rtDW.clockTickCounter < 1) && (rtDW.clockTickCounter >= 0));
-  if (rtDW.clockTickCounter >= 1) {
+  rtb_Tick = (rtDW.clockTickCounter < rtP.Tick_Duty) && (rtDW.clockTickCounter >=
+    0) ? rtP.Tick_Amp : 0.0;
+  if (rtDW.clockTickCounter >= rtP.Tick_Period - 1.0) {
     rtDW.clockTickCounter = 0;
   } else {
     rtDW.clockTickCounter++;
   }
 
   /* End of DiscretePulseGenerator: '<S1>/Tick' */
-
-  /* Outport: '<Root>/GetCupEvent' */
-  rtY.GetCupEvent = rtb_Memory1;
-
-  /* Update for Memory: '<S1>/Memory1' */
-  rtDW.Memory1_PreviousInput = rtDW.GetCupEvent;
 
   /* Update for Memory: '<S1>/Memory2' incorporates:
    *  DataTypeConversion: '<S1>/Data Type Conversion'
@@ -709,7 +758,7 @@ void ControlSystem_step(void)
    *  Update for Inport: '<Root>/SugarDoserEvent'
    *  Update for Inport: '<Root>/TakeOutEvent'
    */
-  rtDW.Memory2_PreviousInput[0] = (i != 0);
+  rtDW.Memory2_PreviousInput[0] = (rtb_Tick != 0.0);
   rtDW.Memory2_PreviousInput[1] = rtU.AmericanCoffee;
   rtDW.Memory2_PreviousInput[2] = rtU.CoffeeLatte;
   rtDW.Memory2_PreviousInput[3] = rtU.Cappuccino;
@@ -720,6 +769,9 @@ void ControlSystem_step(void)
   rtDW.Memory2_PreviousInput[8] = rtU.ClearIntegratorEvent_n;
   rtDW.Memory2_PreviousInput[9] = rtU.ClearIntegratorEvent;
   rtDW.Memory2_PreviousInput[10] = rtU.TakeOutEvent;
+
+  /* Update for Memory: '<S1>/Memory1' */
+  rtDW.Memory1_PreviousInput = rtDW.GetCupEvent;
 }
 
 /* Model initialize function */
@@ -727,9 +779,17 @@ void ControlSystem_initialize(void)
 {
   {
     int32_T i;
+
+    /* InitializeConditions for Memory: '<S1>/Memory2' */
     for (i = 0; i < 11; i++) {
       rtPrevZCX.ControlSystem_Trig_ZCE[i] = POS_ZCSIG;
+      rtDW.Memory2_PreviousInput[i] = rtP.Memory2_X0;
     }
+
+    /* End of InitializeConditions for Memory: '<S1>/Memory2' */
+
+    /* InitializeConditions for Memory: '<S1>/Memory1' */
+    rtDW.Memory1_PreviousInput = rtP.Memory1_X0;
   }
 }
 

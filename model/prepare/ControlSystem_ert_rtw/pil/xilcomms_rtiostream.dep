@@ -1,0 +1,30 @@
+xilcomms_rtiostream.o: E:/toolbox/rtw/targets/pil/c/xilcomms_rtiostream.c \
+ E:/toolbox/rtw/targets/pil/c/xilcomms_rtiostream.h \
+ C:/Users/dell1/Desktop/coffee_machine/model/prepare/ControlSystem_ert_rtw/rtwtypes.h \
+ E:/toolbox/rtw/targets/pil/c/comms_interface.h E:/rtw/c/src/rtiostream.h \
+ E:/toolbox/coder/rtiostream/src/utils/rtiostream_utils.h \
+ E:/toolbox/rtw/targets/pil/c/rx_tx_buffer_sizes.h \
+ E:/toolbox/rtw/targets/pil/c/xil_common.h \
+ E:/extern/include/coder/connectivity/XILTgtAppSvc/XILTgtAppSvc.h \
+ E:/extern/include/coder/connectivity/XILTgtAppSvc/XILTgtAppSvc_spec.h \
+ E:/toolbox/rtw/targets/pil/c/xilcomms_rtiostream.h
+
+E:/toolbox/rtw/targets/pil/c/xilcomms_rtiostream.h:
+
+C:/Users/dell1/Desktop/coffee_machine/model/prepare/ControlSystem_ert_rtw/rtwtypes.h:
+
+E:/toolbox/rtw/targets/pil/c/comms_interface.h:
+
+E:/rtw/c/src/rtiostream.h:
+
+E:/toolbox/coder/rtiostream/src/utils/rtiostream_utils.h:
+
+E:/toolbox/rtw/targets/pil/c/rx_tx_buffer_sizes.h:
+
+E:/toolbox/rtw/targets/pil/c/xil_common.h:
+
+E:/extern/include/coder/connectivity/XILTgtAppSvc/XILTgtAppSvc.h:
+
+E:/extern/include/coder/connectivity/XILTgtAppSvc/XILTgtAppSvc_spec.h:
+
+E:/toolbox/rtw/targets/pil/c/xilcomms_rtiostream.h:
